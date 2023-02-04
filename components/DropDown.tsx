@@ -10,29 +10,32 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export type VibeType = "Professional" | "Casual" | "Funny";
-
-interface DropDownProps {
-  vibe: VibeType;
-  setVibe: (vibe: VibeType) => void;
+interface DropDownProps<T> {
+  value: T;
+  values: Array<T>;
+  setValue: (value: T) => void;
 }
 
-let vibes: VibeType[] = ["Professional", "Casual", "Funny"];
-
-export default function DropDown({ vibe, setVibe }: DropDownProps) {
+export default function DropDown<T>({
+  value,
+  values,
+  setValue,
+}: DropDownProps<T>) {
   return (
-    <Menu as="div" className="relative block text-left w-full">
+    <Menu as="div" className="relative block w-full text-left">
       <div>
-        <Menu.Button className="inline-flex w-full justify-between items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black">
-          {vibe}
-          <ChevronUpIcon
-            className="-mr-1 ml-2 h-5 w-5 ui-open:hidden"
-            aria-hidden="true"
-          />
-          <ChevronDownIcon
-            className="-mr-1 ml-2 h-5 w-5 hidden ui-open:block"
-            aria-hidden="true"
-          />
+        <Menu.Button className="inline-flex items-center justify-between w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black">
+          <>
+            {value}
+            <ChevronUpIcon
+              className="hidden w-5 h-5 ml-2 -mr-1 ui-open:block"
+              aria-hidden="true"
+            />
+            <ChevronDownIcon
+              className="w-5 h-5 ml-2 -mr-1  ui-open:hidden"
+              aria-hidden="true"
+            />
+          </>
         </Menu.Button>
       </div>
 
@@ -46,23 +49,23 @@ export default function DropDown({ vibe, setVibe }: DropDownProps) {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          key={vibe}
+          className="absolute left-0 z-10 w-full mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          key={`${value}`}
         >
           <div className="">
-            {vibes.map((vibeItem) => (
-              <Menu.Item key={vibeItem}>
+            {values.map((valueItem) => (
+              <Menu.Item key={`${valueItem}`}>
                 {({ active }) => (
                   <button
-                    onClick={() => setVibe(vibeItem)}
+                    onClick={() => setValue(valueItem)}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      vibe === vibeItem ? "bg-gray-200" : "",
+                      value === valueItem ? "bg-gray-200" : "",
                       "px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between"
                     )}
                   >
-                    <span>{vibeItem}</span>
-                    {vibe === vibeItem ? (
+                    <span>{`${valueItem}`}</span>
+                    {value === valueItem ? (
                       <CheckIcon className="w-4 h-4 text-bold" />
                     ) : null}
                   </button>

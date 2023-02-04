@@ -4,184 +4,329 @@ import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import DropDown, { VibeType } from "../components/DropDown";
+import DropDown from "../components/DropDown";
 import Footer from "../components/Footer";
-import Github from "../components/GitHub";
 import Header from "../components/Header";
+import FormField from "../components/FormField";
 import LoadingDots from "../components/LoadingDots";
 import ResizablePanel from "../components/ResizablePanel";
 
+export type GradeType =
+  | "Pre-K"
+  | "Kindergarten"
+  | "Grade 1"
+  | "Grade 2"
+  | "Grade 3"
+  | "Grade 4"
+  | "Grade 5"
+  | "Grade 6"
+  | "Grade 7"
+  | "Grade 8"
+  | "Grade 9"
+  | "Grade 10"
+  | "Grade 11"
+  | "Grade 12"
+  | "Post secondary"
+  | "Adult education"
+  | "All ages";
+
+let grades: GradeType[] = [
+  "Pre-K",
+  "Kindergarten",
+  "Grade 1",
+  "Grade 2",
+  "Grade 3",
+  "Grade 4",
+  "Grade 5",
+  "Grade 6",
+  "Grade 7",
+  "Grade 8",
+  "Grade 9",
+  "Grade 10",
+  "Grade 11",
+  "Grade 12",
+  "Post secondary",
+  "Adult education",
+  "All ages",
+];
+
+export type SubjectType =
+  | "English language arts"
+  | "Math"
+  | "Science"
+  | "Arts"
+  | "History"
+  | "Geography"
+  | "Social and emotional learning"
+  | "Social studies"
+  | "Special education"
+  | "English as a second language"
+  | "Other";
+
+let subjects: SubjectType[] = [
+  "English language arts",
+  "Math",
+  "Science",
+  "Arts",
+  "History",
+  "Geography",
+  "Social and emotional learning",
+  "Social studies",
+  "Special education",
+  "English as a second language",
+  "Other",
+];
+
+async function generateFromPrompt(prompt: string): Promise<ReadableStream> {
+  const response = await fetch("/api/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  // This data is a ReadableStream
+  const data = response.body;
+  if (!data) {
+    return Promise.reject();
+  }
+  return Promise.resolve(data);
+}
+
+type ContentTypes = {
+  directInstruction: string;
+  materials: string;
+};
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
-  const [vibe, setVibe] = useState<VibeType>("Professional");
-  const [generatedBios, setGeneratedBios] = useState<String>("");
+  const [grade, setGrade] = useState<GradeType>("Grade 4");
+  const [subject, setSubject] = useState<SubjectType>("Math");
+  const [generatedActivities, setGeneratedActivities] = useState<string>("");
+  const [selectedActivity, setSelectedActivity] = useState<string>("");
+  const [generatedContent, setGeneratedContent] = useState<ContentTypes>({
+    directInstruction: "",
+    materials: "",
+  });
 
-  console.log("Streamed response: ", generatedBios);
-
-  const prompt =
-    vibe === "Funny"
-      ? `Generate 2 funny twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure there is a joke in there and it's a little ridiculous. Make sure each generated bio is at max 20 words and base it on this context: ${bio}${
-          bio.slice(-1) === "." ? "" : "."
-        }`
-      : `Generate 2 ${vibe} twitter bios with no hashtags and clearly labeled "1." and "2.". Make sure each generated bio is at least 14 words and at max 20 words and base them on this context: ${bio}${
-          bio.slice(-1) === "." ? "" : "."
-        }`;
+  const prompt = `Generate 3 lesson plan activity ideas for a ${grade} ${
+    subject !== "Other" ? subject : ""
+  } lesson with the goal of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, and engaging like an expert teacher influencer would think of. Each generated activity is at max 30 words.`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
-    setGeneratedBios("");
+    setGeneratedActivities("");
     setLoading(true);
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-      }),
-    });
-    console.log("Edge function returned.");
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const data = await generateFromPrompt(prompt);
+    if (data) {
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
 
-    // This data is a ReadableStream
-    const data = response.body;
-    if (!data) {
-      return;
-    }
-
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setGeneratedBios((prev) => prev + chunkValue);
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        setGeneratedActivities((prev) => prev + chunkValue);
+      }
     }
 
     setLoading(false);
   };
 
+  async function generateContent(type: keyof ContentTypes) {
+    const prompts: ContentTypes = {
+      directInstruction: "Create a direct instruction",
+      materials: "other",
+    };
+
+    setGeneratedContent({ ...generatedContent, [type]: "" });
+    setLoading(true);
+
+    const data = await generateFromPrompt(prompts[type]);
+    if (data) {
+      const reader = data.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value);
+        setGeneratedContent((prev) => ({
+          ...prev,
+          [type]: prev[type] + chunkValue,
+        }));
+      }
+    }
+
+    setLoading(false);
+  }
+
   return (
-    <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
+    <div className="flex flex-col items-center justify-center max-w-5xl min-h-screen py-2 mx-auto">
       <Head>
-        <title>Twitter Generator</title>
+        <title>Lesson Go!</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
-      <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-        <a
-          className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100 mb-5"
-          href="https://github.com/Nutlope/twitterbio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Github />
-          <p>Star on GitHub</p>
-        </a>
-        <h1 className="sm:text-6xl text-4xl max-w-2xl font-bold text-slate-900">
-          Generate your next Twitter bio in seconds
+      <main className="flex flex-col items-center justify-center flex-1 w-full px-4 mt-12 text-center sm:mt-20">
+        <h1 className="max-w-2xl text-3xl font-bold sm:text-5xl text-slate-900">
+          Create a perfect lesson plan with superhuman speed.
         </h1>
-        <p className="text-slate-500 mt-5">18,167 bios generated so far.</p>
-        <div className="max-w-xl w-full">
-          <div className="flex mt-10 items-center space-x-3">
-            <Image
-              src="/1-black.png"
-              width={30}
-              height={30}
-              alt="1 icon"
-              className="mb-5 sm:mb-0"
+        <p className="mt-5 text-lg text-slate-700">
+          Finish your lesson plan before your coffee? Let's go!
+        </p>
+        <div className="w-full max-w-xl mt-10">
+          <div className="flex flex-row space-x-8">
+            <FormField label="Grade:">
+              <DropDown
+                value={grade}
+                values={grades}
+                setValue={(grade) => setGrade(grade)}
+              />
+            </FormField>
+
+            <FormField label="Subject:">
+              <DropDown
+                value={subject}
+                values={subjects}
+                setValue={(subject) => setSubject(subject)}
+              />
+            </FormField>
+          </div>
+
+          <FormField
+            label="Topic:"
+            description="What's your lesson about?"
+            className="mt-5"
+          >
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={2}
+              className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
+              placeholder={"Plant anatomy"}
             />
-            <p className="text-left font-medium">
-              Copy your current bio{" "}
-              <span className="text-slate-500">
-                (or write a few sentences about yourself)
-              </span>
-              .
-            </p>
-          </div>
-          <textarea
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            rows={4}
-            className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-            placeholder={
-              "e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com."
-            }
-          />
-          <div className="flex mb-5 items-center space-x-3">
-            <Image src="/2-black.png" width={30} height={30} alt="1 icon" />
-            <p className="text-left font-medium">Select your vibe.</p>
-          </div>
-          <div className="block">
-            <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} />
-          </div>
+          </FormField>
 
           {!loading && (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
               onClick={(e) => generateBio(e)}
             >
-              Generate your bio &rarr;
+              Suggest activities &rarr;
             </button>
           )}
           {loading && (
             <button
-              className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+              className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
               disabled
             >
               <LoadingDots color="white" style="large" />
             </button>
           )}
+
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            toastOptions={{ duration: 2000 }}
+          />
+          <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
+          <ResizablePanel>
+            <AnimatePresence mode="wait">
+              <motion.div className="my-10 space-y-10">
+                {generatedActivities && (
+                  <>
+                    <div>
+                      <h2 className="mx-auto text-3xl font-bold sm:text-4xl text-slate-900">
+                        Suggestions:
+                      </h2>
+                    </div>
+                    <div className="flex flex-col items-center justify-center max-w-xl mx-auto space-y-8">
+                      {generatedActivities
+                        .split(/\n(?=[0-9]\.)/)
+                        .map((activity) =>
+                          activity.replace(/\n(?=[0-9]\.)/, "").trim()
+                        )
+                        .map((activity) => {
+                          return (
+                            <button
+                              className={`p-4 transition border shadow-md rounded-xl ${
+                                activity === selectedActivity
+                                  ? "bg-green-700 hover:bg-green-900 text-white"
+                                  : "bg-white hover:bg-gray-100"
+                              }`}
+                              onClick={() => {
+                                setSelectedActivity(`${activity}`);
+                                // toast("Idea copied to clipboard", {
+                                //   icon: "✂️",
+                                // });
+                              }}
+                              key={activity}
+                            >
+                              <p>{activity}</p>
+                            </button>
+                          );
+                        })}
+                    </div>
+                  </>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </ResizablePanel>
+          {selectedActivity && (
+            <div className="">
+              <FormField label="Activity:">
+                <textarea
+                  value={selectedActivity}
+                  onChange={(e) => setSelectedActivity(e.target.value)}
+                  rows={3}
+                  className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
+                />
+              </FormField>
+              {/* <FormField
+                label="Direct Instruction:"
+                description="What knowledge should the teacher introduce and model?"
+              >
+                <textarea
+                  value={generatedContent['directInstruction']}
+                  onChange={(e) => setGeneratedContent({...generatedContent, 'directInstruction': e.target.value})}
+                  rows={3}
+                  style={{ minHeight: "4rem" }}
+                  className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
+                />
+                <button
+                  onClick={()=>generateContent('directInstruction')}
+                  aria-label="Suggest direct instruction content"
+                  className="absolute px-3 py-2 text-white rounded-full right-2 bottom-4 bg-slate-700 hover:bg-green-700"
+                >
+                  Suggest
+                </button>
+              </FormField> */}
+
+              <fieldset>
+                <legend>Include</legend>
+                <input name="include" value="Direct Instruction" />
+                <input name="include" value="Warmup" />
+                <input name="include" value="Guided practice" />
+                <input name="include" value="Independent practice" />
+                <input name="include" value="Differentiation" />
+                <input name="include" value="Materials" />
+                <input name="include" value="Reflection" />
+              </fieldset>
+            </div>
+          )}
         </div>
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{ duration: 2000 }}
-        />
-        <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
-        <ResizablePanel>
-          <AnimatePresence mode="wait">
-            <motion.div className="space-y-10 my-10">
-              {generatedBios && (
-                <>
-                  <div>
-                    <h2 className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto">
-                      Your generated bios
-                    </h2>
-                  </div>
-                  <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                    {generatedBios
-                      .substring(generatedBios.indexOf("1") + 3)
-                      .split("2.")
-                      .map((generatedBio) => {
-                        return (
-                          <div
-                            className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-                            onClick={() => {
-                              navigator.clipboard.writeText(generatedBio);
-                              toast("Bio copied to clipboard", {
-                                icon: "✂️",
-                              });
-                            }}
-                            key={generatedBio}
-                          >
-                            <p>{generatedBio}</p>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </ResizablePanel>
       </main>
       <Footer />
     </div>
