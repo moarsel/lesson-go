@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const { fontFamily } = require("tailwindcss/defaultTheme");
+
 module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
@@ -9,7 +11,11 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-public-sans)", ...fontFamily.sans],
+      },
+    },
   },
   plugins: [require("@tailwindcss/forms"), require("@headlessui/tailwindcss")],
 };

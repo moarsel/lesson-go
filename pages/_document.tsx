@@ -8,12 +8,12 @@ class MyDocument extends Document {
           <link rel="icon" href="/favicon.ico" />
           <meta
             name="description"
-            content="Create a perfect lesson plan in seconds."
+            content="Create an engaging lesson plan in seconds."
           />
           <meta property="og:site_name" content="lessongo.io" />
           <meta
             property="og:description"
-            content="Create a perfect lesson plan in seconds."
+            content="Create an engaging lesson plan in seconds."
           />
           <meta
             property="og:title"
@@ -26,7 +26,7 @@ class MyDocument extends Document {
           />
           <meta
             name="twitter:description"
-            content="Create a perfect lesson plan in seconds."
+            content="Create an engaging lesson plan in seconds."
           />
           <meta property="og:image" content="lessongo.io/og-image.png" />
           <meta name="twitter:image" content="lessongo.io/og-image.png" />

@@ -2,13 +2,19 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col items-center justify-between w-full h-16 px-3 pt-4 mt-5 mb-3 space-y-3 text-center border-t sm:h-20 sm:pt-2 sm:flex-row sm:mb-0">
-      <div>Made for underappreciated teachers everywhere.</div>
+    <footer className="flex flex-col items-center justify-between w-full h-16 px-3 pt-4 mt-5 mb-3 space-y-3 text-center border-t print:hidden sm:h-20 sm:pt-2 sm:flex-row sm:mb-0">
+      <div>
+        Made with 💛 for busy teachers everywhere, from{" "}
+        <Link href="https://mystorybook.com" className="underline group">
+          My Storybook
+        </Link>
+        .
+      </div>
       <div className="flex pb-4 space-x-4 sm:pb-0">
         <Link
-          href="https://twitter.com/russellhoy"
+          href="https://twitter.com/mystorybookkids"
           className="group"
-          aria-label="Russell on Twitter"
+          aria-label="MyStorybook on Twitter"
         >
           <svg
             aria-hidden="true"
