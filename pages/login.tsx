@@ -3,6 +3,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { ReactElement, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import MainLayout from "../components/MainLayout";
+import { getURL } from "../utils/helpers";
 
 const LoginPage = () => {
   const supabaseClient = useSupabaseClient();
@@ -22,7 +23,7 @@ const LoginPage = () => {
         </h2>
         <Auth
           view="sign_in"
-          redirectTo="http://localhost:3000/"
+          redirectTo={`${getURL()}/lessons/new`}
           appearance={{ theme: ThemeSupa }}
           supabaseClient={supabaseClient}
           providers={["google"]}

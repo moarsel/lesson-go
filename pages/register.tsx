@@ -3,6 +3,7 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { ReactElement, useEffect, useState } from "react";
 import MainLayout from "../components/MainLayout";
 import LoginPage from "./login";
+import { getURL } from "../utils/helpers";
 
 const RegisterPage = () => {
   LoginPage.getLayout = function getLayout(page: ReactElement) {
@@ -22,7 +23,7 @@ const RegisterPage = () => {
         </h2>
         <Auth
           view="sign_up"
-          redirectTo="http://localhost:3000/"
+          redirectTo={`${getURL()}/lessons/new`}
           appearance={{ theme: ThemeSupa }}
           supabaseClient={supabaseClient}
           providers={["google"]}

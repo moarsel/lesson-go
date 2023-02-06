@@ -124,6 +124,10 @@ function New() {
   const [localData, setLocalData] = useLocalStorage({});
   const router = useRouter();
 
+  if (!user) {
+    router.push("/register?redirectTo=/lessons/new");
+  }
+
   const [sections, setSections] = useState<SectionTypes>({
     objectives: {
       content: "",

@@ -2,7 +2,6 @@ import { PrinterIcon } from "@heroicons/react/20/solid";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { GetServerSideProps } from "next/types";
 import { ReactElement } from "react";
-import Editor from "../../../components/Editor";
 import MainLayout from "../../../components/MainLayout";
 import { Database } from "../../../supabase/database.types";
 import { Lesson } from "../../../utils/types";
