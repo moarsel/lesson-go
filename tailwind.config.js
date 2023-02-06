@@ -17,5 +17,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("@headlessui/tailwindcss")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("@headlessui/tailwindcss"),
+    require("@tailwindcss/typography"),
+  ],
 };

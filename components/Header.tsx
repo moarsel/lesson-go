@@ -8,7 +8,7 @@ export default function Header() {
   const router = useRouter();
   return (
     <header className="w-full print:hidden">
-      <div className="flex items-center justify-between w-full px-2 mt-5 border-b-2 pb-7 sm:px-4">
+      <div className="flex items-center justify-between w-full px-8 mt-5 border-b-2 pb-7 sm:px-16">
         <Link href="/" className="flex items-center space-x-3 ">
           <Image
             alt="Lesson Go"
@@ -44,7 +44,7 @@ export default function Header() {
         )}
       </div>
       {user && (
-        <div className="flex items-center w-full h-12 gap-12 p-8 border-b-2">
+        <div className="flex items-center w-full h-12 gap-12 p-8 border-b-2 sm:px-16">
           <Link href="/lessons/new" className="relative text-xl font-medium">
             New Lesson
             <div

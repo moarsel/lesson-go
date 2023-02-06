@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Home: NextPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center max-w-5xl min-h-screen py-2 mx-auto">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 mx-auto">
       <Head>
         <title>Lesson Go!</title>
         <link rel="icon" href="/favicon.ico" />
