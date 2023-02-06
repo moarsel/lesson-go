@@ -1,6 +1,8 @@
 import { CheckIcon } from "@heroicons/react/20/solid";
+import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 
@@ -123,10 +125,6 @@ function New() {
   const user = useUser();
   const [localData, setLocalData] = useLocalStorage({});
   const router = useRouter();
-
-  if (!user) {
-    router.push("/register?redirectTo=/lessons/new");
-  }
 
   const [sections, setSections] = useState<SectionTypes>({
     objectives: {
@@ -462,4 +460,28 @@ export default New;
 
 New.getLayout = function getLayout(page: ReactElement) {
   return <MainLayout>{page}</MainLayout>;
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session)
+    return {
+      redirect: {
+        destination: "/register?redirectTo=/lessons/new",
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {
+      initialSession: session,
+      user: session.user,
+    },
+  };
 };
