@@ -68,7 +68,7 @@ export type SubjectType =
 
 type SubjectOptions = { label: SubjectType; value: SubjectType };
 
-let subjects: Array<SubjectOptions> = [
+export const subjectTypes: Array<SubjectOptions> = [
   { label: "English language arts", value: "English language arts" },
   { label: "Math", value: "Math" },
   { label: "Science", value: "Science" },
@@ -281,7 +281,7 @@ function New() {
         <FormField label="Subject:" className="w-full">
           <DropDown
             value={subject}
-            values={subjects}
+            values={subjectTypes}
             setValue={(subject: Array<SubjectOptions>) => setSubject(subject)}
           />
         </FormField>
