@@ -37,9 +37,6 @@ const Home: NextPage = () => {
                   .pauseFor(1200)
                   .changeDelay(15)
                   .typeString(" with superhuman speed 🤖")
-                  .callFunction(() => {
-                    console.log("All strings were deleted");
-                  })
                   .start();
               }}
             ></TypeWriterEffect>

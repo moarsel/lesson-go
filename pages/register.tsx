@@ -4,6 +4,7 @@ import { ReactElement, useEffect, useState } from "react";
 import MainLayout from "../components/MainLayout";
 import LoginPage from "./login";
 import { getURL } from "../utils/helpers";
+import { useRouter } from "next/router";
 
 const RegisterPage = () => {
   LoginPage.getLayout = function getLayout(page: ReactElement) {
@@ -11,6 +12,9 @@ const RegisterPage = () => {
   };
   const supabaseClient = useSupabaseClient();
   const user = useUser();
+  const router = useRouter();
+
+  if (user) router.push(`${router?.query?.redirectTo}`);
 
   if (!user)
     return (
@@ -32,14 +36,6 @@ const RegisterPage = () => {
         />
       </div>
     );
-
-  return (
-    <>
-      <button onClick={() => supabaseClient.auth.signOut()}>Sign out</button>
-      <p>user:</p>
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-    </>
-  );
 };
 
 export default RegisterPage;
