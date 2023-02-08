@@ -17,7 +17,7 @@ export default function Header() {
             width={24}
             height={24}
           />
-          <h1 className="ml-2 text-2xl font-[650] tracking-tight [font-variant: all-small-caps] sm:text-3xl">
+          <h1 className="ml-2 text-lg uppercase font-[800] tracking-tight [font-variant: all-small-caps] sm:text-2xl">
             Lesson Go!
           </h1>
         </Link>
