@@ -33,24 +33,24 @@ export type GradeType =
   | "Adult education"
   | "All ages";
 
-let grades: GradeType[] = [
-  "Pre-K",
-  "Kindergarten",
-  "Grade 1",
-  "Grade 2",
-  "Grade 3",
-  "Grade 4",
-  "Grade 5",
-  "Grade 6",
-  "Grade 7",
-  "Grade 8",
-  "Grade 9",
-  "Grade 10",
-  "Grade 11",
-  "Grade 12",
-  "Post secondary",
-  "Adult education",
-  "All ages",
+export const gradeValues = [
+  { value: 4, label: "Pre-K" },
+  { value: 5, label: "Kindergarten" },
+  { value: 6, label: "Grade 1" },
+  { value: 7, label: "Grade 2" },
+  { value: 8, label: "Grade 3" },
+  { value: 9, label: "Grade 4" },
+  { value: 10, label: "Grade 5" },
+  { value: 11, label: "Grade 6" },
+  { value: 12, label: "Grade 7" },
+  { value: 13, label: "Grade 8" },
+  { value: 14, label: "Grade 9" },
+  { value: 15, label: "Grade 10" },
+  { value: 16, label: "Grade 11" },
+  { value: 17, label: "Grade 12" },
+  { value: 18, label: "Adult education" },
+  { value: 19, label: "Post secondary" },
+  { value: 0, label: "All ages" },
 ];
 
 export type SubjectType =
@@ -66,18 +66,26 @@ export type SubjectType =
   | "English as a second language"
   | "Other";
 
-let subjects: SubjectType[] = [
-  "English language arts",
-  "Math",
-  "Science",
-  "Arts",
-  "History",
-  "Geography",
-  "Social and emotional learning",
-  "Social studies",
-  "Special education",
-  "English as a second language",
-  "Other",
+type SubjectOptions = { label: SubjectType; value: SubjectType };
+
+let subjects: Array<SubjectOptions> = [
+  { label: "English language arts", value: "English language arts" },
+  { label: "Math", value: "Math" },
+  { label: "Science", value: "Science" },
+  { label: "Arts", value: "Arts" },
+  { label: "History", value: "History" },
+  { label: "Geography", value: "Geography" },
+  {
+    label: "Social and emotional learning",
+    value: "Social and emotional learning",
+  },
+  { label: "Social studies", value: "Social studies" },
+  { label: "Special education", value: "Special education" },
+  {
+    label: "English as a second language",
+    value: "English as a second language",
+  },
+  { label: "Other", value: "Other" },
 ];
 
 export type SectionData = {
@@ -117,8 +125,12 @@ async function generateFromPrompt(prompt: string): Promise<ReadableStream> {
 function New() {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
-  const [grade, setGrade] = useState<GradeType>("Grade 4");
-  const [subject, setSubject] = useState<SubjectType>("Math");
+  const [grade, setGrade] = useState<Array<{ value: number; label: string }>>([
+    { value: 4, label: "hi" },
+  ]);
+  const [subject, setSubject] = useState<
+    Array<{ label: SubjectType; value: SubjectType }>
+  >([{ value: "Math", label: "Math" }]);
   const [generatedActivities, setGeneratedActivities] = useState<string>("");
   const [selectedActivity, setSelectedActivity] = useState<string>("");
   const supabase = useSupabaseClient<Database>();
@@ -153,9 +165,11 @@ function New() {
     },
   });
 
-  const activityPrompt = `Generate 3 lesson plan activity ideas for a ${grade} ${
-    subject !== "Other" ? subject : ""
-  } lesson with the goal of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, and engaging like an expert teacher influencer would think of. Each generated activity is at max 30 words.`;
+  const activityPrompt = `Generate 3 lesson plan activity ideas for ${grade
+    .map((g) => g.label)
+    .join(" and ")} ${
+    subject.map((s) => s.label).join("and") !== "Other" ? subject : ""
+  } lesson with the goal of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, and engaging like an expert teacher influencer would think of. Each generated activity is at max 35 words.`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
@@ -225,7 +239,9 @@ function New() {
       .insert({
         user_id: user?.id,
         title: bio,
-        subject: subject,
+        overview: selectedActivity,
+        subject: subject.map((subject) => subject.value),
+        grade: grade.map((grade) => grade.value),
         content: sections,
       })
       .select("id")
@@ -255,8 +271,10 @@ function New() {
         <FormField label="Grade:" className="w-full">
           <DropDown
             value={grade}
-            values={grades}
-            setValue={(grade) => setGrade(grade)}
+            values={gradeValues}
+            setValue={(r: Array<{ label: string; value: number }>) =>
+              setGrade(r)
+            }
           />
         </FormField>
 
@@ -264,7 +282,7 @@ function New() {
           <DropDown
             value={subject}
             values={subjects}
-            setValue={(subject) => setSubject(subject)}
+            setValue={(subject: Array<SubjectOptions>) => setSubject(subject)}
           />
         </FormField>
       </div>
@@ -470,18 +488,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session)
-    return {
-      redirect: {
-        destination: "/register?redirectTo=/lessons/new",
-        permanent: false,
-      },
-    };
+  // if (!session)
+  //   return {
+  //     redirect: {
+  //       destination: "/register?redirectTo=/lessons/new",
+  //       permanent: false,
+  //     },
+  //   };
 
   return {
     props: {
       initialSession: session,
-      user: session.user,
+      // user: session.user,
     },
   };
 };

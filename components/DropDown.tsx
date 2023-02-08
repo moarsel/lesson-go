@@ -1,4 +1,4 @@
-import { Menu, Transition } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -10,9 +10,10 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
+type FieldType = { label: string; value: string | number };
 interface DropDownProps<T> {
-  value: T;
-  values: Array<T>;
+  value: Array<FieldType>;
+  values: Array<FieldType>;
   setValue: (value: T) => void;
 }
 
@@ -22,21 +23,21 @@ export default function DropDown<T>({
   setValue,
 }: DropDownProps<T>) {
   return (
-    <Menu as="div" className="relative block w-full text-left">
-      <div>
-        <Menu.Button className="inline-flex items-center justify-between w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black">
+    <Listbox multiple onChange={setValue}>
+      <div className="relative block w-full text-left">
+        <Listbox.Button className="inline-flex items-center justify-between w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-black">
           <>
-            {value}
+            <span>{value?.map((v) => v.label).join(", ") || " "}</span>
             <ChevronUpIcon
               className="hidden w-5 h-5 ml-2 -mr-1 ui-open:block"
               aria-hidden="true"
             />
             <ChevronDownIcon
-              className="w-5 h-5 ml-2 -mr-1  ui-open:hidden"
+              className="w-5 h-5 ml-2 -mr-1 ui-open:hidden"
               aria-hidden="true"
             />
           </>
-        </Menu.Button>
+        </Listbox.Button>
       </div>
 
       <Transition
@@ -48,33 +49,35 @@ export default function DropDown<T>({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items
+        <Listbox.Options
           className="absolute left-0 z-10 w-full mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           key={`${value}`}
         >
           <div className="">
             {values.map((valueItem) => (
-              <Menu.Item key={`${valueItem}`}>
+              <Listbox.Option key={`${valueItem.value}`} value={valueItem}>
                 {({ active }) => (
-                  <button
-                    onClick={() => setValue(valueItem)}
+                  <div
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      value === valueItem ? "bg-gray-200" : "",
+                      value.some((v) => v.value === valueItem.value)
+                        ? "bg-gray-200"
+                        : "",
                       "px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between"
                     )}
                   >
-                    <span>{`${valueItem}`}</span>
-                    {value === valueItem ? (
+                    <span className="flex items-center justify-between w-full px-4 py-2 space-x-2 text-sm text-left">{`${valueItem.label}`}</span>
+                    {value.some((v) => v.value === valueItem.value) ? (
                       <CheckIcon className="w-4 h-4 text-bold" />
                     ) : null}
-                  </button>
+                  </div>
+                  // </button>
                 )}
-              </Menu.Item>
+              </Listbox.Option>
             ))}
           </div>
-        </Menu.Items>
+        </Listbox.Options>
       </Transition>
-    </Menu>
+    </Listbox>
   );
 }

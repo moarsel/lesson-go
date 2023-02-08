@@ -7,16 +7,15 @@ import { Database } from "../../supabase/database.types";
 
 function LessonsPage({ lessons }: { lessons: any[] }) {
   return (
-    <div>
-      <h1 className="text-3xl">Lessons</h1>
-      <h2>All</h2>
+    <div className="w-full max-w-2xl mx-auto">
+      <h1 className="text-3xl">Lesson plans</h1>
       {lessons?.map((lesson) => (
         <Link
           href={`/lessons/${lesson.id}`}
-          className="block p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
+          className="block h-20 p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
-          <h3>{lesson.title}</h3>
-          <p>{lesson.topic}</p>
+          <h3 className="text-xl font-bold capitalize">{lesson.title}</h3>
+          <p className="text-gray-800 text-ellipsis">{lesson.overview}</p>
         </Link>
       ))}
     </div>

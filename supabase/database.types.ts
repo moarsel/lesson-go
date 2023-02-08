@@ -14,24 +14,30 @@ export interface Database {
           content: Json | null;
           created_at: string | null;
           id: number;
-          subject: string | null;
+          subject: Array<string | null>;
+          grade: Array<number | null>;
           title: string | null;
+          overview?: string | null;
           user_id: string | null;
         };
         Insert: {
           content?: Json | null;
           created_at?: string | null;
           id?: number;
-          subject?: string | null;
+          subject?: Array<string | null>;
+          grade?: Array<number | null>;
           title?: string | null;
+          overview?: string | null;
           user_id?: string | null;
         };
         Update: {
           content?: Json | null;
           created_at?: string | null;
           id?: number;
-          subject?: string | null;
+          subject?: Array<string | null>;
+          grade?: Array<number | null>;
           title?: string | null;
+          overview?: string | null;
           user_id?: string | null;
         };
       };

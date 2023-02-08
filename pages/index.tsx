@@ -21,10 +21,16 @@ const Home: NextPage = () => {
           Go from no ideas to polished lesson plan in a snap!
         </p>
         <Link
-          href="/lessons/new"
-          className="w-64 px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
+          href="/register?redirectTo=/lessons/new"
+          className="w-64 px-4 py-2 mt-8 font-medium text-white bg-black border-2 border-black rounded-xl sm:mt-10 hover:bg-black/80"
         >
           Get Started
+        </Link>
+        <Link
+          href="/lessons/"
+          className="w-64 px-4 py-2 mt-8 font-medium border-2 border-black rounded-xl sm:mt-10 hover:bg-gray-100/80"
+        >
+          Browse Lesson Plans
         </Link>
       </main>
       <Footer />
