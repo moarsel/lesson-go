@@ -28,13 +28,15 @@ function MyApp({
 
   return (
     <div className={`${publicSans.variable} font-sans`}>
-      <SessionContextProvider
-        supabaseClient={supabase}
-        initialSession={pageProps.initialSession}
-      >
-        {getLayout(<Component {...pageProps} />)}
-        <Analytics />
-      </SessionContextProvider>
+      <div id="headlessui-portal-root">
+        <SessionContextProvider
+          supabaseClient={supabase}
+          initialSession={pageProps.initialSession}
+        >
+          {getLayout(<Component {...pageProps} />)}
+          <Analytics />
+        </SessionContextProvider>
+      </div>
     </div>
   );
 }

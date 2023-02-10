@@ -46,9 +46,9 @@ function LessonsPage({
       {lessons?.map((lesson) => (
         <Link
           href={`/lessons/${lesson.id}`}
-          className="block h-20 p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
+          className="block h-24 p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
-          <h3 className="text-xl font-bold capitalize">{lesson.title}</h3>
+          <h3 className="text-2xl font-bold capitalize">{lesson.title}</h3>
           <p className="text-gray-800 truncate">{lesson.overview}</p>
         </Link>
       ))}
@@ -72,7 +72,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient<Database>(ctx);
   // Check if we have a session
-  const { data, error } = await supabase.from("lessons").select("*");
+  const { data, error } = await supabase
+    .from("lessons")
+    .select("*")
+    .eq("public", true);
 
   return {
     props: {

@@ -16,7 +16,7 @@ function MyLessonsPage({
       <h1 className="mb-8 text-4xl font-bold mt-11">My Lesson Plans</h1>
       {lessons?.map((lesson) => (
         <Link
-          href={`/lessons/${lesson}`}
+          href={`/lessons/${lesson.id}`}
           className="block h-20 p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
           <h3 className="text-xl font-bold capitalize">{lesson.title}</h3>

@@ -43,20 +43,35 @@ const Home: NextPage = () => {
           )}
         </h1>
         <p className="mt-5 text-lg sm:text-2xl text-slate-700">
-          Using AI, you'll go from no ideas to polished lesson plan in a snap!
+          Use AI to go from no ideas to polished lesson plan in a snap!
         </p>
-        <Link
-          href="/register?redirectTo=/lessons/new"
-          className="w-64 px-4 py-2 mt-8 font-medium text-white bg-black border-2 border-black rounded-xl sm:mt-10 hover:bg-black/80"
+        <div className="flex flex-col gap-5 mt-16 sm:flex-row">
+          <Link
+            href="/register?redirectTo=/lessons/new"
+            className="w-64 px-4 py-2 font-medium text-white bg-black border-2 border-black rounded-xl hover:bg-black/80"
+          >
+            Plan my lesson <span className="ml-2"> ⚡️</span>
+          </Link>
+          <Link
+            href="/lessons/"
+            className="w-64 px-4 py-2 font-medium border-2 border-black rounded-xl hover:bg-gray-100/80"
+          >
+            Browse Lesson Plans
+          </Link>
+        </div>
+
+        <h2 className="mt-32 mb-6 text-lg font-bold">
+          Want a sneak peak before you log in?
+        </h2>
+        <video
+          src="/lesson-go-intro.mp4"
+          aria-label="Overview of lesson go: choosing grade, subject, and topic then auto-generating lesson ideas"
+          width={"90%"}
+          className="max-w-2xl border-2 border-black rounded-xl"
+          controls
         >
-          Plan my lesson <span className="ml-2"> ⚡️</span>
-        </Link>
-        <Link
-          href="/lessons/"
-          className="w-64 px-4 py-2 mt-8 font-medium border-2 border-black rounded-xl sm:mt-10 hover:bg-gray-100/80"
-        >
-          Browse Lesson Plans
-        </Link>
+          <p>Sorry, it appears your system does not support video playback.</p>
+        </video>
       </main>
       <Footer />
     </div>

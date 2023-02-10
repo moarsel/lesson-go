@@ -22,10 +22,11 @@ export default function Header({ children }: { children?: ReactNode }) {
         </Link>
 
         {user && (
-          <Link href="/account">
-            <div className="flex items-center justify-center w-12 h-12 text-3xl uppercase rounded-full bg-slate-400">
-              {user?.email?.substring(0, 1)}
-            </div>
+          <Link
+            href="/account"
+            className="px-4 py-2 font-medium whitespace-nowrap"
+          >
+            My Account
           </Link>
         )}
         {!user && (

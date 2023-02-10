@@ -72,7 +72,7 @@ export default function DropDown<T>({
                         "px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between"
                       )}
                     >
-                      <span className="flex items-center justify-between w-full px-4 py-2 space-x-2 text-sm text-left">{`${valueItem.label}`}</span>
+                      <span className="flex items-center justify-between w-full px-4 py-1 text-sm text-left">{`${valueItem.label}`}</span>
                       {value.some((v) => v.value === valueItem.value) ? (
                         <CheckIcon className="w-8 h-8 text-bold" />
                       ) : null}
@@ -95,7 +95,7 @@ export default function DropDown<T>({
                         "px-4 py-2 text-sm w-full text-left flex items-center space-x-2 justify-between"
                       )}
                     >
-                      <span className="flex items-center justify-between w-full px-4 py-2 space-x-2 text-sm text-left">{`${valueItem.label}`}</span>
+                      <span className="flex items-center justify-between w-full px-4 py-1 text-sm text-left">{`${valueItem.label}`}</span>
                       {value.some((v) => v.value === valueItem.value) ? (
                         <CheckIcon className="w-8 h-8 text-bold" />
                       ) : null}

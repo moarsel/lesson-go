@@ -17,7 +17,8 @@ export interface Database {
           subject: Array<string | null>;
           grade: Array<number | null>;
           title: string | null;
-          overview?: string | null;
+          overview: string | null;
+          public: boolean;
           user_id: string | null;
         };
         Insert: {
@@ -28,6 +29,7 @@ export interface Database {
           grade?: Array<number | null>;
           title?: string | null;
           overview?: string | null;
+          public?: boolean;
           user_id?: string | null;
         };
         Update: {
@@ -38,6 +40,7 @@ export interface Database {
           grade?: Array<number | null>;
           title?: string | null;
           overview?: string | null;
+          public?: boolean;
           user_id?: string | null;
         };
       };

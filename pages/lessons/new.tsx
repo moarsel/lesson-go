@@ -5,13 +5,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 
 import DropDown from "../../components/DropDown";
 import FormField from "../../components/FormField";
 import LoadingDots from "../../components/LoadingDots";
 import MainLayout from "../../components/MainLayout";
 import ResizablePanel from "../../components/ResizablePanel";
+import Textarea from "../../components/Textarea";
 import { Database } from "../../supabase/database.types";
 import { useLocalStorage } from "../../utils/useLocalStorage";
 
@@ -126,9 +127,9 @@ async function generateFromPrompt(prompt: string): Promise<ReadableStream> {
 function New() {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
-  const [grade, setGrade] = useState<Array<{ value: number; label: string }>>(
-    []
-  );
+  const [grade, setGrade] = useState<Array<{ value: number; label: string }>>([
+    { value: 0, label: "All ages" },
+  ]);
   const [subject, setSubject] = useState<
     Array<{ label: SubjectType; value: SubjectType }>
   >([{ value: "Math", label: "Math" }]);
@@ -138,6 +139,8 @@ function New() {
   const user = useUser();
   const [localData, setLocalData] = useLocalStorage({});
   const router = useRouter();
+  const activitiesRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
 
   const [sections, setSections] = useState<SectionTypes>({
     objectives: {
@@ -194,6 +197,28 @@ function New() {
     setLoading(false);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (activitiesRef.current) {
+        activitiesRef.current.scrollIntoView({
+          block: "start",
+          behavior: "smooth",
+        });
+      }
+    }, 1500);
+  }, [Boolean(generatedActivities)]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (detailsRef.current) {
+        detailsRef.current.scrollIntoView({
+          block: "start",
+          behavior: "smooth",
+        });
+      }
+    }, 1500);
+  }, [Boolean(sections.objectives.content)]);
+
   function setSectionContent(type: keyof SectionTypes, contentValue: string) {
     setSections({
       ...sections,
@@ -206,11 +231,11 @@ function New() {
     setLoading(true);
 
     const lessonPlanPrompt = {
-      objectives: `List what a teacher needs to cover to prepare ${grade} ${subject} for ${selectedActivity}. Suggest a few specific concepts and phrase them as grade appropriate learning objectives students should meet, and use less than 70 words.`,
-      instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (what specific concepts to cover, then how to model the activity for students). It should be appropriate for a ${grade} ${subject} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
-      practice: `Detail the plan for ${grade} ${subject} students doing the guided practice part of this activity: ${selectedActivity}. It should that meet learning goals: ${sections.objectives.content}.  Bullet points in the style of a creative veteran teacher passive voice.`,
-      differentiation: `Make a list of bullet points examples of how to differentiate this activity: ${selectedActivity} for ${grade} students with differing needs. In the style of a creative veteran teacher but in a passive voice.`,
-      materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 60 words max.`,
+      objectives: `List what a teacher needs to cover to prepare ${grade} ${subject} for ${selectedActivity}. Suggest a few specific concepts and phrase them as grade appropriate learning objectives students should meet, and use less than 70 words in point form.`,
+      instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (what specific concepts to cover, then how to model the activity for students). Only include the setup not the activity itself. It should be appropriate for a ${grade} ${subject} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
+      practice: `Detail the plan for the guided practice part of this activity: ${selectedActivity} for ${grade} students. The plan should be step by step and specific, naturally incorporating formative assessment for these learning goals ${sections.objectives.content}. Don't explicitly mention learning goals or formative assessment. List steps in a passive voice.`,
+      differentiation: `Make a list less than 6 bullet points examples of how to differentiate this activity: ${selectedActivity} for ${grade} students with differing needs. Written in passive voice of a passionate teacher.`,
+      materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 60 words at most, but could be as few as 2 bullet points.`,
     };
 
     const data = await generateFromPrompt(lessonPlanPrompt[type]);
@@ -298,7 +323,7 @@ function New() {
           onChange={(e) => setBio(e.target.value)}
           rows={2}
           className="w-full mt-2 border-gray-300 rounded-md shadow-sm form-input focus:border-black focus:ring-black"
-          placeholder={"Plant anatomy"}
+          placeholder={"e.g. Fractions in everyday life"}
         />
       </FormField>
 
@@ -312,7 +337,7 @@ function New() {
           onClick={(e) =>
             Boolean(subject.length && grade.length) && generateBio(e)
           }
-          disabled={Boolean(subject.length && grade.length)}
+          disabled={Boolean(!subject.length || !grade.length)}
         >
           {generatedActivities ? "Try one more time ↺" : "Suggest activities →"}
         </button>
@@ -333,37 +358,43 @@ function New() {
           <motion.div className="my-8 space-y-10">
             {generatedActivities && (
               <>
-                <div>
-                  <h2 className="mx-auto text-3xl font-bold sm:text-4xl text-slate-900">
+                <div ref={activitiesRef}>
+                  <h2
+                    id="activities"
+                    className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900"
+                  >
                     Great, how about we try one of these activities?
                   </h2>
-                </div>
-                <div className="flex flex-col items-center justify-center max-w-xl mx-auto space-y-8">
-                  {generatedActivities
-                    .split(/\n(?=[0-9]\.)/)
-                    .map((activity) => activity.replace(/([0-9]\.)/, "").trim())
-                    .map((activity, i) => {
-                      return (
-                        <button
-                          className={`p-4 transition border shadow-md rounded-xl ${
-                            activity === selectedActivity
-                              ? "bg-green-700 hover:bg-green-900 text-white"
-                              : "bg-white hover:bg-gray-100"
-                          }`}
-                          onClick={() => {
-                            setSelectedActivity(`${activity}`);
-                          }}
-                          key={activity}
-                        >
-                          <p className="flex items-center gap-5 text-left">
-                            <span className="flex items-center justify-center w-8 h-8 text-lg text-white bg-green-900 rounded-full shrink-0">
-                              {i + 1}
-                            </span>
-                            {activity}
-                          </p>
-                        </button>
-                      );
-                    })}
+
+                  <div className="flex flex-col items-center justify-center max-w-xl mx-auto space-y-8">
+                    {generatedActivities
+                      .split(/\n(?=[0-9]\.)/)
+                      .map((activity) =>
+                        activity.replace(/([0-9]\.)/, "").trim()
+                      )
+                      .map((activity, i) => {
+                        return (
+                          <button
+                            className={`p-4 transition border shadow-md rounded-xl ${
+                              activity === selectedActivity
+                                ? "bg-green-700 hover:bg-green-900 text-white"
+                                : "bg-white hover:bg-gray-100"
+                            }`}
+                            onClick={() => {
+                              setSelectedActivity(`${activity}`);
+                            }}
+                            key={activity}
+                          >
+                            <p className="flex items-center gap-5 text-left">
+                              <span className="flex items-center justify-center w-8 h-8 text-lg text-white bg-green-900 rounded-full shrink-0">
+                                {i + 1}
+                              </span>
+                              {activity}
+                            </p>
+                          </button>
+                        );
+                      })}
+                  </div>
                 </div>
               </>
             )}
@@ -393,7 +424,7 @@ function New() {
       </ResizablePanel>
       <hr className="h-px my-10 bg-gray-700 border-1 dark:bg-gray-700" />
       {sections.objectives.content && (
-        <div className="">
+        <div ref={detailsRef}>
           <h2 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
             Great, now let's finish the lesson plan!
           </h2>
@@ -446,7 +477,7 @@ function New() {
                     </div>
                   </button>
                   {sectionData.content && (
-                    <textarea
+                    <Textarea
                       value={sectionData.content}
                       aria-label={sectionName}
                       onChange={(e) =>
@@ -455,9 +486,6 @@ function New() {
                           e.target.value
                         )
                       }
-                      rows={6}
-                      style={{ minHeight: "4rem" }}
-                      className="w-full p-6 mb-[-6px] border-transparent border-t-slate-200  rounded-b-xl focus:border-green-700 focus:ring-green-700 focus:ring-inset"
                     />
                   )}
                 </div>
