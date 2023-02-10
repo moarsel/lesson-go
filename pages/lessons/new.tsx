@@ -208,9 +208,9 @@ function New() {
     const lessonPlanPrompt = {
       objectives: `List what a teacher needs to cover to prepare ${grade} ${subject} for ${selectedActivity}. Suggest a few specific concepts and phrase them as grade appropriate learning objectives students should meet, and use less than 70 words.`,
       instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (what specific concepts to cover, then how to model the activity for students). It should be appropriate for a ${grade} ${subject} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
-      practice: `Detail the plan for ${grade} ${subject} students doing the guided practice part of this activity: ${selectedActivity}. It should that meet learning goals: ${sections.objectives.content}.  In the style of a creative veteran teacher passive voice.`,
+      practice: `Detail the plan for ${grade} ${subject} students doing the guided practice part of this activity: ${selectedActivity}. It should that meet learning goals: ${sections.objectives.content}.  Bullet points in the style of a creative veteran teacher passive voice.`,
       differentiation: `Make a list of bullet points examples of how to differentiate this activity: ${selectedActivity} for ${grade} students with differing needs. In the style of a creative veteran teacher but in a passive voice.`,
-      materials: `Make a list of bullet points with the specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only no headings.`,
+      materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 60 words max.`,
     };
 
     const data = await generateFromPrompt(lessonPlanPrompt[type]);
@@ -304,8 +304,15 @@ function New() {
 
       {!loading && (
         <button
-          className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
-          onClick={(e) => generateBio(e)}
+          className={`w-full px-4 py-2 mt-8 font-medium text-white rounded-xl sm:mt-10 hover:bg-black/80 ${
+            Boolean(subject.length && grade.length)
+              ? "bg-black "
+              : "bg-neutral-500 cursor-not-allowed"
+          }`}
+          onClick={(e) =>
+            Boolean(subject.length && grade.length) && generateBio(e)
+          }
+          disabled={Boolean(subject.length && grade.length)}
         >
           {generatedActivities ? "Try one more time ↺" : "Suggest activities →"}
         </button>
@@ -427,7 +434,14 @@ function New() {
                             : "border-green-700 bg-green-700"
                         }`}
                       >
-                        {sectionData.content ? <CheckIcon color="white" /> : ""}
+                        {sectionData.content ? (
+                          <CheckIcon
+                            className="font-bold w-7 h-7"
+                            color="white"
+                          />
+                        ) : (
+                          ""
+                        )}
                       </span>
                     </div>
                   </button>

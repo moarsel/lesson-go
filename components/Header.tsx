@@ -1,4 +1,4 @@
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -7,7 +7,7 @@ export default function Header({ children }: { children?: ReactNode }) {
   const user = useUser();
   return (
     <header className="w-full border-b-2 print:hidden">
-      <div className="flex items-center justify-between w-full pr-2 mt-5 pb-7 sm:px-16">
+      <div className="flex items-center justify-between w-full px-2 mt-5 pb-7 sm:px-16">
         <Link href="/" className="flex items-center space-x-3 ">
           <Image
             alt="Lesson Go"

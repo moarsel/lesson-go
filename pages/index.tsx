@@ -25,27 +25,25 @@ const Home: NextPage = () => {
       <main className="flex flex-col items-center flex-1 w-full px-4 mt-20 text-center sm:mt-24">
         <h1
           ref={headingRef}
-          aria-label="Create superb lesson plans with superhuman speed"
+          aria-label="Create super lesson plans with superhuman speed"
           className="max-w-2xl px-4 text-4xl font-bold sm:text-5xl text-slate-900"
         >
           {loaded && (
             <TypeWriterEffect
-              options={{ delay: 90, autoStart: false }}
+              options={{ delay: 80, autoStart: false }}
               onInit={(typewriter) => {
                 typewriter
                   .typeString("Create super lesson plans")
                   .pauseFor(1200)
                   .changeDelay(15)
-                  .typeString(
-                    ` with super speed ${String.fromCodePoint(129302)}`
-                  )
+                  .typeString(` with superhuman speed!`)
                   .start();
               }}
             ></TypeWriterEffect>
           )}
         </h1>
         <p className="mt-5 text-lg sm:text-2xl text-slate-700">
-          Go from no ideas to polished lesson plan in a snap!
+          Using AI, you'll go from no ideas to polished lesson plan in a snap!
         </p>
         <Link
           href="/register?redirectTo=/lessons/new"
