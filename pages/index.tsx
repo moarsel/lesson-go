@@ -33,10 +33,12 @@ const Home: NextPage = () => {
               options={{ delay: 90, autoStart: false }}
               onInit={(typewriter) => {
                 typewriter
-                  .typeString("Create superb lesson plans")
+                  .typeString("Create super lesson plans")
                   .pauseFor(1200)
                   .changeDelay(15)
-                  .typeString(" with superhuman speed 🤖")
+                  .typeString(
+                    ` with super speed ${String.fromCodePoint(129302)}`
+                  )
                   .start();
               }}
             ></TypeWriterEffect>

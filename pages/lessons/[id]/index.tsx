@@ -1,5 +1,6 @@
 import { PrinterIcon } from "@heroicons/react/20/solid";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import Head from "next/head";
 import { GetServerSideProps } from "next/types";
 import { ReactElement } from "react";
 import MainLayout from "../../../components/MainLayout";
@@ -11,6 +12,9 @@ function ViewLessonPage({ lesson }: { lesson: Lesson }) {
   const content = lesson.content as SectionTypes;
   return (
     <div className="max-w-4xl px-6 mx-auto">
+      <Head>
+        <title>{lesson?.title} Lesson Plan | Lesson Go</title>
+      </Head>
       <div className="flex flex-row items-center">
         <h1 className="mb-3 text-4xl capitalize">{lesson?.title}</h1>
         <button

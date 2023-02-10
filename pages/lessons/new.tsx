@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, useState } from "react";
 
@@ -125,9 +126,9 @@ async function generateFromPrompt(prompt: string): Promise<ReadableStream> {
 function New() {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
-  const [grade, setGrade] = useState<Array<{ value: number; label: string }>>([
-    { value: 4, label: "hi" },
-  ]);
+  const [grade, setGrade] = useState<Array<{ value: number; label: string }>>(
+    []
+  );
   const [subject, setSubject] = useState<
     Array<{ label: SubjectType; value: SubjectType }>
   >([{ value: "Math", label: "Math" }]);
@@ -267,7 +268,7 @@ function New() {
       <h1 className="mx-auto mb-6 text-3xl font-bold sm:text-4xl text-slate-900">
         First, who is this for?
       </h1>
-      <div className="flex flex-row space-x-8">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <FormField label="Grade:" className="w-full">
           <DropDown
             value={grade}
@@ -477,7 +478,14 @@ function New() {
 export default New;
 
 New.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return (
+    <MainLayout>
+      <Head>
+        <title>Create a lesson | Lesson Go AI</title>
+      </Head>
+      {page}
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

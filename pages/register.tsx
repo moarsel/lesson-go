@@ -19,7 +19,7 @@ const RegisterPage = () => {
   if (!user)
     return (
       <div className="mx-auto w-96">
-        <h1 className="mb-4 text-3xl font-bold text-center sm:text-5xl text-slate-900">
+        <h1 className="mb-4 text-3xl font-bold text-center sm:text-4xl text-slate-900">
           Register
         </h1>
         <h2 className="mb-10 text-xl text-center text-gray-700">

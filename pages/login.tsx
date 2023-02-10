@@ -4,6 +4,7 @@ import { ReactElement, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import MainLayout from "../components/MainLayout";
 import { getURL } from "../utils/helpers";
+import Head from "next/head";
 
 const LoginPage = () => {
   const supabaseClient = useSupabaseClient();
@@ -15,7 +16,7 @@ const LoginPage = () => {
   if (!user)
     return (
       <div className="mx-auto w-96">
-        <h2 className="mb-3 text-3xl font-bold text-center sm:text-5xl text-slate-900">
+        <h2 className="mb-3 text-3xl font-bold text-center sm:text-4xl text-slate-900">
           Login
         </h2>
         <h2 className="mb-12 text-xl text-center text-gray-700">
@@ -37,5 +38,12 @@ const LoginPage = () => {
 export default LoginPage;
 
 LoginPage.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return (
+    <MainLayout>
+      <Head>
+        <title>Login | Lesson Go: Lesson plan with AI</title>
+      </Head>
+      {page}
+    </MainLayout>
+  );
 };

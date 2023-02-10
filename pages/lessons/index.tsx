@@ -1,4 +1,5 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import Head from "next/head";
 import Link from "next/link";
 import { GetServerSideProps } from "next/types";
 import { ReactElement, useState } from "react";
@@ -8,7 +9,11 @@ import MainLayout from "../../components/MainLayout";
 import { Database } from "../../supabase/database.types";
 import { gradeValues, subjectTypes } from "./new";
 
-function LessonsPage({ lessons }: { lessons: any[] }) {
+function LessonsPage({
+  lessons,
+}: {
+  lessons: Database["public"]["Tables"]["lessons"]["Row"][];
+}) {
   const [grades, setGrades] = useState<Array<{ label: string; value: number }>>(
     []
   );
@@ -17,7 +22,7 @@ function LessonsPage({ lessons }: { lessons: any[] }) {
   >([]);
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <h1 className="mb-8 text-5xl font-bold mt-11">Lesson plans</h1>
+      <h1 className="mb-8 text-4xl font-bold mt-11">Lesson plans</h1>
       <div>
         <FormField label="Filter by grades:">
           <DropDown
@@ -44,7 +49,7 @@ function LessonsPage({ lessons }: { lessons: any[] }) {
           className="block h-20 p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
           <h3 className="text-xl font-bold capitalize">{lesson.title}</h3>
-          <p className="text-gray-800 text-ellipsis">{lesson.overview}</p>
+          <p className="text-gray-800 truncate">{lesson.overview}</p>
         </Link>
       ))}
     </div>
@@ -53,7 +58,14 @@ function LessonsPage({ lessons }: { lessons: any[] }) {
 export default LessonsPage;
 
 LessonsPage.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return (
+    <MainLayout>
+      <Head>
+        <title>Lesson plan templates | Lesson Go: plan lessons with AI</title>
+      </Head>
+      {page}
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
