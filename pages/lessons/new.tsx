@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { CheckIcon } from "@heroicons/react/20/solid";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -169,29 +169,36 @@ function New() {
     },
   });
 
-  const activityPrompt = `Generate 3 lesson plan activity ideas for ${grade
+  const studentDemographic = `${grade
     .map((g) => g.label)
-    .join(" and ")} ${
-    subject.map((s) => s.label).join("and") !== "Other" ? subject : ""
-  } lesson with the goal of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, and engaging like an expert teacher influencer would think of. Each generated activity is at max 35 words.`;
+    .join(" and ")} ${subject
+    .map((s) => (s.label !== "Other" ? s.label : ""))
+    .filter(Boolean)
+    .join(" and ")}`;
+
+  const activityPrompt = `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, and engaging like an expert teacher influencer would think of. Each generated activity is at max 40 words.`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
     setGeneratedActivities("");
     setLoading(true);
 
-    const data = await generateFromPrompt(activityPrompt);
-    if (data) {
-      const reader = data.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
+    try {
+      const data = await generateFromPrompt(activityPrompt);
+      if (data) {
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let done = false;
 
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value);
-        setGeneratedActivities((prev) => prev + chunkValue);
+        while (!done) {
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+          const chunkValue = decoder.decode(value);
+          setGeneratedActivities((prev) => prev + chunkValue);
+        }
       }
+    } catch (e) {
+      console.warn(e);
     }
 
     setLoading(false);
@@ -231,31 +238,34 @@ function New() {
     setLoading(true);
 
     const lessonPlanPrompt = {
-      objectives: `List what a teacher needs to cover to prepare ${grade} ${subject} for ${selectedActivity}. Suggest a few specific concepts and phrase them as grade appropriate learning objectives students should meet, and use less than 70 words in point form.`,
+      objectives: `List what a teacher needs to cover to prepare ${studentDemographic} for ${selectedActivity}. Suggest a few specific concepts and phrase them as grade appropriate learning objectives students should meet, and use less than 70 words in point form.`,
       instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (what specific concepts to cover, then how to model the activity for students). Only include the setup not the activity itself. It should be appropriate for a ${grade} ${subject} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
-      practice: `Detail the plan for the guided practice part of this activity: ${selectedActivity} for ${grade} students. The plan should be step by step and specific, naturally incorporating formative assessment for these learning goals ${sections.objectives.content}. Don't explicitly mention learning goals or formative assessment. List steps in a passive voice.`,
-      differentiation: `Make a list less than 6 bullet points examples of how to differentiate this activity: ${selectedActivity} for ${grade} students with differing needs. Written in passive voice of a passionate teacher.`,
+      practice: `Detail the plan for the guided practice part of this activity: ${selectedActivity} for ${studentDemographic} students. The plan should be step by step and specific, naturally incorporating formative assessment for these learning goals ${sections.objectives.content}. Don't explicitly mention learning goals or formative assessment. List steps in a passive voice.`,
+      differentiation: `Make a list less than 6 bullet points examples of how to differentiate this activity: ${selectedActivity} for ${studentDemographic} students with differing needs. Written in passive voice of a passionate teacher.`,
       materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 60 words at most, but could be as few as 2 bullet points.`,
     };
 
-    const data = await generateFromPrompt(lessonPlanPrompt[type]);
+    try {
+      const data = await generateFromPrompt(lessonPlanPrompt[type]);
 
-    if (data) {
-      const reader = data.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
+      if (data) {
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let done = false;
 
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value);
-        setSections((prev) => ({
-          ...prev,
-          [type]: { ...prev[type], content: prev[type].content + chunkValue },
-        }));
+        while (!done) {
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+          const chunkValue = decoder.decode(value);
+          setSections((prev) => ({
+            ...prev,
+            [type]: { ...prev[type], content: prev[type].content + chunkValue },
+          }));
+        }
       }
+    } catch (e) {
+      console.warn(e);
     }
-
     setLoading(false);
   }
 
@@ -290,7 +300,7 @@ function New() {
 
   return (
     <div className="col-span-12 mt-10 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
-      <h1 className="mb-6 text-3xl font-bold  sm:text-4xl text-slate-900">
+      <h1 className="mb-6 text-3xl font-bold sm:text-4xl text-slate-900">
         First, who is this for?
       </h1>
       <div className="flex flex-col gap-4 sm:flex-row">
@@ -466,7 +476,7 @@ function New() {
                         }`}
                       >
                         {sectionData.content ? (
-                          <ChevronDownIcon
+                          <CheckIcon
                             className="font-bold w-7 h-7"
                             color="white"
                           />
