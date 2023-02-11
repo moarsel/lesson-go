@@ -42,8 +42,12 @@ const Home: NextPage = () => {
             ></TypeWriterEffect>
           )}
         </h1>
-        <p className="mt-5 text-lg sm:text-2xl text-slate-700">
+        <p className="mt-6 text-lg sm:text-2xl text-slate-700">
           Use AI to go from no ideas to polished lesson plan in a snap!
+        </p>
+        <p className="mt-1 text-lg sm:text-2xl text-slate-700">
+          We'll guide you step-by-step to create a personalized plan for your
+          students.
         </p>
         <div className="flex flex-col gap-5 mt-16 sm:flex-row">
           <Link

@@ -1,4 +1,4 @@
-import { CheckIcon } from "@heroicons/react/20/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -289,8 +289,8 @@ function New() {
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto mt-10">
-      <h1 className="mx-auto mb-6 text-3xl font-bold sm:text-4xl text-slate-900">
+    <div className="col-span-12 mt-10 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
+      <h1 className="mb-6 text-3xl font-bold  sm:text-4xl text-slate-900">
         First, who is this for?
       </h1>
       <div className="flex flex-col gap-4 sm:flex-row">
@@ -466,7 +466,7 @@ function New() {
                         }`}
                       >
                         {sectionData.content ? (
-                          <CheckIcon
+                          <ChevronDownIcon
                             className="font-bold w-7 h-7"
                             color="white"
                           />

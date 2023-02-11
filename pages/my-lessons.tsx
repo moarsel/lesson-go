@@ -12,12 +12,12 @@ function MyLessonsPage({
   lessons: Database["public"]["Tables"]["lessons"]["Row"][];
 }) {
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-8 text-4xl font-bold mt-11">My Lesson Plans</h1>
       {lessons?.map((lesson) => (
         <Link
           href={`/lessons/${lesson.id}`}
-          className="block h-20 p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
+          className="block h-20 max-w-xl p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
           <h3 className="text-xl font-bold capitalize">{lesson.title}</h3>
           <p className="text-gray-800 truncate">{lesson.overview}</p>

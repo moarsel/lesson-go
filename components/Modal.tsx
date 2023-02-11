@@ -68,14 +68,6 @@ export default function Modal({
                   {...props}
                   className="w-full max-w-lg mt-4 text-left align-middle transition-all transform bg-white shadow-xl"
                 >
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    aria-label="close"
-                    className="absolute p-2 bg-white rounded-full right-1 top-1"
-                  >
-                    <XMarkIcon className="w-8 h-8" />
-                  </button>
                   <div className="overflow-hidden">
                     <div className="relative p-6 rounded">
                       <Dialog.Title
@@ -87,6 +79,14 @@ export default function Modal({
                       {children}
                     </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="close"
+                    className="absolute p-2 bg-white rounded-full right-1 top-1 "
+                  >
+                    <XMarkIcon className="w-8 h-8" />
+                  </button>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

@@ -6,9 +6,9 @@ import { ReactNode } from "react";
 export default function Header({ children }: { children?: ReactNode }) {
   const user = useUser();
   return (
-    <header className="w-full border-b-2 print:hidden">
-      <div className="flex items-center justify-between w-full px-2 mt-5 pb-7 sm:px-16">
-        <Link href="/" className="flex items-center space-x-3 ">
+    <header className="grid w-full grid-cols-12 px-4 border-b-2 print:hidden">
+      <div className="flex items-center justify-between w-full col-span-12 mt-5 pb-7 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
+        <Link href="/" className="flex items-center ">
           <Image
             alt="Lesson Go"
             src="/lesson-go.svg"
@@ -16,7 +16,7 @@ export default function Header({ children }: { children?: ReactNode }) {
             width={24}
             height={24}
           />
-          <h1 className="ml-2  text-lg uppercase font-[800] tracking-tight [font-variant: all-small-caps] sm:text-2xl whitespace-nowrap">
+          <h1 className="sm:ml-2  text-lg uppercase font-[800] tracking-tight [font-variant: all-small-caps] sm:text-2xl whitespace-nowrap">
             Lesson <span className="text-green-700">Go</span>
           </h1>
         </Link>

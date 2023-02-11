@@ -42,9 +42,9 @@ const LinkButton = ({
     <Link
       className={clsx(
         variant === "primary" &&
-          "flex flex-row w-max gap-3 px-4 py-2 font-medium border-2 border-black text-white bg-neutral-900 whitespace-nowrap rounded-xl hover:bg-black/80",
+          "flex flex-row items-center w-max gap-3 px-4 py-2 font-medium border-2 border-black text-white bg-neutral-900 whitespace-nowrap rounded-xl hover:bg-black/80",
         variant === "outline" &&
-          "flex flex-row w-max gap-3 px-4 py-2 font-medium border-2 border-black rounded-xl  whitespace-nowrap  hover:bg-gray-100/80",
+          "flex flex-row items-center w-max gap-3 px-4 py-2 font-medium border-2 border-black rounded-xl  whitespace-nowrap  hover:bg-gray-100/80",
         fullWidth && "w-full",
         className
       )}

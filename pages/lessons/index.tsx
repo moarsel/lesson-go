@@ -21,10 +21,10 @@ function LessonsPage({
     Array<{ label: string; value: string }>
   >([]);
   return (
-    <div className="w-full max-w-2xl mx-auto">
+    <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-8 text-4xl font-bold mt-11">Lesson plans</h1>
-      <div>
-        <FormField label="Filter by grades:">
+      <div className="flex flex-row w-full gap-4">
+        <FormField label="Filter by grades:" className="w-56">
           <DropDown
             value={grades}
             values={gradeValues}
@@ -33,7 +33,7 @@ function LessonsPage({
             }
           ></DropDown>
         </FormField>
-        <FormField label="Filter by Subjects:">
+        <FormField label="Filter by Subjects:" className="w-56">
           <DropDown
             value={subjects}
             values={subjectTypes}
@@ -46,7 +46,7 @@ function LessonsPage({
       {lessons?.map((lesson) => (
         <Link
           href={`/lessons/${lesson.id}`}
-          className="block h-24 p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
+          className="block h-24 max-w-xl p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
           <h3 className="text-2xl font-bold capitalize">{lesson.title}</h3>
           <p className="text-gray-800 truncate">{lesson.overview}</p>

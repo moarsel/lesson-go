@@ -10,7 +10,7 @@ function MainLayout({ children }: { children: ReactNode }) {
         <Navbar />
       </Header>
 
-      <main className="flex flex-col flex-1 w-full px-4 mt-10 sm:mt-12">
+      <main className="grid w-full grid-cols-12 px-5 mt-10 sm:mt-12">
         {children}
       </main>
       <Footer />

@@ -19,10 +19,17 @@ import { Database } from "../../../supabase/database.types";
 import { Lesson } from "../../../utils/types";
 import { gradeValues, SectionTypes } from "../new";
 
-function ViewLessonPage({ lesson }: { lesson: Lesson }) {
+function ViewLessonPage({
+  lesson,
+  currentUserId,
+}: {
+  lesson: Lesson;
+  currentUserId?: string;
+}) {
   if (!lesson) throw Error("Not authorized");
   const supabase = useSupabaseClient();
   const content = lesson?.content as SectionTypes;
+  const isCurrentUser = lesson.user_id === currentUserId;
   const [shareOpen, setShareOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(lesson.public);
   async function handleTogglePublish() {
@@ -66,37 +73,47 @@ function ViewLessonPage({ lesson }: { lesson: Lesson }) {
   };
 
   return (
-    <div className="max-w-4xl px-6 mx-auto">
+    <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <Head>
         <title>{lesson?.title} Lesson Plan | Lesson Go</title>
       </Head>
-      <div className="flex flex-row items-center">
-        <h1 className="mb-3 text-4xl capitalize">{lesson?.title}</h1>
-        <Button
-          onClick={() => setShareOpen(true)}
-          className="ml-auto  print:hidden"
-        >
-          <ShareIcon width={24} />
-          Share lesson
-        </Button>
+      <div className="flex flex-col gap-4">
+        <div>
+          <h1 className="mb-2 text-4xl capitalize">{lesson?.title}</h1>
+          <div className="text-xl text-gray-600">
+            {lesson?.grade
+              ?.map((g) => gradeValues.find((v) => v.value === g)?.label)
+              .join(", ")}{" "}
+            {lesson?.subject?.join(", ")}
+          </div>
+        </div>
+        <div className="flex flex-row gap-3">
+          <Button onClick={() => setShareOpen(true)} className="print:hidden">
+            <ShareIcon width={24} />
+            Share lesson
+          </Button>
+          <Button variant="outline" onClick={() => window.print()}>
+            <PrinterIcon width={24} />
+            Print lesson plan
+          </Button>
+        </div>
+
         <Modal
           title="Share"
           open={shareOpen}
           onClose={() => setShareOpen(false)}
         >
           <div className="flex flex-col mt-8 gap-y-5">
-            <Button onClick={() => window.print()}>
-              <PrinterIcon width={24} />
-              Print lesson plan
-            </Button>
-            <Button onClick={handleTogglePublish}>
-              {!isPublic ? (
-                <GlobeAltIcon width={24} />
-              ) : (
-                <LockClosedIcon width={24} />
-              )}
-              {!isPublic ? "Publish" : "Make private"}
-            </Button>
+            {isCurrentUser && (
+              <Button onClick={handleTogglePublish}>
+                {!isPublic ? (
+                  <GlobeAltIcon width={24} />
+                ) : (
+                  <LockClosedIcon width={24} />
+                )}
+                {!isPublic ? "Publish" : "Make private"}
+              </Button>
+            )}
 
             {isPublic && (
               <>
@@ -127,12 +144,7 @@ function ViewLessonPage({ lesson }: { lesson: Lesson }) {
           </div>
         </Modal>
       </div>
-      <div className="text-xl text-gray-600">
-        {lesson?.grade
-          ?.map((g) => gradeValues.find((v) => v.value === g)?.label)
-          .join(", ")}{" "}
-        {lesson?.subject?.join(", ")}
-      </div>
+
       <div className="mt-8 prose prose-slate">
         <h2 className="">Learning Objectives</h2>
         <div className="">
@@ -194,6 +206,15 @@ ViewLessonPage.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient<Database>(ctx);
+  let userId;
+  try {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    userId = user?.id;
+  } catch (e) {}
+
   // Check if we have a session
   const { data, error } = await supabase
     .from("lessons")
@@ -204,6 +225,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       lesson: data,
+      currentUserId: userId || null,
     },
   };
 };
