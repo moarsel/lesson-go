@@ -39,7 +39,7 @@ export default function Header({ children }: { children?: ReactNode }) {
             </Link>
             <Link
               href="/register"
-              className="px-4 py-2 font-medium text-white bg-green-600 whitespace-nowrap rounded-xl hover:bg-black/80"
+              className="px-4 py-2 font-medium text-white bg-green-700 whitespace-nowrap rounded-xl hover:bg-black/80"
             >
               Get Started
             </Link>

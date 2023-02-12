@@ -71,22 +71,22 @@ export type SubjectType =
 type SubjectOptions = { label: SubjectType; value: SubjectType };
 
 export const subjectTypes: Array<SubjectOptions> = [
+  { label: "Arts", value: "Arts" },
   { label: "English language arts", value: "English language arts" },
+  {
+    label: "English as a second language",
+    value: "English as a second language",
+  },
+  { label: "Geography", value: "Geography" },
+  { label: "History", value: "History" },
   { label: "Math", value: "Math" },
   { label: "Science", value: "Science" },
-  { label: "Arts", value: "Arts" },
-  { label: "History", value: "History" },
-  { label: "Geography", value: "Geography" },
   {
     label: "Social and emotional learning",
     value: "Social and emotional learning",
   },
   { label: "Social studies", value: "Social studies" },
   { label: "Special education", value: "Special education" },
-  {
-    label: "English as a second language",
-    value: "English as a second language",
-  },
   { label: "Other", value: "Other" },
 ];
 
@@ -242,7 +242,7 @@ function New() {
       instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (what specific concepts to cover, then how to model the activity for students). Only include the setup not the activity itself. It should be appropriate for a ${grade} ${subject} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
       practice: `Detail the plan for the guided practice part of this activity: ${selectedActivity} for ${studentDemographic} students. The plan should be step by step and specific, naturally incorporating formative assessment for these learning goals ${sections.objectives.content}. Don't explicitly mention learning goals or formative assessment. List steps in a passive voice.`,
       differentiation: `Make a list less than 6 bullet points examples of how to differentiate this activity: ${selectedActivity} for ${studentDemographic} students with differing needs. Written in passive voice of a passionate teacher.`,
-      materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 60 words at most, but could be as few as 2 bullet points.`,
+      materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 30 words at most, but could be as few as 2 bullet points.`,
     };
 
     try {
@@ -299,9 +299,9 @@ function New() {
   }
 
   return (
-    <div className="col-span-12 mt-10 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
+    <div className="col-span-12 mt-10 sm:col-span-8 sm:col-start-2 lg:col-span-6 lg:col-start-3">
       <h1 className="mb-6 text-3xl font-bold sm:text-4xl text-slate-900">
-        First, who is this for?
+        First, who is this lesson for?
       </h1>
       <div className="flex flex-col gap-4 sm:flex-row">
         <FormField label="Grade:" className="w-full">
@@ -339,7 +339,7 @@ function New() {
 
       {!loading && (
         <button
-          className={`w-full px-4 py-2 mt-8 font-medium text-white rounded-xl sm:mt-10 hover:bg-black/80 ${
+          className={`w-full md:w-80 px-4 py-2 mt-8 font-medium text-white rounded-xl sm:mt-10 hover:bg-black/80 ${
             Boolean(subject.length && grade.length)
               ? "bg-black "
               : "bg-neutral-500 cursor-not-allowed"

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col items-center justify-between w-full h-16 px-3 pt-4 mt-5 mb-3 space-y-3 text-center border-t print:hidden sm:h-20 sm:pt-2 sm:flex-row sm:mb-0">
+    <footer className="flex flex-col items-center justify-between w-full h-16 px-8 pt-4 mt-5 mb-3 space-y-3 text-center border-t print:hidden sm:h-20 sm:pt-2 sm:flex-row sm:mb-0">
       <div>
         Made with 💛 for busy teachers everywhere, from{" "}
         <Link href="https://mystorybook.com" className="underline group">

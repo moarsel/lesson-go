@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import Script from "next/script";
 
 import { ReactElement } from "react";
 import MainLayout from "../components/MainLayout";
@@ -17,11 +18,17 @@ function Account({
   const router = useRouter();
 
   return (
-    <div className="flex flex-col px-12">
+    <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-3 text-3xl">Account</h1>
-      Email: {user?.email}
-      <span>{lessons?.length} lesson(s) created</span>
-      {/* <iframe data-tally-src="https://tally.so/embed/3Eqjzo?transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="482" frameborder="0" marginheight="0" marginwidth="0" title="Lesson Go Signup"></iframe><script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script> */}
+      <div>Email: {user?.email}</div>
+      <div className="mb-12">{lessons?.length} lesson(s) created</div>
+      <Script
+        src="https://tally.so/widgets/embed.js"
+        onLoad={() => {
+          // @ts-ignore
+          // window.Tally.openPopup("3Eqjzo");
+        }}
+      ></Script>
       <button
         className="w-24 px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
         onClick={async () => {

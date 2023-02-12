@@ -94,7 +94,7 @@ function ViewLessonPage({
           </Button>
           <Button variant="outline" onClick={() => window.print()}>
             <PrinterIcon width={24} />
-            Print lesson plan
+            Print
           </Button>
         </div>
 
@@ -103,7 +103,7 @@ function ViewLessonPage({
           open={shareOpen}
           onClose={() => setShareOpen(false)}
         >
-          <div className="flex flex-col mt-8 gap-y-5">
+          <div className="flex flex-col mt-8 gap-y-4">
             {isCurrentUser && (
               <Button onClick={handleTogglePublish}>
                 {!isPublic ? (
@@ -117,28 +117,30 @@ function ViewLessonPage({
 
             {isPublic && (
               <>
-                <LinkButton
-                  variant="outline"
-                  target="_blank"
-                  href={shareLinks.email(currentUrl, lesson?.title || "")}
-                >
-                  <InboxIcon width={24} />
-                  Email lesson
-                </LinkButton>
-                <LinkButton
-                  variant="outline"
-                  target="_blank"
-                  href={shareLinks.facebook(currentUrl, lesson?.title || "")}
-                >
-                  Share on Facebook
-                </LinkButton>
-                <LinkButton
-                  variant="outline"
-                  target="_blank"
-                  href={shareLinks.twitter(currentUrl, lesson?.title || "")}
-                >
-                  Share on Twitter
-                </LinkButton>
+                <p className="mb-2">Share via:</p>
+                <div className="flex flex-row gap-2">
+                  <LinkButton
+                    variant="outline"
+                    target="_blank"
+                    href={shareLinks.email(currentUrl, lesson?.title || "")}
+                  >
+                    Email
+                  </LinkButton>
+                  <LinkButton
+                    variant="outline"
+                    target="_blank"
+                    href={shareLinks.facebook(currentUrl, lesson?.title || "")}
+                  >
+                    Facebook
+                  </LinkButton>
+                  <LinkButton
+                    variant="outline"
+                    target="_blank"
+                    href={shareLinks.twitter(currentUrl, lesson?.title || "")}
+                  >
+                    Twitter
+                  </LinkButton>
+                </div>
               </>
             )}
           </div>
@@ -148,8 +150,8 @@ function ViewLessonPage({
       <div className="mt-8 prose prose-slate">
         <h2 className="">Learning Objectives</h2>
         <div className="">
-          {content?.objectives?.content.split("\n").map((c) => (
-            <p>{c}</p>
+          {content?.objectives?.content.split("\n").map((c, i) => (
+            <p key={i}>{c}</p>
           ))}
         </div>
 
