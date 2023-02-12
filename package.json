@@ -21,6 +21,7 @@
     "clsx": "^1.2.1",
     "eventsource-parser": "^0.0.5",
     "framer-motion": "^8.4.3",
+    "jwt-decode": "^3.1.2",
     "lexical": "^0.7.7",
     "next": "latest",
     "react": "18.2.0",
