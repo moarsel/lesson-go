@@ -52,7 +52,7 @@ const Home: NextPage = () => {
         </p>
         <div className="flex flex-col gap-5 mt-16 sm:flex-row">
           <Link
-            href="/register?redirectTo=/lessons/new"
+            href="/lessons/new"
             className="w-64 px-4 py-2 font-medium text-white bg-black border-2 border-black rounded-xl hover:bg-black/80"
           >
             Plan my lesson <span className="ml-2"> ⚡️</span>
