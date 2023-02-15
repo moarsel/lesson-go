@@ -28,6 +28,7 @@ function MyApp({
 }) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
   const getLayout = Component.getLayout ?? ((page) => page);
+
   const [gAPILoaded, setGAPILoaded] = useState(false);
 
   async function loginWithGoogle({ credential }: { credential: string }) {
@@ -78,6 +79,18 @@ function MyApp({
           defer
           onLoad={() => {
             setGAPILoaded(true);
+          }}
+        ></Script>
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `(function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:3367525,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
           }}
         ></Script>
       </div>
