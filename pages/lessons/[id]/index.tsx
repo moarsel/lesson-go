@@ -148,6 +148,11 @@ function ViewLessonPage({
       </div>
 
       <div className="mt-8 prose prose-slate">
+        {lesson?.overview && (
+          <>
+            <p className="text-2xl">{lesson.overview}</p>
+          </>
+        )}
         <h2 className="">Learning Objectives</h2>
         <div className="">
           {content?.objectives?.content.split("\n").map((c, i) => (
@@ -155,7 +160,7 @@ function ViewLessonPage({
           ))}
         </div>
 
-        {content?.materials && (
+        {content?.materials?.content && (
           <>
             <h2 className="">Materials</h2>
             <div className="">
@@ -165,7 +170,7 @@ function ViewLessonPage({
             </div>
           </>
         )}
-        {content?.instructions && (
+        {content?.instructions?.content && (
           <>
             <h2 className="">Direct Instruction</h2>
             <div className="">
@@ -175,7 +180,7 @@ function ViewLessonPage({
             </div>
           </>
         )}
-        {content?.practice && (
+        {content?.practice?.content && (
           <>
             <h2 className="">Guided Practice</h2>
             <div className="">
@@ -185,7 +190,7 @@ function ViewLessonPage({
             </div>
           </>
         )}
-        {content?.differentiation && (
+        {content?.differentiation?.content && (
           <>
             <h2 className="">Differentiation</h2>
             <div className="">

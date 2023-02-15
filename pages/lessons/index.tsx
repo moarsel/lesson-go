@@ -20,6 +20,18 @@ function LessonsPage({
   const [subjects, setSubjects] = useState<
     Array<{ label: string; value: string }>
   >([]);
+
+  const filteredLessons = lessons.filter(
+    (lesson) =>
+      (!grades.length ||
+        grades.some((g) =>
+          lesson.grade.find((lessonGrade) => lessonGrade === g.value)
+        )) &&
+      (!subjects.length ||
+        subjects.some((g) =>
+          lesson.subject.find((lessonSub) => lessonSub === g.label)
+        ))
+  );
   return (
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-8 text-4xl font-bold mt-11">Lesson plans</h1>
@@ -43,13 +55,24 @@ function LessonsPage({
           ></DropDown>
         </FormField>
       </div>
-      {lessons?.map((lesson) => (
+      {filteredLessons?.map((lesson) => (
         <Link
           href={`/lessons/${lesson.id}`}
-          className="block h-24 max-w-xl p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
+          className="block max-w-xl p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
           <h3 className="text-2xl font-bold capitalize">{lesson.title}</h3>
-          <p className="text-gray-800 truncate">{lesson.overview}</p>
+          <p className="mb-2 text-lg text-gray-800">{lesson.overview}</p>
+          <p className="flex flex-row gap-3 text-gray-800">
+            {" "}
+            <span className="px-3 text-center bg-green-200 rounded-full">
+              {lesson.grade
+                .map((l) => gradeValues.find((v) => v.value === l)?.label)
+                .join(", ")}{" "}
+            </span>
+            <span className="px-3 text-center bg-orange-100 rounded-full">
+              {lesson.subject.join(", ")}
+            </span>
+          </p>
         </Link>
       ))}
     </div>
