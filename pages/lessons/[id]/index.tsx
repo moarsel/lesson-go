@@ -92,7 +92,11 @@ function ViewLessonPage({
             <ShareIcon width={24} />
             Share lesson
           </Button>
-          <Button variant="outline" onClick={() => window.print()}>
+          <Button
+            variant="outline"
+            onClick={() => window.print()}
+            className="print:hidden"
+          >
             <PrinterIcon width={24} />
             Print
           </Button>

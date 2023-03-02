@@ -41,7 +41,7 @@ function Navbar() {
       <LinkButton
         variant="outline"
         href="/lessons/new"
-        className="relative mb-2 ml-auto sm:text-xl"
+        className="relative mb-2 ml-auto sm:text-lg"
       >
         New Lesson
         <PencilSquareIcon className="hidden md:block" width={24} />

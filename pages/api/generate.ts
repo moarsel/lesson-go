@@ -1,4 +1,5 @@
-import { OpenAIStream, OpenAIStreamPayload } from "../../utils/OpenAIStream";
+import { CreateChatCompletionRequest, CreateCompletionRequest } from "openai";
+import { OpenAIStream } from "../../utils/OpenAIStream";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing env var from OpenAI");
@@ -17,9 +18,14 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response("No prompt in the request", { status: 400 });
   }
 
-  const payload: OpenAIStreamPayload = {
-    model: "text-davinci-003",
-    prompt,
+  const payload: CreateChatCompletionRequest = {
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "user",
+        content: `${prompt}`,
+      },
+    ],
     temperature: 0.7,
     top_p: 1,
     frequency_penalty: 0,
@@ -30,6 +36,7 @@ const handler = async (req: Request): Promise<Response> => {
   };
 
   const stream = await OpenAIStream(payload);
+
   return new Response(stream);
 };
 

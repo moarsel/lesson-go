@@ -176,7 +176,7 @@ function New() {
     .filter(Boolean)
     .join(" and ")}`;
 
-  const activityPrompt = `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, and engaging like an expert teacher influencer would think of. Each generated activity is at max 40 words.`;
+  const activityPrompt = `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity is at max 35 words.`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
@@ -238,10 +238,10 @@ function New() {
     setLoading(true);
 
     const lessonPlanPrompt = {
-      objectives: `List what a teacher needs to cover to prepare ${studentDemographic} for ${selectedActivity}. Suggest a few specific concepts and phrase them as grade appropriate learning objectives students should meet, and use less than 70 words in point form.`,
-      instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (what specific concepts to cover, then how to model the activity for students). Only include the setup not the activity itself. It should be appropriate for a ${grade} ${subject} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
-      practice: `Detail the plan for the guided practice part of this activity: ${selectedActivity} for ${studentDemographic} students. The plan should be step by step and specific, naturally incorporating formative assessment for these learning goals ${sections.objectives.content}. Don't explicitly mention learning goals or formative assessment. List steps in a passive voice.`,
-      differentiation: `Make a list less than 6 bullet points examples of how to differentiate this activity: ${selectedActivity} for ${studentDemographic} students with differing needs. Written in passive voice of a passionate teacher.`,
+      objectives: `List the main learning objectives ${studentDemographic} for ${selectedActivity}. Summarize a few specific concepts as learning objectives students should meet, and use less than 50 words in point form.`,
+      instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (summarize key concepts for ${studentDemographic}, and then instructions for how to model the activity for students). Only include the setup not the activity itself. It should be appropriate for a ${studentDemographic} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
+      practice: `Detail the plan for the guided practice part of this activity: ${selectedActivity} for ${studentDemographic} students. The plan should be step by step and specific, naturally incorporating formative assessment for these learning goals ${sections.objectives.content}. Don't explicitly mention learning goals or formative assessment. List steps in a passive voice and keep it under 150 words.`,
+      differentiation: `Make a list less than 6 bullet points examples of how to differentiate this activity: ${selectedActivity} for ${studentDemographic} students with differing needs or background. Written in passive voice of a passionate teacher.`,
       materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 30 words at most, but could be as few as 2 bullet points.`,
     };
 
