@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetServerSideProps } from "next/types";
 import { ReactElement, useState } from "react";
+import Autocomplete from "../../components/Autocomplete";
 import DropDown from "../../components/DropDown";
 import FormField from "../../components/FormField";
 import MainLayout from "../../components/MainLayout";
@@ -14,45 +15,33 @@ function LessonsPage({
 }: {
   lessons: Database["public"]["Tables"]["lessons"]["Row"][];
 }) {
-  const [grades, setGrades] = useState<Array<{ label: string; value: number }>>(
-    []
-  );
-  const [subjects, setSubjects] = useState<
-    Array<{ label: string; value: string }>
-  >([]);
+  const [grades, setGrades] = useState<string>("");
+  const [subjects, setSubjects] = useState<string>("");
 
   const filteredLessons = lessons.filter(
     (lesson) =>
       (!grades.length ||
-        grades.some((g) =>
-          lesson.grade.find((lessonGrade) => lessonGrade === g.value)
-        )) &&
+        lesson.grade.find((lessonGrade) => lessonGrade === grades)) &&
       (!subjects.length ||
-        subjects.some((g) =>
-          lesson.subject.find((lessonSub) => lessonSub === g.label)
-        ))
+        lesson.subject.find((lessonSub) => lessonSub === subjects))
   );
   return (
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-8 text-4xl font-bold mt-11">Lesson plans</h1>
       <div className="flex flex-row w-full gap-4">
         <FormField label="Filter by grades:" className="w-56">
-          <DropDown
-            value={grades}
-            values={gradeValues}
-            setValue={(g: Array<{ label: string; value: number }>) =>
-              setGrades(g)
-            }
-          ></DropDown>
+          <Autocomplete
+            value={""}
+            onChange={(e) => setGrades(e)}
+            items={gradeValues}
+          />
         </FormField>
         <FormField label="Filter by Subjects:" className="w-56">
-          <DropDown
-            value={subjects}
-            values={subjectTypes}
-            setValue={(g: Array<{ label: string; value: string }>) =>
-              setSubjects(g)
-            }
-          ></DropDown>
+          <Autocomplete
+            value={""}
+            onChange={(e) => setSubjects(e)}
+            items={subjectTypes}
+          />
         </FormField>
       </div>
       {filteredLessons?.map((lesson) => (
@@ -66,7 +55,7 @@ function LessonsPage({
             {" "}
             <span className="px-3 text-center bg-green-200 rounded-full">
               {lesson.grade
-                .map((l) => gradeValues.find((v) => v.value === l)?.label)
+                .map((l) => gradeValues.find((v) => v === l))
                 .join(", ")}{" "}
             </span>
             <span className="px-3 text-center bg-orange-100 rounded-full">

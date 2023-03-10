@@ -12,6 +12,7 @@ import Head from "next/head";
 import { GetServerSideProps } from "next/types";
 import { ReactElement, useState } from "react";
 import Button from "../../../components/Button";
+import Editor from "../../../components/Editor/Editor";
 import LinkButton from "../../../components/LinkButton";
 import MainLayout from "../../../components/MainLayout";
 import Modal from "../../../components/Modal";
@@ -82,7 +83,7 @@ function ViewLessonPage({
           <h1 className="mb-2 text-4xl capitalize">{lesson?.title}</h1>
           <div className="text-xl text-gray-600">
             {lesson?.grade
-              ?.map((g) => gradeValues.find((v) => v.value === g)?.label)
+              ?.map((g) => gradeValues.find((v) => v === g))
               .join(", ")}{" "}
             {lesson?.subject?.join(", ")}
           </div>
@@ -151,59 +152,13 @@ function ViewLessonPage({
         </Modal>
       </div>
 
-      <div className="mt-8 prose prose-slate">
-        {lesson?.overview && (
-          <>
-            <p className="text-2xl">{lesson.overview}</p>
-          </>
-        )}
-        <h2 className="">Learning Objectives</h2>
-        <div className="">
-          {content?.objectives?.content.split("\n").map((c, i) => (
-            <p key={i}>{c}</p>
-          ))}
-        </div>
-
-        {content?.materials?.content && (
-          <>
-            <h2 className="">Materials</h2>
-            <div className="">
-              {content?.materials?.content.split("\n").map((c) => (
-                <p>{c}</p>
-              ))}
-            </div>
-          </>
-        )}
-        {content?.instructions?.content && (
-          <>
-            <h2 className="">Direct Instruction</h2>
-            <div className="">
-              {content?.instructions?.content.split("\n").map((c) => (
-                <p>{c}</p>
-              ))}
-            </div>
-          </>
-        )}
-        {content?.practice?.content && (
-          <>
-            <h2 className="">Guided Practice</h2>
-            <div className="">
-              {content?.practice?.content.split("\n").map((c) => (
-                <p>{c}</p>
-              ))}
-            </div>
-          </>
-        )}
-        {content?.differentiation?.content && (
-          <>
-            <h2 className="">Differentiation</h2>
-            <div className="">
-              {content?.differentiation?.content.split("\n").map((c) => (
-                <p>{c}</p>
-              ))}
-            </div>
-          </>
-        )}
+      <div className="mt-8 prose prose-slate print:prose-sm">
+        {Object.entries(content)?.map(([key, section], i) => (
+          <div className="print:break-after-all ">
+            <h2 className="capitalize">{key}</h2>
+            <Editor content={section.content} readOnly key={i} />
+          </div>
+        ))}
       </div>
     </div>
   );

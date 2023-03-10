@@ -6,13 +6,14 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useRef, useState } from "react";
+import Autocomplete from "../../components/Autocomplete";
 
 import DropDown from "../../components/DropDown";
+import Editor from "../../components/Editor/Editor";
 import FormField from "../../components/FormField";
 import LoadingDots from "../../components/LoadingDots";
 import MainLayout from "../../components/MainLayout";
 import ResizablePanel from "../../components/ResizablePanel";
-import Textarea from "../../components/Textarea";
 import { Database } from "../../supabase/database.types";
 import { useLocalStorage } from "../../utils/useLocalStorage";
 
@@ -36,23 +37,23 @@ export type GradeType =
   | "All ages";
 
 export const gradeValues = [
-  { value: 4, label: "Pre-K" },
-  { value: 5, label: "Kindergarten" },
-  { value: 6, label: "Grade 1" },
-  { value: 7, label: "Grade 2" },
-  { value: 8, label: "Grade 3" },
-  { value: 9, label: "Grade 4" },
-  { value: 10, label: "Grade 5" },
-  { value: 11, label: "Grade 6" },
-  { value: 12, label: "Grade 7" },
-  { value: 13, label: "Grade 8" },
-  { value: 14, label: "Grade 9" },
-  { value: 15, label: "Grade 10" },
-  { value: 16, label: "Grade 11" },
-  { value: 17, label: "Grade 12" },
-  { value: 18, label: "Adult education" },
-  { value: 19, label: "Post secondary" },
-  { value: 0, label: "All ages" },
+  "Pre-K",
+  "Kindergarten",
+  "Grade 1",
+  "Grade 2",
+  "Grade 3",
+  "Grade 4",
+  "Grade 5",
+  "Grade 6",
+  "Grade 7",
+  "Grade 8",
+  "Grade 9",
+  "Grade 10",
+  "Grade 11",
+  "Grade 12",
+  "Adult education",
+  "Post secondary",
+  "All ages",
 ];
 
 export type SubjectType =
@@ -68,41 +69,31 @@ export type SubjectType =
   | "English as a second language"
   | "Other";
 
-type SubjectOptions = { label: SubjectType; value: SubjectType };
-
-export const subjectTypes: Array<SubjectOptions> = [
-  { label: "Arts", value: "Arts" },
-  { label: "English language arts", value: "English language arts" },
-  {
-    label: "English as a second language",
-    value: "English as a second language",
-  },
-  { label: "Geography", value: "Geography" },
-  { label: "History", value: "History" },
-  { label: "Math", value: "Math" },
-  { label: "Science", value: "Science" },
-  {
-    label: "Social and emotional learning",
-    value: "Social and emotional learning",
-  },
-  { label: "Social studies", value: "Social studies" },
-  { label: "Special education", value: "Special education" },
-  { label: "Other", value: "Other" },
+export const subjectTypes: Array<string> = [
+  "Arts",
+  "English language arts",
+  "English as a second language",
+  "Geography",
+  "History",
+  "Math",
+  "Science",
+  "Social and emotional learning",
+  "Social studies",
+  "Special education",
+  "Other",
 ];
 
 export type SectionData = {
   content: string;
   description: string;
+  prompt: string;
 };
 export type SectionTypes = {
-  objectives: SectionData;
-  instructions: SectionData;
-  practice: SectionData;
-  differentiation: SectionData;
-  materials: SectionData;
+  plan: SectionData;
+  assessment: SectionData;
 };
 
-async function generateFromPrompt(prompt: string): Promise<ReadableStream> {
+export async function generateFromPrompt(prompt: string): Promise<any> {
   const response = await fetch("/api/generate", {
     method: "POST",
     headers: {
@@ -127,12 +118,8 @@ async function generateFromPrompt(prompt: string): Promise<ReadableStream> {
 function New() {
   const [loading, setLoading] = useState(false);
   const [bio, setBio] = useState("");
-  const [grade, setGrade] = useState<Array<{ value: number; label: string }>>([
-    { value: 0, label: "All ages" },
-  ]);
-  const [subject, setSubject] = useState<
-    Array<{ label: SubjectType; value: SubjectType }>
-  >([{ value: "Math", label: "Math" }]);
+  const [grade, setGrade] = useState("");
+  const [subject, setSubject] = useState("");
   const [generatedActivities, setGeneratedActivities] = useState<string>("");
   const [selectedActivity, setSelectedActivity] = useState<string>("");
   const supabase = useSupabaseClient<Database>();
@@ -142,41 +129,23 @@ function New() {
   const activitiesRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
 
-  const [sections, setSections] = useState<SectionTypes>({
-    objectives: {
+  const studentDemographic = `${grade} ${subject === "Other" ? "" : subject}`;
+  const defaultContent = {
+    plan: {
+      prompt: `Create  ${studentDemographic} lesson plan that meets these goals: ${selectedActivity}. The plan should be formatted in markdown and only include sections for warmup, direct instruction, guided practice, and differentiation. Make it specific, realistic, concise, and practical.`,
       content: "",
-      description:
-        "Starting with learning goals helps robots (and humans) work backwards to make a lesson that meets our end goals.",
+      description: "",
     },
-    instructions: {
+    assessment: {
+      prompt: `My ${studentDemographic} students are doing this activity: ${selectedActivity}. Output an assessment to quiz their learning with a few different question formats, with white space for the students to write, and the answers should only be in an answer key at the end. Output should be in markdown format.`,
       content: "",
-      description:
-        "Direct instruction on what concepts to explain, and how to model the activity.",
+      description: "",
     },
-    practice: {
-      content: "",
-      description:
-        "How students will practice the skills and get guided with feedback.",
-    },
-    differentiation: {
-      content: "",
-      description:
-        "Ideas for modifying the activity for a wider range of student needs.",
-    },
-    materials: {
-      content: "",
-      description: "What do we need to make sure we have ahead of time.",
-    },
-  });
+  } as SectionTypes;
 
-  const studentDemographic = `${grade
-    .map((g) => g.label)
-    .join(" and ")} ${subject
-    .map((s) => (s.label !== "Other" ? s.label : ""))
-    .filter(Boolean)
-    .join(" and ")}`;
+  const [sections, setSections] = useState<SectionTypes>(defaultContent);
 
-  const activityPrompt = `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity is at max 35 words.`;
+  const activityPrompt = `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 35 words (don't include a word count).`;
 
   const generateBio = async (e: any) => {
     e.preventDefault();
@@ -200,7 +169,6 @@ function New() {
     } catch (e) {
       console.warn(e);
     }
-
     setLoading(false);
   };
 
@@ -224,7 +192,7 @@ function New() {
         });
       }
     }, 1500);
-  }, [Boolean(sections.objectives.content)]);
+  }, [Boolean(sections.plan.content)]);
 
   function setSectionContent(type: keyof SectionTypes, contentValue: string) {
     setSections({
@@ -238,11 +206,8 @@ function New() {
     setLoading(true);
 
     const lessonPlanPrompt = {
-      objectives: `List the main learning objectives ${studentDemographic} for ${selectedActivity}. Summarize a few specific concepts as learning objectives students should meet, and use less than 50 words in point form.`,
-      instructions: `Create a detailed plan for how a teacher will do a class Warmup (how to get the class engaged in the topic - 60 words max) and Direct Instruction (summarize key concepts for ${studentDemographic}, and then instructions for how to model the activity for students). Only include the setup not the activity itself. It should be appropriate for a ${studentDemographic} class activity: ${selectedActivity}.`, // that meets learning goals: ${sections.objectives.content}
-      practice: `Detail the plan for the guided practice part of this activity: ${selectedActivity} for ${studentDemographic} students. The plan should be step by step and specific, naturally incorporating formative assessment for these learning goals ${sections.objectives.content}. Don't explicitly mention learning goals or formative assessment. List steps in a passive voice and keep it under 150 words.`,
-      differentiation: `Make a list less than 6 bullet points examples of how to differentiate this activity: ${selectedActivity} for ${studentDemographic} students with differing needs or background. Written in passive voice of a passionate teacher.`,
-      materials: `Make a list of specific materials needed in this lesson: ${sections.practice.content}. Return markdown bullet points only and no headings, 30 words at most, but could be as few as 2 bullet points.`,
+      plan: `Create ${studentDemographic} lesson plan that meets these goals: ${selectedActivity}. The plan should be formatted in markdown with sections for warmup and materials (side by side), direct instruction (full row), guided practice (full row), and differentiation (full row). Make it specific, realistic, concise, and practical, there should be no h1 title.`,
+      assessment: `My ${studentDemographic} students are doing this activity: ${selectedActivity}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with a few different question formats, with whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
     };
 
     try {
@@ -266,7 +231,13 @@ function New() {
     } catch (e) {
       console.warn(e);
     }
+    console.log("done");
     setLoading(false);
+  }
+
+  function handleNextStep() {
+    generateContent("plan");
+    generateContent("assessment");
   }
 
   async function saveContent() {
@@ -276,8 +247,8 @@ function New() {
         user_id: user?.id,
         title: bio,
         overview: selectedActivity,
-        subject: subject.map((subject) => subject.value),
-        grade: grade.map((grade) => grade.value),
+        subject: [subject],
+        grade: [grade],
         content: sections,
       })
       .select("id")
@@ -305,27 +276,25 @@ function New() {
       </h1>
       <div className="flex flex-col gap-4 sm:flex-row">
         <FormField label="Grade:" className="w-full">
-          <DropDown
-            value={grade}
-            values={gradeValues}
-            setValue={(r: Array<{ label: string; value: number }>) =>
-              setGrade(r)
-            }
+          <Autocomplete
+            value={""}
+            onChange={(e) => setGrade(e)}
+            items={gradeValues}
           />
         </FormField>
 
         <FormField label="Subject:" className="w-full">
-          <DropDown
-            value={subject}
-            values={subjectTypes}
-            setValue={(subject: Array<SubjectOptions>) => setSubject(subject)}
+          <Autocomplete
+            value={""}
+            onChange={(e) => setSubject(e)}
+            items={subjectTypes}
           />
         </FormField>
       </div>
 
       <FormField
         label="Topic:"
-        description="What's your lesson about?"
+        description="What will students learn about?"
         className="mt-5"
       >
         <textarea
@@ -333,7 +302,9 @@ function New() {
           onChange={(e) => setBio(e.target.value)}
           rows={2}
           className="w-full mt-2 border-gray-300 rounded-md shadow-sm form-input focus:border-black focus:ring-black"
-          placeholder={"e.g. Fractions in everyday life"}
+          placeholder={
+            "e.g. Students will be able to identify the parts of a flower."
+          }
         />
       </FormField>
 
@@ -422,7 +393,7 @@ function New() {
                   />
                 </FormField>
                 <button
-                  onClick={() => generateContent("objectives")}
+                  onClick={handleNextStep}
                   className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
                 >
                   Next step
@@ -433,79 +404,27 @@ function New() {
         </AnimatePresence>
       </ResizablePanel>
       <hr className="h-px my-10 bg-gray-700 border-1 dark:bg-gray-700" />
-      {sections.objectives.content && (
+      {sections.plan.content && (
         <div ref={detailsRef}>
           <h2 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
             Great, now let's finish the lesson plan!
           </h2>
 
           <div className="flex flex-col w-full gap-4 mb-8">
-            {Object.entries(sections).map(([sectionName, sectionData]) => {
-              return (
-                <div className="transition border shadow-md rounded-xl">
-                  <button
-                    disabled={
-                      sectionName === "objectives" ||
-                      Boolean(sectionData.content)
-                    }
-                    aria-pressed={Boolean(sectionData.content)}
-                    aria-label={"include " + sectionName}
-                    className={`p-6 text-left w-full  flex flex-col bg-white rounded-xl ${
-                      Boolean(sectionData.content)
-                        ? "rounded-t-xl"
-                        : " rounded-xl hover:bg-gray-100"
-                    }`}
-                    onClick={() =>
-                      !sectionData.content &&
-                      generateContent(sectionName as keyof SectionTypes)
-                    }
-                    key={sectionName}
-                  >
-                    <div className="flex flex-row items-center w-full gap-5">
-                      <div className="flex flex-col">
-                        <div className="text-lg font-bold capitalize">
-                          {sectionName}
-                        </div>{" "}
-                        <div className="text-sm">{sectionData.description}</div>
-                      </div>
-                      <span
-                        className={`ml-auto flex items-center justify-center w-8 h-8 text-lg  rounded-full shrink-0 border-2 ${
-                          !sectionData.content
-                            ? "border-black bg-white"
-                            : "border-green-700 bg-green-700"
-                        }`}
-                      >
-                        {sectionData.content ? (
-                          <CheckIcon
-                            className="font-bold w-7 h-7"
-                            color="white"
-                          />
-                        ) : (
-                          ""
-                        )}
-                      </span>
-                    </div>
-                  </button>
-                  {sectionData.content && (
-                    <Textarea
-                      value={sectionData.content}
-                      aria-label={sectionName}
-                      onChange={(e) =>
-                        setSectionContent(
-                          sectionName as keyof SectionTypes,
-                          e.target.value
-                        )
-                      }
-                    />
-                  )}
-                </div>
-              );
-            })}
+            <Editor
+              content={sections.plan.content}
+              onChange={(value) => setSectionContent("plan", value)}
+            />
+
+            <Editor
+              content={sections.assessment.content}
+              onChange={(value) => setSectionContent("assessment", value)}
+            />
           </div>
         </div>
       )}
 
-      {sections.objectives.content && loading && (
+      {sections.assessment.content && loading && (
         <button
           className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
           disabled
@@ -513,7 +432,7 @@ function New() {
           <LoadingDots color="white" style="large" />
         </button>
       )}
-      {!loading && sections.objectives.content && (
+      {!loading && sections.assessment.content && (
         <>
           <button
             onClick={saveContent}

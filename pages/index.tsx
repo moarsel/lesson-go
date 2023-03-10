@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import TypeWriterEffect from "typewriter-effect";
+import { MdBolt } from "react-icons/md";
 
 const Home: NextPage = () => {
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
         <h1
           ref={headingRef}
           aria-label="Create super lesson plans with superhuman speed"
-          className="max-w-2xl px-4 text-4xl font-bold sm:text-5xl text-slate-900"
+          className="max-w-2xl px-4 text-4xl font-bold min-h-[96px] sm:text-5xl text-slate-900"
         >
           {loaded && (
             <TypeWriterEffect
@@ -42,20 +43,20 @@ const Home: NextPage = () => {
             ></TypeWriterEffect>
           )}
         </h1>
-        <p className="mt-6 text-lg sm:text-xl text-slate-700">
-          Go from <strong>no ideas</strong> to{" "}
-          <strong>finished lesson plans</strong> in a snap.
+        <p className="mt-10 text-lg sm:text-xl text-slate-700">
+          Go from <strong>blank slate</strong> to{" "}
+          <strong>finished lesson plan</strong> in a flash.
         </p>
         <p className="max-w-xl mt-2 text-lg sm:text-xl text-slate-700">
-          Our AI will guide you step-by-step to create a personalized lesson
-          plan for your students.
+          Let our AI guide you through the process of creating a personalized
+          lesson plan for your students.
         </p>
         <div className="flex flex-col gap-5 mt-16 sm:flex-row">
           <Link
             href="/lessons/new"
-            className="w-64 px-4 py-2 font-medium text-white bg-black border-2 border-black rounded-xl hover:bg-black/80"
+            className="flex items-center justify-center w-64 gap-2 px-4 py-2 font-medium text-white bg-black border-2 border-black rounded-xl hover:bg-black/80"
           >
-            Plan my lesson <span className="ml-2"> ⚡️</span>
+            Plan my lesson <MdBolt className="text-2xl " />
           </Link>
           <Link
             href="/lessons/"

@@ -15,7 +15,7 @@ export interface Database {
           created_at: string | null;
           id: number;
           subject: Array<string | null>;
-          grade: Array<number | null>;
+          grade: Array<string | null>;
           title: string | null;
           overview: string | null;
           public: boolean;
@@ -26,7 +26,7 @@ export interface Database {
           created_at?: string | null;
           id?: number;
           subject?: Array<string | null>;
-          grade?: Array<number | null>;
+          grade?: Array<string | null>;
           title?: string | null;
           overview?: string | null;
           public?: boolean;
@@ -37,7 +37,7 @@ export interface Database {
           created_at?: string | null;
           id?: number;
           subject?: Array<string | null>;
-          grade?: Array<number | null>;
+          grade?: Array<string | null>;
           title?: string | null;
           overview?: string | null;
           public?: boolean;
