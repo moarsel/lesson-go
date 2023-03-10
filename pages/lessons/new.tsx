@@ -416,6 +416,9 @@ function New() {
               onChange={(value) => setSectionContent("plan", value)}
             />
 
+            <h3 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
+              Assessment
+            </h3>
             <Editor
               content={sections.assessment.content}
               onChange={(value) => setSectionContent("assessment", value)}

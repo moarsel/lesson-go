@@ -18,7 +18,7 @@ export default ({ content, readOnly = false, onChange }: EditorProps) => {
   const editor = useEditor({
     editorProps: {
       attributes: {
-        class: "prose-sm sm:prose prose-headings:mb-1",
+        class: "prose-sm sm:prose prose-headings:mb-1 p-4",
       },
     },
     extensions: [
