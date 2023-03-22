@@ -48,11 +48,12 @@ const Button = ({
     <button
       type={type}
       className={clsx(
+        "justify-center whitespace-nowrap flex flex-row items-center gap-3 px-4 py-2 font-medium",
         variant === "primary" &&
-          "flex flex-row items-center w-max gap-3 px-4 py-2 font-medium text-white bg-neutral-900 whitespace-nowrap rounded-xl hover:bg-black/80",
+          " text-white bg-neutral-900 rounded-xl hover:bg-black/80",
         variant === "outline" &&
-          "flex flex-row items-center w-max gap-3 px-4 py-2 font-medium border-2 border-black rounded-xl  whitespace-nowrap  hover:bg-gray-100/80",
-        fullWidth && "w-full",
+          " border-2 border-black rounded-xl   hover:bg-gray-100/80",
+        fullWidth ? "w-full" : "w-max",
         className
       )}
       {...props}

@@ -18,7 +18,7 @@ function LessonsPage({
   const [grades, setGrades] = useState<string>("");
   const [subjects, setSubjects] = useState<string>("");
 
-  const filteredLessons = lessons.filter(
+  const filteredLessons = lessons?.filter(
     (lesson) =>
       (!grades.length ||
         lesson.grade.find((lessonGrade) => lessonGrade === grades)) &&
