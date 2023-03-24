@@ -7,6 +7,7 @@ import TableCell from "@tiptap/extension-table-cell";
 
 import React, { useEffect } from "react";
 import { marked } from "marked";
+import Menubar from "./Menubar";
 
 type EditorProps = {
   content: string;
@@ -44,5 +45,10 @@ export default ({ content, readOnly = false, onChange }: EditorProps) => {
     }
   }, [editor, content]);
 
-  return <EditorContent editor={editor} />;
+  return (
+    <div>
+      {!readOnly && <Menubar editor={editor} />}
+      <EditorContent editor={editor} />
+    </div>
+  );
 };

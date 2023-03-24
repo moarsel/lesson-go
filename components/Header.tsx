@@ -16,8 +16,8 @@ export default function Header({ children }: { children?: ReactNode }) {
             width={24}
             height={24}
           />
-          <h1 className="sm:ml-2  text-lg uppercase font-[800] tracking-tight [font-variant: all-small-caps] sm:text-2xl whitespace-nowrap">
-            Lesson <span className="text-green-700">Go</span>
+          <h1 className="sm:ml-2  text-lg uppercase font-bold tracking-tight [font-variant: all-small-caps] sm:text-2xl whitespace-nowrap">
+            Lesson <span className="text-green-700">Bot</span>
           </h1>
         </Link>
 

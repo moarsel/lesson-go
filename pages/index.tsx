@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           <h1
             ref={headingRef}
             aria-label="Create super lesson plans with superhuman speed"
-            className="max-w-4xl tracking-tight px-4 text-4xl font-bold min-h-[108px] sm:text-6xl text-slate-900"
+            className="max-w-4xl tracking-tight px-4 text-4xl md:text-6xl font-bold min-h-[108px] sm:text-5xl text-slate-900"
           >
             {loaded && (
               <TypeWriterEffect
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
             <strong>finished lesson plan</strong> in a flash.
           </p>
 
-          <div className="flex flex-col gap-5 mt-16 sm:flex-row">
+          <div className="relative flex flex-col gap-5 mt-16 sm:flex-row">
             <Link
               href="/lessons/new"
               className="flex items-center justify-center w-64 gap-2 px-4 py-2 font-medium text-white bg-black border-2 border-black rounded-xl hover:bg-black/80"
@@ -72,10 +72,17 @@ const Home: NextPage = () => {
             </Link>
           </div>
         </div>
-        <section className="flex flex-col items-center w-full px-4 pb-12 mt-20 bg-gradient-to-tl from-green-400 to-green-800">
-          <div className="max-w-2xl mt-20 mb-12 text-center text-white">
-            <h2 className="text-4xl font-bold ">
-              Create a personalized lesson plan for your students with AI.
+        <section className="relative flex flex-col items-center w-full px-4 pb-12 mt-20 bg-gradient-to-tl from-green-500 to-green-900">
+          <div className="max-w-2xl mt-16 mb-12 text-center text-white">
+            <img
+              style={{ width: "15rem" }}
+              src="/robot.png"
+              alt="smiling nerdy 3d robot"
+              className="mx-auto"
+            />
+            <h2 className="mt-6 text-4xl font-bold ">
+              Create a personalized lesson plan with a little help from our AI
+              lesson bot.
             </h2>
           </div>
           <div className="pb-4 mb-4 -inset-x-4 bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl">
@@ -91,7 +98,7 @@ const Home: NextPage = () => {
                   Stay organized
                 </Tab>
               </Tab.List>
-              <Tab.Panels className="max-w-xl px-4 mx-auto text-lg text-center text-white ">
+              <Tab.Panels className="relative max-w-xl px-4 mx-auto text-lg text-center text-white ">
                 <Tab.Panel>
                   Generate ideas for activities tailored specifically to your
                   class.
