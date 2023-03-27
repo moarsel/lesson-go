@@ -10,8 +10,9 @@ const LoginPage = () => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
   const router = useRouter();
+  const redirect = (router.query.returnUrl as string) ?? "/lessons/new";
 
-  if (user) router.push("/lessons/new");
+  if (user) router.push(redirect);
 
   if (!user)
     return (
@@ -24,7 +25,7 @@ const LoginPage = () => {
         </h2>
         <Auth
           view="sign_in"
-          redirectTo={`${getURL()}/lessons/new`}
+          redirectTo={`${getURL()}${redirect}}`}
           appearance={{ theme: ThemeSupa }}
           supabaseClient={supabaseClient}
           providers={["google"]}

@@ -38,6 +38,18 @@ export default (props: NodeViewProps) => {
 
           props.editor.commands.insertContent(chunkValue);
 
+          // const cursor = document.createElement('span')
+          // cursor.classList.add('collaboration-cursor__caret')
+          // cursor.setAttribute('style', `border-color: #00aa00`)
+
+          // const label = document.createElement('div')
+
+          // label.classList.add('collaboration-cursor__label')
+          // label.setAttribute('style', `background-color: #00aa00`)
+          // label.insertBefore(document.createTextNode('hi'), null)
+          // cursor.insertBefore(label, null)
+
+          // return cursor
           // props.editor.chain().command((props) => {
           //   props.view.dispatchEvent(
           //     new KeyboardEvent("keydown", { key: chunkValue, bubbles: true })

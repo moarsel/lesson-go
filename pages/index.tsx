@@ -9,11 +9,22 @@ import { MdBolt } from "react-icons/md";
 import { Tab } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import Button from "../components/Button";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [loaded, setLoaded] = useState(false);
-  const isBrowser = typeof window !== "undefined";
+  const router = useRouter();
+
+  function handleStartCheckout(tier: "free" | "pro" | "super") {
+    if (tier === "free") {
+      router.push(`/login?returnUrl=/lessons/new`);
+    } else if (tier === "pro") {
+      router.push(`/login?returnUrl=/account?upgrade=pro`);
+    } else {
+      router.push(`/login?returnUrl=/account?upgrade=super`);
+    }
+  }
 
   useEffect(() => {
     setLoaded(true);
@@ -41,14 +52,14 @@ const Home: NextPage = () => {
           >
             {loaded && (
               <TypeWriterEffect
-                options={{ delay: 80, autoStart: false }}
+                options={{ delay: 60, autoStart: false }}
                 onInit={(typewriter) => {
                   typewriter
                     .typeString(
                       `Create <span class="text-green-700">super</span> lesson plans <br/>`
                     )
                     .pauseFor(1200)
-                    .changeDelay(15)
+                    .changeDelay(10)
                     .typeString(
                       `with <span class="text-green-700">superhuman</span> speed!`
                     )
@@ -88,16 +99,16 @@ const Home: NextPage = () => {
           <div className="pb-4 mb-4 -inset-x-4 bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl">
             <Tab.Group>
               <Tab.List className="flex items-center justify-around p-2 mt-4 space-x-2 sm:p-8 rounded-xl">
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
                   Activity ideas
                 </Tab>
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
                   Lesson plans
                 </Tab>
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
                   Assessments
                 </Tab>
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
                   Stay organized
                 </Tab>
               </Tab.List>
@@ -168,7 +179,11 @@ const Home: NextPage = () => {
                   <span className="text-4xl font-bold">$0</span>
                   <span className="font-medium text-gray-600"></span>
                 </div>
-                <Button variant="outline" fullWidth>
+                <Button
+                  onClick={() => handleStartCheckout("free")}
+                  variant="outline"
+                  fullWidth
+                >
                   Get started
                 </Button>
                 <div>
@@ -189,7 +204,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <div className="flex flex-col max-w-2xl p-12 mx-auto mt-16 space-y-8 md:w-1/3 rounded-3xl ring-2 ring-green-700">
-                <h4 className="text-2xl font-bold">Educator</h4>
+                <h4 className="text-2xl font-bold">Pro</h4>
                 <p className="text-gray-600">
                   Everything you need to plan your lessons for the year.
                 </p>
@@ -197,7 +212,11 @@ const Home: NextPage = () => {
                   <span className="text-4xl font-bold">$59</span>
                   <span className="font-medium text-gray-600">/ year</span>
                 </div>
-                <Button variant="primary" fullWidth>
+                <Button
+                  onClick={() => handleStartCheckout("pro")}
+                  variant="primary"
+                  fullWidth
+                >
                   Get started
                 </Button>
 
@@ -221,14 +240,18 @@ const Home: NextPage = () => {
               <div className="flex flex-col max-w-2xl p-12 mx-auto mt-16 space-y-8 md:w-1/3 rounded-3xl ring-1 ring-gray-200">
                 <h4 className="text-2xl font-bold">Superplanner</h4>
                 <p className="text-gray-600">
-                  The unlimited membership for pros who plan <em>tons</em> of
-                  lessons
+                  The unlimited membership for educators who plan <em>tons</em>{" "}
+                  of lessons
                 </p>
                 <div>
                   <span className="text-4xl font-bold">$189</span>
                   <span className="font-medium text-gray-600">/ year</span>
                 </div>
-                <Button variant="outline" fullWidth>
+                <Button
+                  onClick={() => handleStartCheckout("super")}
+                  variant="outline"
+                  fullWidth
+                >
                   Get started
                 </Button>
                 <div>
