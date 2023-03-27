@@ -41,7 +41,7 @@ LoginPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MainLayout>
       <Head>
-        <title>Login | Lesson Go: Lesson plan with AI</title>
+        <title>Login | Lesson Robot: Lesson plan with AI</title>
       </Head>
       {page}
     </MainLayout>

@@ -32,7 +32,7 @@ MyLessonsPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MainLayout>
       <Head>
-        <title>My Lesson Plans | Lesson Go: Lesson plan with AI</title>
+        <title>My Lesson Plans | Lesson Robot: Lesson plan with AI</title>
       </Head>
       {page}
     </MainLayout>

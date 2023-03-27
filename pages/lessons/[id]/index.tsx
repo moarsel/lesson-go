@@ -51,7 +51,7 @@ function ViewLessonPage({
     facebook: (url: string, title: string) =>
       `https://www.facebook.com/sharer/sharer.php?u=${url}&t=${title}"`,
     twitter: (url: string, title: string) =>
-      `https://twitter.com/share?text=I%20just%20published%20%22${title}%22%20on%20Lesson%20Go!%20${url}`,
+      `https://twitter.com/share?text=I%20just%20published%20%22${title}%22%20on%20Lesson%20Robot!%20${url}`,
     email: (url: string, title: string) =>
       `mailto:?&subject=I published my lesson &body=I%20just%20published%20a%20lesson%20%22${title}%22%20at%20${url}.`,
   };
@@ -76,7 +76,7 @@ function ViewLessonPage({
   return (
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <Head>
-        <title>{lesson?.title} Lesson Plan | Lesson Go</title>
+        <title>{lesson?.title} Lesson Plan | Lesson Robot</title>
       </Head>
       <div className="flex flex-col gap-4">
         <div>

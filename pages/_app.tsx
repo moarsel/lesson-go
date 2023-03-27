@@ -47,6 +47,7 @@ function MyApp({
     window.google.accounts.id.initialize({
       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
       callback: loginWithGoogle,
+      cancel_on_tap_outside: false,
     });
 
     // @ts-ignore

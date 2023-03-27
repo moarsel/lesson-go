@@ -455,7 +455,7 @@ New.getLayout = function getLayout(page: ReactElement) {
   return (
     <MainLayout>
       <Head>
-        <title>Create a lesson | Lesson Go AI</title>
+        <title>Create a lesson | Lesson Robot AI</title>
       </Head>
       {page}
     </MainLayout>

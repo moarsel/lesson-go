@@ -21,17 +21,23 @@ const Home: NextPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 mx-auto">
       <Head>
-        <title>Lesson Go!</title>
+        <title>Lesson Robot</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Header />
       <main className="w-full">
-        <div className="flex flex-col items-center flex-1 w-full px-4 mt-20 text-center sm:mt-24">
+        <div className="flex flex-col items-center flex-1 w-full px-4 mt-8 text-center sm:mt-12">
+          <img
+            style={{ width: "20rem" }}
+            src="/robot.png"
+            alt="smiling nerdy 3d robot"
+            className="mx-auto"
+          />
           <h1
             ref={headingRef}
             aria-label="Create super lesson plans with superhuman speed"
-            className="max-w-4xl tracking-tight px-4 text-4xl md:text-6xl font-bold min-h-[108px] sm:text-5xl text-slate-900"
+            className="max-w-4xl mt-5 tracking-tight px-4 text-4xl md:text-6xl font-bold min-h-[108px] sm:text-5xl text-slate-900"
           >
             {loaded && (
               <TypeWriterEffect
@@ -74,25 +80,22 @@ const Home: NextPage = () => {
         </div>
         <section className="relative flex flex-col items-center w-full px-4 pb-12 mt-20 bg-gradient-to-tl from-green-500 to-green-900">
           <div className="max-w-2xl mt-16 mb-12 text-center text-white">
-            <img
-              style={{ width: "15rem" }}
-              src="/robot.png"
-              alt="smiling nerdy 3d robot"
-              className="mx-auto"
-            />
             <h2 className="mt-6 text-4xl font-bold ">
-              Create a personalized lesson plan with a little help from our AI
-              lesson bot.
+              Personalize your lesson plans with a little help from our AI
+              lesson robot.
             </h2>
           </div>
           <div className="pb-4 mb-4 -inset-x-4 bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl">
             <Tab.Group>
               <Tab.List className="flex items-center justify-around p-2 mt-4 space-x-2 sm:p-8 rounded-xl">
                 <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
-                  Get activity ideas
+                  Activity ideas
                 </Tab>
                 <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
-                  Lesson plan
+                  Lesson plans
+                </Tab>
+                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
+                  Assessments
                 </Tab>
                 <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-700 rounded-xl">
                   Stay organized
@@ -102,28 +105,46 @@ const Home: NextPage = () => {
                 <Tab.Panel>
                   Generate ideas for activities tailored specifically to your
                   class.
+                  <img
+                    className="my-8 shadow-lg ring-4 ring-white/20"
+                    src="screenshot-1.png"
+                    width={"100%"}
+                    alt="screenshot of activity suggestsions for a chosen topic: grade 4 charlotte's web."
+                  />
                 </Tab.Panel>
                 <Tab.Panel>
                   Auto-generate a custom lesson plan with everything you need,
                   then edit it to your liking.
+                  <img
+                    className="my-8 shadow-lg ring-4 ring-white/20"
+                    src="screenshot-2.png"
+                    width={"100%"}
+                    alt="screenshot of a lesson plan Charlotte's web including warmup, materials, direct instruction"
+                  />
+                </Tab.Panel>
+                <Tab.Panel>
+                  Save the hassle of finding or creating assessments materials
+                  from scratch. We'll draft custom assessment questions based on
+                  your lesson.
+                  <img
+                    className="my-8 shadow-lg ring-4 ring-white/20"
+                    src="screenshot-3.png"
+                    width={"100%"}
+                    alt="screenshot of a fill in the blank questions about Charlotte's web."
+                  />
                 </Tab.Panel>
                 <Tab.Panel>
                   Keep your lesson plans organized and share your nicely
                   formatted documents.{" "}
+                  <img
+                    className="my-8 shadow-lg ring-4 ring-white/20"
+                    src="screenshot-4.png"
+                    width={"100%"}
+                    alt="screenshot of a list of lesson plan previews"
+                  />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
-            <video
-              src="/lesson-go-intro.mp4"
-              aria-label="Overview of lesson go: choosing grade, subject, and topic then auto-generating lesson ideas"
-              width={"90%"}
-              className="max-w-2xl mx-auto mt-8 border-8 rounded-2xl border-white/10 "
-              controls
-            >
-              <p>
-                Sorry, it appears your system does not support video playback.
-              </p>
-            </video>
           </div>
         </section>
         <section className="w-full pt-20">
@@ -133,9 +154,9 @@ const Home: NextPage = () => {
               Save hours of time and get back to teaching.
             </h3>
             <p className="max-w-2xl mx-auto mt-6 text-lg leading-8 text-gray-600 ">
-              We made it free for you to try Lesson Go, so that you see how much
-              it helps you. Give a try, then get your whole year of lesson
-              planning done for just $89.
+              We made it free for you to try Lesson Bot, so that you see just
+              how much it helps. Give it a try, then get your whole year of
+              lesson planning done for just $59.
             </p>
             <div className="flex flex-col gap-2 md:flex-row md:space-x-4 space-between">
               <div className="flex flex-col max-w-2xl p-12 mx-auto mt-16 space-y-8 md:w-1/3 rounded-3xl ring-1 ring-gray-200">
@@ -173,7 +194,7 @@ const Home: NextPage = () => {
                   Everything you need to plan your lessons for the year.
                 </p>
                 <div>
-                  <span className="text-4xl font-bold">$89</span>
+                  <span className="text-4xl font-bold">$59</span>
                   <span className="font-medium text-gray-600">/ year</span>
                 </div>
                 <Button variant="primary" fullWidth>
@@ -200,11 +221,11 @@ const Home: NextPage = () => {
               <div className="flex flex-col max-w-2xl p-12 mx-auto mt-16 space-y-8 md:w-1/3 rounded-3xl ring-1 ring-gray-200">
                 <h4 className="text-2xl font-bold">Superplanner</h4>
                 <p className="text-gray-600">
-                  Unlimited lesson plans for power planners who want to get
-                  things done.
+                  The unlimited membership for pros who plan <em>tons</em> of
+                  lessons
                 </p>
                 <div>
-                  <span className="text-4xl font-bold">$200</span>
+                  <span className="text-4xl font-bold">$189</span>
                   <span className="font-medium text-gray-600">/ year</span>
                 </div>
                 <Button variant="outline" fullWidth>

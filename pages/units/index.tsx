@@ -73,7 +73,9 @@ LessonsPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MainLayout>
       <Head>
-        <title>Lesson plan templates | Lesson Go: plan lessons with AI</title>
+        <title>
+          Lesson plan templates | Lesson Robot: plan lessons with AI
+        </title>
       </Head>
       {page}
     </MainLayout>

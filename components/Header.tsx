@@ -9,15 +9,8 @@ export default function Header({ children }: { children?: ReactNode }) {
     <header className="grid w-full grid-cols-12 px-4 border-b-2 print:hidden">
       <div className="flex items-center justify-between w-full col-span-12 mt-5 pb-7 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
         <Link href="/" className="flex items-center ">
-          <Image
-            alt="Lesson Go"
-            src="/lesson-go.svg"
-            className="hidden w-10 h-10 sm:w-12 sm:h-12 sm:block"
-            width={24}
-            height={24}
-          />
-          <h1 className="sm:ml-2  text-lg uppercase font-bold tracking-tight [font-variant: all-small-caps] sm:text-2xl whitespace-nowrap">
-            Lesson <span className="text-green-700">Bot</span>
+          <h1 className="sm:ml-4  text-lg  font-[800] tracking-tight [font-variant: all-small-caps] sm:text-2xl whitespace-nowrap">
+            Lesson<span className="text-green-700">Robot</span>.com
           </h1>
         </Link>
 

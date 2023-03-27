@@ -1,4 +1,4 @@
-# [Lesson Go](https://lessongo.io)
+# [Lesson Robot](https://lessonrobot.com)
 
 Create lesson plans with AI
 

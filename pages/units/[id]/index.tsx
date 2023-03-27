@@ -76,7 +76,7 @@ function ViewLessonPage({
   return (
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <Head>
-        <title>{lesson?.title} Lesson Plan | Lesson Go</title>
+        <title>{lesson?.title} Lesson Plan | Lesson Robot</title>
       </Head>
       <div className="flex flex-col gap-4">
         <div>

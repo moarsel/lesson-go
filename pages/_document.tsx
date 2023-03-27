@@ -17,19 +17,19 @@ class MyDocument extends Document {
           />
           <meta
             property="og:title"
-            content="Lesson Go | Instant lesson plans"
+            content="Lesson Robot | Instant lesson plans"
           />
           <meta name="twitter:card" content="summary_large_image" />
           <meta
             name="twitter:title"
-            content="Lesson go | Instant lesson plans"
+            content="Lesson Robot | Instant lesson plans"
           />
           <meta
             name="twitter:description"
             content="Create an engaging lesson plan in seconds."
           />
-          <meta property="og:image" content="lessongo.io/og-image.png" />
-          <meta name="twitter:image" content="lessongo.io/og-image.png" />
+          <meta property="og:image" content="lessonrobot.com/og-image.png" />
+          <meta name="twitter:image" content="lessonrobot.com/og-image.png" />
         </Head>
         <body>
           <Main />
