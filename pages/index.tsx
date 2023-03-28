@@ -10,6 +10,7 @@ import { Tab } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import Button from "../components/Button";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const Home: NextPage = () => {
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -39,16 +40,18 @@ const Home: NextPage = () => {
       <Header />
       <main className="w-full">
         <div className="flex flex-col items-center flex-1 w-full px-4 mt-8 text-center sm:mt-12">
-          <img
+          <Image
             style={{ width: "20rem" }}
             src="/robot.png"
             alt="smiling nerdy 3d robot"
             className="mx-auto"
+            width={320}
+            height={320}
           />
           <h1
             ref={headingRef}
             aria-label="Create super lesson plans with superhuman speed"
-            className="max-w-4xl mt-5 tracking-tight px-4 text-4xl md:text-6xl font-bold min-h-[108px] sm:text-5xl text-slate-900"
+            className="max-w-4xl mt-5 tracking-tight px-4 text-3xl md:text-6xl font-bold sm:min-h-[120px] sm:text-5xl text-slate-900"
           >
             {loaded && (
               <TypeWriterEffect
@@ -98,7 +101,7 @@ const Home: NextPage = () => {
           </div>
           <div className="pb-4 mb-4 -inset-x-4 bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl">
             <Tab.Group>
-              <Tab.List className="flex items-center justify-around p-2 mt-4 space-x-2 sm:p-8 rounded-xl">
+              <Tab.List className="flex flex-col items-stretch justify-around p-2 mt-4 mb-2 space-x-2 sm:items-center sm:flex-row sm:p-8 rounded-xl">
                 <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
                   Activity ideas
                 </Tab>
@@ -159,7 +162,7 @@ const Home: NextPage = () => {
           </div>
         </section>
         <section className="w-full pt-20">
-          <div className="px-1 mx-auto sm:text-center sm:px-8">
+          <div className="px-4 mx-auto sm:text-center sm:px-8">
             <h2 className="mb-6 text-xl font-bold text-green-700 ">Pricing</h2>
             <h3 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Save hours of time and get back to teaching.
@@ -238,10 +241,9 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <div className="flex flex-col max-w-2xl p-12 mx-auto mt-16 space-y-8 md:w-1/3 rounded-3xl ring-1 ring-gray-200">
-                <h4 className="text-2xl font-bold">Superplanner</h4>
+                <h4 className="text-2xl font-bold">Unlimited</h4>
                 <p className="text-gray-600">
-                  The unlimited membership for educators who plan <em>tons</em>{" "}
-                  of lessons
+                  For educators who want to be unstoppable planning machines.
                 </p>
                 <div>
                   <span className="text-4xl font-bold">$189</span>

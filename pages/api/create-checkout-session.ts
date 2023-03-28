@@ -32,7 +32,7 @@ const createCheckoutSession = async (
     let { data: subscription, error: fetchSubscriptionError } =
       await supabaseAdmin
         .from("subscriptions")
-        .select("*, prices(*, products(*))")
+        .select("*)")
         .in("status", ["trialing", "active"])
         .eq("user_id", session?.user?.id)
         .single();
