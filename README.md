@@ -8,7 +8,23 @@ This project uses the [OpenAI GPT-3 API](https://openai.com/api/) (specifically,
 
 ## Running Locally
 
-After cloning the repo, go to [OpenAI](https://beta.openai.com/account/api-keys) to make an account and put your API key in a file called `.env`.
+### Prerequisites
+
+- Docker
+- Supabase CLI
+
+### Supabase Local Development
+
+```bash
+npm install
+npx supabase start
+```
+
+Create a file called `.env.local`.
+
+Put outputs of `npx supabase start` into `.env.local`. See example.
+
+After cloning the repo, go to [OpenAI](https://beta.openai.com/account/api-keys) to make an account and put your API key in a file called `.env`. See example.
 
 Then, run the application in the command line and it will be available at `http://localhost:3000`.
 
