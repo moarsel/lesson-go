@@ -4,8 +4,6 @@ import Link from "next/link";
 import { GetServerSideProps } from "next/types";
 import { ReactElement, useState } from "react";
 import Autocomplete from "../../components/Autocomplete";
-import DropDown from "../../components/DropDown";
-import FormField from "../../components/FormField";
 import MainLayout from "../../components/MainLayout";
 import { Database } from "../../supabase/database.types";
 import { gradeValues, subjectTypes } from "./new";
@@ -29,20 +27,21 @@ function LessonsPage({
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-8 text-4xl font-bold mt-11">Lesson plans</h1>
       <div className="flex flex-row w-full gap-4">
-        <FormField label="Filter by grades:" className="w-56">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setGrades(e)}
-            items={gradeValues}
-          />
-        </FormField>
-        <FormField label="Filter by Subjects:" className="w-56">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setSubjects(e)}
-            items={subjectTypes}
-          />
-        </FormField>
+        <Autocomplete
+          className="w-56"
+          label="Filter by grades:"
+          value={""}
+          onChange={(e) => setGrades(e)}
+          items={gradeValues}
+        />
+
+        <Autocomplete
+          className="w-56"
+          label="Filter by Subjects:"
+          value={""}
+          onChange={(e) => setSubjects(e)}
+          items={subjectTypes}
+        />
       </div>
       {filteredLessons?.map((lesson) => (
         <Link

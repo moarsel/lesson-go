@@ -152,7 +152,7 @@ function ViewLessonPage({
         </Modal>
       </div>
 
-      <div className="mt-8 prose prose-slate print:prose-sm">
+      <div className="p-12 my-8 prose border shadow-xl rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
         {Object.entries(content)?.map(([key, section], i) => (
           <div className="print:break-after-all ">
             <h2 className="capitalize">{key}</h2>

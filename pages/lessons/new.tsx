@@ -6,14 +6,14 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useRef, useState } from "react";
+import { MdLightbulb } from "react-icons/md";
 import Autocomplete from "../../components/Autocomplete";
-
-import DropDown from "../../components/DropDown";
+import Button from "../../components/Button";
 import Editor from "../../components/Editor/Editor";
-import FormField from "../../components/FormField";
-import LoadingDots from "../../components/LoadingDots";
 import MainLayout from "../../components/MainLayout";
-import ResizablePanel from "../../components/ResizablePanel";
+import Pill from "../../components/Pill";
+import Suggestions from "../../components/Suggestions";
+import Textarea from "../../components/Textarea";
 import { Database } from "../../supabase/database.types";
 import { useLocalStorage } from "../../utils/useLocalStorage";
 
@@ -89,6 +89,11 @@ export type SectionData = {
   prompt: string;
 };
 export type SectionTypes = {
+  activityIdeas: SectionData;
+  activity: SectionData;
+  resourceIdeas: SectionData;
+  selectedResource: SectionData;
+  resource: SectionData;
   plan: SectionData;
   assessment: SectionData;
 };
@@ -117,11 +122,9 @@ export async function generateFromPrompt(prompt: string): Promise<any> {
 
 function New() {
   const [loading, setLoading] = useState(false);
-  const [bio, setBio] = useState("");
+  const [topic, setTopic] = useState("");
   const [grade, setGrade] = useState("");
   const [subject, setSubject] = useState("");
-  const [generatedActivities, setGeneratedActivities] = useState<string>("");
-  const [selectedActivity, setSelectedActivity] = useState<string>("");
   const supabase = useSupabaseClient<Database>();
   const user = useUser();
   const [localData, setLocalData] = useLocalStorage({});
@@ -131,57 +134,37 @@ function New() {
 
   const studentDemographic = `${grade} ${subject === "Other" ? "" : subject}`;
   const defaultContent = {
-    plan: {
-      prompt: `Create  ${studentDemographic} lesson plan that meets these goals: ${selectedActivity}. The plan should be formatted in markdown and only include sections for warmup, direct instruction, guided practice, and differentiation. Make it specific, realistic, concise, and practical.`,
+    activity: {
+      prompt: "",
       content: "",
-      description: "",
+    },
+    activityIdeas: {
+      prompt: ``,
+      content: "",
+    },
+    resource: {
+      prompt: ``,
+      content: "",
+    },
+    selectedResource: {
+      prompt: ``,
+      content: "",
+    },
+    resourceIdeas: {
+      prompt: ``,
+      content: "",
+    },
+    plan: {
+      prompt: ``,
+      content: "",
     },
     assessment: {
-      prompt: `My ${studentDemographic} students are doing this activity: ${selectedActivity}. Output an assessment to quiz their learning with a few different question formats, with white space for the students to write, and the answers should only be in an answer key at the end. Output should be in markdown format.`,
+      prompt: ``,
       content: "",
-      description: "",
     },
   } as SectionTypes;
 
   const [sections, setSections] = useState<SectionTypes>(defaultContent);
-
-  const activityPrompt = `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${bio}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 35 words (don't include a word count).`;
-
-  const generateBio = async (e: any) => {
-    e.preventDefault();
-    setGeneratedActivities("");
-    setLoading(true);
-
-    try {
-      const data = await generateFromPrompt(activityPrompt);
-      if (data) {
-        const reader = data.getReader();
-        const decoder = new TextDecoder();
-        let done = false;
-
-        while (!done) {
-          const { value, done: doneReading } = await reader.read();
-          done = doneReading;
-          const chunkValue = decoder.decode(value);
-          setGeneratedActivities((prev) => prev + chunkValue);
-        }
-      }
-    } catch (e) {
-      console.warn(e);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (activitiesRef.current) {
-        activitiesRef.current.scrollIntoView({
-          block: "start",
-          behavior: "smooth",
-        });
-      }
-    }, 1500);
-  }, [Boolean(generatedActivities)]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -205,13 +188,20 @@ function New() {
     setSectionContent(type, "");
     setLoading(true);
 
-    const lessonPlanPrompt = {
-      plan: `Create ${studentDemographic} lesson plan that meets these goals: ${selectedActivity}. The plan should be formatted in markdown with sections for warmup and materials (side by side), direct instruction (full row), guided practice (full row), and differentiation (full row). Make it specific, realistic, concise, and practical, there should be no h1 title.`,
-      assessment: `My ${studentDemographic} students are doing this activity: ${selectedActivity}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with a few different question formats, with whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
+    const getPrompts = (type: keyof SectionTypes) => {
+      return {
+        activityIdeas: `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 35 words (don't include a word count).`,
+        activity: "",
+        selectedResource: "",
+        resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content}. Make sure each example is max 35 words in the form of a prompt where the output would just be text. No videos, no quiz, no cards, no graphics, no websites, no interactive anything.  It should not be a prompt for students but a learning material they could use. Output the only a numbered list in markdown with no text before or after.`,
+        resource: `Generate a well formatted markdown student resource with lots of whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}.`,
+        plan: `Create ${studentDemographic} lesson plan that meets these goals: ${sections.activity.content}. The plan should be formatted in markdown with sections for warmup and materials (side by side), direct instruction (full row), guided practice (full row), and differentiation (full row). Make it specific, realistic, concise, and practical, there should be no h1 title.`,
+        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with a few different question formats, with whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
+      }[type];
     };
 
     try {
-      const data = await generateFromPrompt(lessonPlanPrompt[type]);
+      const data = await generateFromPrompt(getPrompts(type));
 
       if (data) {
         const reader = data.getReader();
@@ -235,18 +225,13 @@ function New() {
     setLoading(false);
   }
 
-  function handleNextStep() {
-    generateContent("plan");
-    generateContent("assessment");
-  }
-
   async function saveContent() {
     const { data, error } = await supabase
       .from("lessons")
       .insert({
         user_id: user?.id,
-        title: bio,
-        overview: selectedActivity,
+        title: topic,
+        overview: sections.activity.content,
         subject: [subject],
         grade: [grade],
         content: sections,
@@ -258,7 +243,7 @@ function New() {
       // setLocalData({
       //   [data.id]: {
       //     user_id: user?.id,
-      //     title: bio,
+      //     title: topic,
       //     subject: subject,
       //     content: sections,
       //   },
@@ -270,179 +255,241 @@ function New() {
   }
 
   return (
-    <div className="col-span-12 mt-10 sm:col-span-8 sm:col-start-2 lg:col-span-6 lg:col-start-3">
-      <h1 className="mb-6 text-3xl font-bold sm:text-4xl text-slate-900">
+    <div className="min-h-screen col-span-12 mt-10 sm:col-span-8 sm:col-start-2 lg:col-span-6 lg:col-start-3">
+      <h1 className="mb-5 text-3xl font-bold sm:text-4xl text-slate-900">
         First, who is this lesson for?
       </h1>
       <div className="flex flex-col gap-4 sm:flex-row">
-        <FormField label="Grade:" className="w-full">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setGrade(e)}
-            items={gradeValues}
-          />
-        </FormField>
+        <Autocomplete
+          label="Grade"
+          className="w-full"
+          value={""}
+          onChange={(e) => setGrade(e)}
+          items={gradeValues}
+        />
 
-        <FormField label="Subject:" className="w-full">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setSubject(e)}
-            items={subjectTypes}
-          />
-        </FormField>
+        <Autocomplete
+          className="w-full"
+          label="Subject"
+          value={""}
+          onChange={(e) => setSubject(e)}
+          items={subjectTypes}
+        />
       </div>
 
-      <FormField
-        label="Topic:"
+      <Textarea
+        label="Topic"
         description="What will students learn about?"
-        className="mt-5"
-      >
-        <textarea
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          rows={2}
-          className="w-full mt-2 border-gray-300 rounded-md shadow-sm form-input focus:border-black focus:ring-black"
-          placeholder={
-            "e.g. Students will be able to identify the parts of a flower."
-          }
-        />
-      </FormField>
+        value={topic}
+        onChange={(e) => setTopic(e.target.value)}
+        rows={2}
+        placeholder={
+          "e.g. Students will be able to identify the parts of a flower."
+        }
+      />
 
-      {!loading && (
-        <button
-          className={`w-full md:w-80 px-4 py-2 mt-8 font-medium text-white rounded-xl sm:mt-10 hover:bg-black/80 ${
-            Boolean(subject.length && grade.length)
-              ? "bg-black "
-              : "bg-neutral-500 cursor-not-allowed"
-          }`}
-          onClick={(e) =>
-            Boolean(subject.length && grade.length) && generateBio(e)
-          }
-          disabled={Boolean(!subject.length || !grade.length)}
-        >
-          {generatedActivities ? "Try one more time ↺" : "Suggest activities →"}
-        </button>
-      )}
-      {loading && (
-        <button
-          className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
-          disabled
-        >
-          <LoadingDots color="white" style="large" />
-        </button>
-      )}
-      {generatedActivities && (
-        <hr className="h-px my-10 bg-gray-700 border-1 dark:bg-gray-700" />
-      )}
-      <ResizablePanel>
-        <AnimatePresence mode="wait">
-          <motion.div className="my-8 space-y-10">
-            {generatedActivities && (
-              <>
-                <div ref={activitiesRef}>
-                  <h2
-                    id="activities"
-                    className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900"
-                  >
-                    Great, how about we try one of these activities?
-                  </h2>
+      <AnimatePresence mode="wait">
+        {topic && grade && subject && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="p-4 ring-2 ring-black/10 rounded-xl"
+          >
+            <h2
+              id="activities"
+              className="flex flex-row gap-3 mx-auto text-xl font-bold sm:text-2xl text-slate-900"
+            >
+              Brainstorm activity ideas
+            </h2>
+            <p className="my-2">
+              Suggest ideas for a {studentDemographic} lesson on {topic}.
+            </p>
+            <div className="flex flex-row flex-wrap gap-4">
+              <Pill selected={false}>10 minute warmup</Pill>
+              <Pill selected={false}>cumulative project</Pill>
+            </div>
+            <Button
+              className={`w-full md:w-80 px-4 py-2 mt-4 font-medium text-white rounded-xl  hover:bg-black/80 ${
+                Boolean(subject.length && grade.length)
+                  ? "bg-black "
+                  : "bg-neutral-500 cursor-not-allowed"
+              }`}
+              onClick={(e) => {
+                if (Boolean(subject.length && grade.length)) {
+                  generateContent("activityIdeas");
+                  setSectionContent("activity", "");
+                }
+              }}
+              loading={loading}
+              disabled={Boolean(!subject.length || !grade.length)}
+            >
+              {sections.activityIdeas.content
+                ? "Try again"
+                : "Suggest activities"}
+              <MdLightbulb />
+            </Button>
 
-                  <div className="flex flex-col items-center justify-center max-w-xl mx-auto space-y-8">
-                    {generatedActivities
-                      .split(/\n(?=[0-9]\.)/)
-                      .map((activity) =>
-                        activity.replace(/([0-9]\.)/, "").trim()
-                      )
-                      .map((activity, i) => {
-                        return (
-                          <button
-                            className={`p-4 transition border shadow-md rounded-xl ${
-                              activity === selectedActivity
-                                ? "bg-green-700 hover:bg-green-900 text-white"
-                                : "bg-white hover:bg-gray-100"
-                            }`}
-                            onClick={() => {
-                              setSelectedActivity(`${activity}`);
-                            }}
-                            key={activity}
-                          >
-                            <p className="flex items-center gap-5 text-left">
-                              <span className="flex items-center justify-center w-8 h-8 text-lg text-white bg-green-900 rounded-full shrink-0">
-                                {i + 1}
-                              </span>
-                              {activity}
-                            </p>
-                          </button>
-                        );
-                      })}
-                  </div>
-                </div>
-              </>
-            )}
-            {selectedActivity && (
-              <>
-                <FormField
-                  label="Selected Activity:"
+            <div ref={activitiesRef} className="">
+              {!sections.activity.content && (
+                <Suggestions
+                  content={sections.activityIdeas.content}
+                  onSelect={(item: string) =>
+                    setSectionContent("activity", item)
+                  }
+                />
+              )}
+              {sections.activity.content && (
+                <Textarea
+                  label="Selected Activity"
                   description="Feel free to tweak this your needs."
+                  value={sections.activity.content}
+                  onChange={(e) =>
+                    setSectionContent("activity", e.target.value)
+                  }
+                  rows={3}
+                  className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
+                />
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {sections.activity.content && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="p-4 mt-8 ring-2 ring-black/10 rounded-xl"
+            ref={detailsRef}
+          >
+            <h2 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
+              Great, now let's finish the lesson plan!
+            </h2>
+            <p className="mb-4">
+              Generate a lesson plan summary for a {studentDemographic} lesson
+              on {topic}.
+            </p>
+            <div className="flex flex-row flex-wrap gap-3">
+              <Pill selected>Summary table</Pill>
+              <Pill>5 part lesson plan</Pill>
+            </div>
+            <Button onClick={() => generateContent("plan")} loading={loading}>
+              Generate Plan
+            </Button>
+            {sections.plan.content && (
+              <div className="flex flex-col w-full gap-4 mb-8">
+                <Editor
+                  content={sections.plan.content}
+                  onChange={(value) => setSectionContent("plan", value)}
+                />
+              </div>
+            )}
+          </motion.div>
+        )}
+        {sections.plan.content && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="p-4 mt-8 ring-2 ring-black/10 rounded-xl"
+          >
+            <h2
+              id="activities"
+              className="text-xl font-bold sm:text-2xl text-slate-900"
+            >
+              Create learning materials
+            </h2>
+            <Button
+              className={`w-full md:w-80 px-4 py-2 mt-2 font-medium text-white rounded-xl  hover:bg-black/80 ${
+                Boolean(subject.length && grade.length)
+                  ? "bg-black "
+                  : "bg-neutral-500 cursor-not-allowed"
+              }`}
+              onClick={(e) =>
+                Boolean(subject.length && grade.length) &&
+                generateContent("resourceIdeas")
+              }
+              loading={loading}
+              disabled={Boolean(!subject.length || !grade.length)}
+            >
+              {sections.resourceIdeas.content
+                ? "Try one more time ↺"
+                : "Suggest lesson materials →"}
+            </Button>
+
+            {!sections.selectedResource.content && (
+              <Suggestions
+                content={sections.resourceIdeas.content}
+                onSelect={(item: string) =>
+                  setSectionContent("selectedResource", item)
+                }
+              />
+            )}
+            {sections.selectedResource.content && (
+              <>
+                <Textarea
+                  label="Selected Resource"
+                  description="Feel free to tweak this your needs."
+                  value={sections.selectedResource.content}
+                  onChange={(e) =>
+                    setSectionContent("selectedResource", e.target.value)
+                  }
+                  rows={3}
+                  className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
+                />
+                <Button
+                  onClick={() => generateContent("resource")}
+                  loading={loading}
                 >
-                  <textarea
-                    value={selectedActivity}
-                    onChange={(e) => setSelectedActivity(e.target.value)}
-                    rows={3}
-                    className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
-                  />
-                </FormField>
-                <button
-                  onClick={handleNextStep}
-                  className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
-                >
-                  Next step
-                </button>
+                  Create!
+                </Button>
+                <Editor
+                  content={sections.resource.content}
+                  onChange={(value) => setSectionContent("resource", value)}
+                />
               </>
             )}
           </motion.div>
-        </AnimatePresence>
-      </ResizablePanel>
-      <hr className="h-px my-10 bg-gray-700 border-1 dark:bg-gray-700" />
-      {sections.plan.content && (
-        <div ref={detailsRef}>
-          <h2 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
-            Great, now let's finish the lesson plan!
-          </h2>
+        )}
 
-          <div className="flex flex-col w-full gap-4 mb-8">
-            <Editor
-              content={sections.plan.content}
-              onChange={(value) => setSectionContent("plan", value)}
-            />
-
+        {sections.plan.content && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="p-4 mt-8 ring-2 ring-black/10 rounded-xl"
+          >
             <h3 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
               Assessment
             </h3>
+            <p className="mb-4">
+              Generate a multiple choice assessment for a {studentDemographic}{" "}
+              lesson on {topic}.
+            </p>
+            <div className="flex flex-row flex-wrap gap-3">
+              <Pill selected>Multiple choice</Pill>
+              <Pill>Reflection questions</Pill>
+            </div>
             <Editor
               content={sections.assessment.content}
               onChange={(value) => setSectionContent("assessment", value)}
             />
-          </div>
-        </div>
-      )}
 
-      {sections.assessment.content && loading && (
-        <button
-          className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
-          disabled
-        >
-          <LoadingDots color="white" style="large" />
-        </button>
-      )}
-      {!loading && sections.assessment.content && (
+            <Button
+              onClick={() => generateContent("assessment")}
+              loading={loading}
+            >
+              Generate Assessment
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {sections.plan.content && (
         <>
-          <button
-            onClick={saveContent}
-            className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
-          >
+          <Button onClick={saveContent} loading={loading}>
             Create lesson plan!
-          </button>
+          </Button>
         </>
       )}
     </div>

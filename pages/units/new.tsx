@@ -7,11 +7,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import Autocomplete from "../../components/Autocomplete";
+import Button from "../../components/Button";
 
-import DropDown from "../../components/DropDown";
 import Editor from "../../components/Editor/Editor";
 import FormField from "../../components/FormField";
-import LoadingDots from "../../components/LoadingDots";
 import MainLayout from "../../components/MainLayout";
 import ResizablePanel from "../../components/ResizablePanel";
 import { Database } from "../../supabase/database.types";
@@ -343,54 +342,41 @@ function New() {
         First, who is this unit for?
       </h1>
       <div className="flex flex-col gap-4 sm:flex-row">
-        <FormField label="Grade:" className="w-full">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setGrade(e)}
-            items={gradeValues}
-          />
-        </FormField>
+        <Autocomplete
+          label="Grade:"
+          className="w-full"
+          value={""}
+          onChange={(e) => setGrade(e)}
+          items={gradeValues}
+        />
 
-        <FormField label="Subject:" className="w-full">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setSubject(e)}
-            items={subjectTypes}
-          />
-        </FormField>
+        <Autocomplete
+          label="Subject:"
+          className="w-full"
+          value={""}
+          onChange={(e) => setSubject(e)}
+          items={subjectTypes}
+        />
       </div>
 
-      <FormField label="State/Province:" className="w-full">
-        <Autocomplete
-          value={""}
-          onChange={(e) => setLocation(e)}
-          items={stateValues}
-        />
-      </FormField>
+      <Autocomplete
+        label="State/Province:"
+        className="w-full"
+        value={""}
+        onChange={(e) => setLocation(e)}
+        items={stateValues}
+      />
 
-      {!loading && (
-        <button
-          className={`w-full md:w-80 px-4 py-2 mt-8 font-medium text-white rounded-xl sm:mt-10 hover:bg-black/80 ${
-            Boolean(subject.length && grade.length)
-              ? "bg-black "
-              : "bg-neutral-500 cursor-not-allowed"
-          }`}
-          onClick={(e) =>
-            Boolean(subject.length && grade.length) && generateBio(e)
-          }
-          disabled={Boolean(!subject.length || !grade.length)}
-        >
-          {generatedActivities ? "Try one more time ↺" : "Suggest units →"}
-        </button>
-      )}
-      {loading && (
-        <button
-          className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
-          disabled
-        >
-          <LoadingDots color="white" style="large" />
-        </button>
-      )}
+      <Button
+        loading={loading}
+        onClick={(e) =>
+          Boolean(subject.length && grade.length) && generateBio(e)
+        }
+        disabled={Boolean(!subject.length || !grade.length)}
+      >
+        {generatedActivities ? "Try one more time ↺" : "Suggest units →"}
+      </Button>
+
       {generatedActivities && (
         <hr className="h-px my-10 bg-gray-700 border-1 dark:bg-gray-700" />
       )}
@@ -442,7 +428,7 @@ function New() {
             {selectedActivity && (
               <>
                 <FormField
-                  label="Selected Activity:"
+                  label="Selected Activity"
                   description="Feel free to tweak this your needs."
                 >
                   <textarea
@@ -484,22 +470,15 @@ function New() {
         </div>
       )}
 
-      {sections.assessment.content && loading && (
-        <button
-          className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
-          disabled
-        >
-          <LoadingDots color="white" style="large" />
-        </button>
-      )}
-      {!loading && sections.assessment.content && (
+      {sections.assessment.content && (
         <>
-          <button
+          <Button
+            loading={loading}
             onClick={saveContent}
             className="w-full px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
           >
             Create lesson plan!
-          </button>
+          </Button>
         </>
       )}
     </div>

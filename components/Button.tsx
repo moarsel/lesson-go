@@ -23,14 +23,15 @@ interface ButtonProps {
   children: ReactNode;
 
   /**
+   * Is the button in loading state?
+   * @default false
+   * */
+  loading?: boolean;
+
+  /**
    * type attribute of button
    */
   type?: "button" | "submit" | "reset";
-
-  /**
-   * Optional click handler
-   */
-  onClick?: () => void;
 }
 
 /**
@@ -39,6 +40,7 @@ interface ButtonProps {
 const Button = ({
   variant = "primary",
   fullWidth = false,
+  loading = false,
   children,
   type = "button",
   className,
@@ -54,9 +56,11 @@ const Button = ({
         variant === "outline" &&
           " border-2 border-black rounded-xl   hover:bg-gray-100/80",
         fullWidth ? "w-full" : "w-max",
+        loading && "opacity-80 cursor-not-allowed animate-pulse",
         className
       )}
       {...props}
+      disabled={loading || props.disabled}
     >
       {children}
     </button>

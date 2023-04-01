@@ -87,7 +87,7 @@ export default function DropDown<T>({
                   {({ active }) => (
                     <div
                       className={classNames(
-                        " hover:bg-gray-200 px-3 py-2 transition-colors my-1 text-sm rounded-lg w-full text-left flex items-center space-x-2 justify-between cursor-pointer",
+                        " hover:bg-gray-200 px-3 py-2 transition-colors my-1 text-sm rounded-md w-full text-left flex items-center space-x-2 justify-between cursor-pointer",
                         active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                         value.some((v) => v.value === valueItem.value)
                           ? "bg-gray-200 font-bold"

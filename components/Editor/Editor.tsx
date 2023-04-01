@@ -5,7 +5,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useId } from "react";
 import { marked } from "marked";
 import Menubar from "./Menubar";
 
@@ -16,10 +16,11 @@ type EditorProps = {
 };
 
 export default ({ content, readOnly = false, onChange }: EditorProps) => {
+  const id = useId();
   const editor = useEditor({
     editorProps: {
       attributes: {
-        class: "prose-sm sm:prose prose-headings:mb-1 p-4",
+        class: "prose p-4",
       },
     },
     extensions: [
@@ -46,9 +47,21 @@ export default ({ content, readOnly = false, onChange }: EditorProps) => {
   }, [editor, content]);
 
   return (
-    <div>
-      {!readOnly && <Menubar editor={editor} />}
-      <EditorContent editor={editor} />
+    <div className="relative">
+      {!readOnly && (
+        <>
+          <div className="absolute">
+            <a
+              href={`#${id}`}
+              className="hover:bg-grey-lightest focus:bg-grey-lightest focus:shadow-outline sr-only flex select-none justify-center rounded-md border border-transparent bg-white !px-4 !py-2 leading-tight text-black no-underline focus:not-sr-only"
+            >
+              Skip formatting toolbar
+            </a>
+          </div>
+          <Menubar editor={editor} />
+        </>
+      )}
+      <EditorContent editor={editor} id={id} />
     </div>
   );
 };

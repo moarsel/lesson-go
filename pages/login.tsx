@@ -21,7 +21,7 @@ const LoginPage = () => {
           Login
         </h2>
         <h2 className="mb-12 text-xl text-center text-gray-700">
-          Finish lesson planning in a snap 🤖
+          Finish lesson planning in a flash 🤖
         </h2>
         <Auth
           view="sign_in"

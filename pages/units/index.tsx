@@ -29,20 +29,21 @@ function LessonsPage({
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-8 text-4xl font-bold mt-11">Lesson plans</h1>
       <div className="flex flex-row w-full gap-4">
-        <FormField label="Filter by grades:" className="w-56">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setGrades(e)}
-            items={gradeValues}
-          />
-        </FormField>
-        <FormField label="Filter by Subjects:" className="w-56">
-          <Autocomplete
-            value={""}
-            onChange={(e) => setSubjects(e)}
-            items={subjectTypes}
-          />
-        </FormField>
+        <Autocomplete
+          label="Filter by grades:"
+          className="w-56"
+          value={""}
+          onChange={(e) => setGrades(e)}
+          items={gradeValues}
+        />
+
+        <Autocomplete
+          label="Filter by Subjects:"
+          className="w-56"
+          value={""}
+          onChange={(e) => setSubjects(e)}
+          items={subjectTypes}
+        />
       </div>
       {filteredLessons?.map((lesson) => (
         <Link
