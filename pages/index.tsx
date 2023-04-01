@@ -47,6 +47,7 @@ const Home: NextPage = () => {
             className="mx-auto"
             width={320}
             height={320}
+            priority
           />
           <h1
             ref={headingRef}
@@ -59,12 +60,12 @@ const Home: NextPage = () => {
                 onInit={(typewriter) => {
                   typewriter
                     .typeString(
-                      `Create <span class="text-green-700">super</span> lesson plans <br/>`
+                      `Create <span class="text-green-600">super</span> lesson plans <br/>`
                     )
                     .pauseFor(1200)
                     .changeDelay(10)
                     .typeString(
-                      `with <span class="text-green-700">superhuman</span> speed!`
+                      `with <span class="text-green-600">superhuman</span> speed!`
                     )
                     .start();
                 }}
@@ -92,9 +93,9 @@ const Home: NextPage = () => {
             </Link>
           </div>
         </div>
-        <section className="relative flex flex-col items-center w-full px-4 pb-12 mt-20 bg-gradient-to-tl from-green-500 to-green-900">
+        <section className="relative flex flex-col items-center w-full px-4 pb-12 mt-20 bg-gradient-to-tl from-green-400 to-green-800">
           <div className="max-w-2xl mt-16 mb-12 text-center text-white">
-            <h2 className="mt-6 text-4xl font-bold ">
+            <h2 className="mt-6 text-4xl font-[600] leading-normal">
               Personalize your lesson plans with a little help from our AI
               lesson robot.
             </h2>
@@ -102,16 +103,16 @@ const Home: NextPage = () => {
           <div className="pb-4 mb-4 -inset-x-4 bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl">
             <Tab.Group>
               <Tab.List className="flex flex-col items-stretch justify-around p-2 mt-4 mb-2 space-x-2 sm:items-center sm:flex-row sm:p-8 rounded-xl">
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-medium text-white ui-selected:bg-green-900 rounded-xl">
                   Activity ideas
                 </Tab>
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-medium text-white ui-selected:bg-green-900 rounded-xl">
                   Lesson plans
                 </Tab>
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-medium text-white ui-selected:bg-green-900 rounded-xl">
                   Assessments
                 </Tab>
-                <Tab className="px-5 py-3 text-lg font-bold text-white ui-selected:bg-green-900 rounded-xl">
+                <Tab className="px-5 py-3 text-lg font-medium text-white ui-selected:bg-green-900 rounded-xl">
                   Stay organized
                 </Tab>
               </Tab.List>
@@ -164,10 +165,10 @@ const Home: NextPage = () => {
         <section className="w-full pt-20">
           <div className="px-4 mx-auto sm:text-center sm:px-8">
             <h2 className="mb-6 text-xl font-bold text-green-700 ">Pricing</h2>
-            <h3 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h3 className="text-3xl font-[700] leading-normal text-gray-900 sm:text-4xl">
               Save hours of time and get back to teaching.
             </h3>
-            <p className="max-w-2xl mx-auto mt-6 text-lg leading-8 text-gray-600 ">
+            <p className="max-w-2xl mx-auto mt-6 text-lg font-[400] leading-relaxed text-gray-600 ">
               We made it free for you to try Lesson Bot, so that you see just
               how much it helps. Give it a try, then get your whole year of
               lesson planning done for just $59.

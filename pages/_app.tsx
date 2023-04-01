@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/react";
 import type { AppProps } from "next/app";
-import { Public_Sans } from "@next/font/google";
+import { Rubik } from "@next/font/google";
 import jwtDecode from "jwt-decode";
 import "../styles/globals.css";
 import "../styles/editor.css";
@@ -15,7 +15,7 @@ type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
-const publicSans = Public_Sans({
+const publicSans = Rubik({
   subsets: ["latin"],
   variable: "--font-public-sans",
 });
