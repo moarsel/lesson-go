@@ -1,29 +1,42 @@
-import { TextareaHTMLAttributes, useRef } from "react";
+import { TextareaHTMLAttributes, useId, useRef } from "react";
 import useAutosizeTextArea from "../utils/useAutosizeTextArea";
+import FormField from "./FormField";
 
 export default function Textarea({
+  label,
+  description,
   value,
   onChange,
   className,
   ...props
 }: {
+  label: string;
+  description: string;
   value: string;
   onChange: (e: any) => void;
   className?: string;
 } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const ref = useRef<HTMLTextAreaElement>(null);
+  const id = useId();
   useAutosizeTextArea(ref.current, value);
+
   return (
-    <textarea
-      ref={ref}
-      value={value}
-      onChange={onChange}
-      rows={5}
-      style={{ minHeight: "4rem" }}
-      className={`w-full p-6 mb-[-6px] border-transparent border-t-slate-200 rounded-b-xl focus:border-green-700 focus:ring-green-700 focus:ring-inset ${
-        className || ""
-      }`}
-      {...props}
-    />
+    <FormField
+      label={label}
+      description={description}
+      id={id}
+      className={className}
+    >
+      <textarea
+        ref={ref}
+        value={value}
+        onChange={onChange}
+        rows={4}
+        className={`border-gray-400 rounded-md w-full  focus:border-black focus:ring-black ${
+          className || ""
+        }`}
+        {...props}
+      />
+    </FormField>
   );
 }

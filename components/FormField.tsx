@@ -1,8 +1,15 @@
-import { ReactNode } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  ReactNode,
+  useId,
+} from "react";
 
 interface FormFieldProps<T> {
   className?: string;
   label: string | ReactNode;
+  id?: string;
   description?: string | ReactNode;
   children: ReactNode | Array<ReactNode>;
 }
@@ -10,16 +17,26 @@ interface FormFieldProps<T> {
 export default function FormField<T>({
   label,
   description,
+  id,
   className,
   children,
 }: FormFieldProps<T>) {
   return (
-    <label className={`relative flex flex-col mb-4 ${className || ""}`}>
-      <div className="flex items-center mb-2 space-x-3 print:hidden">
-        <p className="text-lg font-bold text-left">{label}</p>
-        <p>{description}</p>
+    <div className={`relative flex flex-col  mb-7 ${className || ""} group`}>
+      <div className="pb-1 print:hidden">
+        <label htmlFor={id} className="text-lg font-medium text-left ">
+          {label}
+        </label>
       </div>
       <div className="block text-left">{children}</div>
-    </label>
+      {description && (
+        <p
+          className="block mb-1 text-sm group-focus-within:text-black text-neutral-700"
+          id={`${id}-description`}
+        >
+          {description}
+        </p>
+      )}
+    </div>
   );
 }
