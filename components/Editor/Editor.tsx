@@ -11,16 +11,22 @@ import Menubar from "./Menubar";
 
 type EditorProps = {
   content: string;
+  className?: string;
   readOnly?: boolean;
   onChange?: (content: any) => void;
 };
 
-export default ({ content, readOnly = false, onChange }: EditorProps) => {
+export default ({
+  content,
+  className = "",
+  readOnly = false,
+  onChange,
+}: EditorProps) => {
   const id = useId();
   const editor = useEditor({
     editorProps: {
       attributes: {
-        class: "prose p-4",
+        class: `prose p-4 ${className}`,
       },
     },
     extensions: [

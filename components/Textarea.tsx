@@ -11,7 +11,7 @@ export default function Textarea({
   ...props
 }: {
   label: string;
-  description: string;
+  description: string | React.ReactNode;
   value: string;
   onChange: (e: any) => void;
   className?: string;

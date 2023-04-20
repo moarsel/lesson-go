@@ -6,7 +6,13 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useRef, useState } from "react";
-import { MdLightbulb } from "react-icons/md";
+import {
+  MdAssignmentTurnedIn,
+  MdLightbulb,
+  MdListAlt,
+  MdPostAdd,
+  MdQuiz,
+} from "react-icons/md";
 import Autocomplete from "../../components/Autocomplete";
 import Button from "../../components/Button";
 import Editor from "../../components/Editor/Editor";
@@ -16,6 +22,8 @@ import Suggestions from "../../components/Suggestions";
 import Textarea from "../../components/Textarea";
 import { Database } from "../../supabase/database.types";
 import { useLocalStorage } from "../../utils/useLocalStorage";
+import RoboCard from "../../components/RoboCard";
+import Select from "../../components/Select";
 
 export type GradeType =
   | "Pre-K"
@@ -190,11 +198,11 @@ function New() {
 
     const getPrompts = (type: keyof SectionTypes) => {
       return {
-        activityIdeas: `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 35 words (don't include a word count).`,
+        activityIdeas: `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 20 words (don't include a word count).`,
         activity: "",
         selectedResource: "",
-        resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content}. Make sure each example is max 35 words in the form of a prompt where the output would just be text. No videos, no quiz, no cards, no graphics, no websites, no interactive anything.  It should not be a prompt for students but a learning material they could use. Output the only a numbered list in markdown with no text before or after.`,
-        resource: `Generate a well formatted markdown student resource with lots of whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}.`,
+        resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content}. Make sure each example is max 35 words in the form of a prompt where the output would just be text. Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything.  It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
+        resource: `Generate a well formatted markdown student printable with lots of whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but don't add images.`,
         plan: `Create ${studentDemographic} lesson plan that meets these goals: ${sections.activity.content}. The plan should be formatted in markdown with sections for warmup and materials (side by side), direct instruction (full row), guided practice (full row), and differentiation (full row). Make it specific, realistic, concise, and practical, there should be no h1 title.`,
         assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with a few different question formats, with whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
       }[type];
@@ -294,201 +302,239 @@ function New() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="p-4 ring-2 ring-black/10 rounded-xl"
           >
-            <h2
-              id="activities"
-              className="flex flex-row gap-3 mx-auto text-xl font-bold sm:text-2xl text-slate-900"
+            <RoboCard
+              title="Brainstorm activity ideas"
+              icon={<MdLightbulb className="text-5xl " />}
             >
-              Brainstorm activity ideas
-            </h2>
-            <p className="my-2">
-              Suggest ideas for a {studentDemographic} lesson on {topic}.
-            </p>
-            <div className="flex flex-row flex-wrap gap-4">
-              <Pill selected={false}>10 minute warmup</Pill>
-              <Pill selected={false}>cumulative project</Pill>
-            </div>
-            <Button
-              className={`w-full md:w-80 px-4 py-2 mt-4 font-medium text-white rounded-xl  hover:bg-black/80 ${
-                Boolean(subject.length && grade.length)
-                  ? "bg-black "
-                  : "bg-neutral-500 cursor-not-allowed"
-              }`}
-              onClick={(e) => {
-                if (Boolean(subject.length && grade.length)) {
-                  generateContent("activityIdeas");
-                  setSectionContent("activity", "");
-                }
-              }}
-              loading={loading}
-              disabled={Boolean(!subject.length || !grade.length)}
-            >
-              {sections.activityIdeas.content
-                ? "Try again"
-                : "Suggest activities"}
-              <MdLightbulb />
-            </Button>
-
-            <div ref={activitiesRef} className="">
-              {!sections.activity.content && (
-                <Suggestions
-                  content={sections.activityIdeas.content}
-                  onSelect={(item: string) =>
-                    setSectionContent("activity", item)
-                  }
+              <p className="text-lg ">
+                Suggest{" "}
+                <Select
+                  value=""
+                  onChange={() => false}
+                  label="activity type"
+                  options={[
+                    { label: "10 minute warmup", value: "10 minute warmup" },
+                  ]}
                 />
-              )}
+                activity ideas for a lesson on{" "}
+                <span className="font-medium">{topic}</span>.
+              </p>
+              <div className="flex flex-col">
+                <Button
+                  variant="primary"
+                  className="w-24 mt-4"
+                  onClick={(e) => {
+                    if (Boolean(subject.length && grade.length)) {
+                      generateContent("activityIdeas");
+                      setSectionContent("activity", "");
+                    }
+                  }}
+                  loading={loading}
+                  disabled={Boolean(!subject.length || !grade.length)}
+                >
+                  {sections.activityIdeas.content && !loading ? (
+                    "Try again ↺"
+                  ) : (
+                    <>
+                      Suggest activities <MdLightbulb className="text-lg" />
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              <div ref={activitiesRef} className="">
+                {!sections.activity.content && (
+                  <Suggestions
+                    content={sections.activityIdeas.content}
+                    onSelect={(item: string) =>
+                      setSectionContent("activity", item)
+                    }
+                  />
+                )}
+              </div>
+
               {sections.activity.content && (
                 <Textarea
                   label="Selected Activity"
-                  description="Feel free to tweak this your needs."
+                  description={
+                    <div className="flex flex-row items-center justify-between">
+                      Feel free to tweak this your needs.
+                    </div>
+                  }
                   value={sections.activity.content}
                   onChange={(e) =>
                     setSectionContent("activity", e.target.value)
                   }
                   rows={3}
-                  className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
+                  className="mt-2"
                 />
               )}
-            </div>
+            </RoboCard>
           </motion.div>
         )}
 
-        {sections.activity.content && (
+        {topic && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="p-4 mt-8 ring-2 ring-black/10 rounded-xl"
             ref={detailsRef}
           >
-            <h2 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
-              Great, now let's finish the lesson plan!
-            </h2>
-            <p className="mb-4">
-              Generate a lesson plan summary for a {studentDemographic} lesson
-              on {topic}.
-            </p>
-            <div className="flex flex-row flex-wrap gap-3">
-              <Pill selected>Summary table</Pill>
-              <Pill>5 part lesson plan</Pill>
-            </div>
-            <Button onClick={() => generateContent("plan")} loading={loading}>
-              Generate Plan
-            </Button>
-            {sections.plan.content && (
-              <div className="flex flex-col w-full gap-4 mb-8">
-                <Editor
-                  content={sections.plan.content}
-                  onChange={(value) => setSectionContent("plan", value)}
+            <RoboCard
+              title="Generate a Lesson Plan"
+              icon={<MdListAlt className="text-5xl" />}
+            >
+              <p className="mb-4">
+                Write a{" "}
+                <Select
+                  value=""
+                  onChange={() => false}
+                  label="activity type"
+                  options={[
+                    {
+                      label: "lesson plan summary table",
+                      value: "lesson plan summary table",
+                    },
+                    {
+                      label: "5 part lesson plan",
+                      value: "5 part lesson plan",
+                    },
+                  ]}
                 />
-              </div>
-            )}
+                lesson plan summary for a {studentDemographic} lesson for the
+                selected activity.
+              </p>
+
+              <Button onClick={() => generateContent("plan")} loading={loading}>
+                <MdListAlt className="text-lg" />
+                {!sections.plan.content ? "Generate Plan" : "Try again ↺"}
+              </Button>
+              {sections.plan.content && (
+                <div className="p-6 border border-slate-100">
+                  <Editor
+                    content={sections.plan.content}
+                    onChange={(value) => setSectionContent("plan", value)}
+                  />
+                </div>
+              )}
+            </RoboCard>
           </motion.div>
         )}
-        {sections.plan.content && (
+
+        {topic && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="p-4 mt-8 ring-2 ring-black/10 rounded-xl"
           >
-            <h2
-              id="activities"
-              className="text-xl font-bold sm:text-2xl text-slate-900"
+            <RoboCard
+              title="Add Printable Resource"
+              icon={<MdPostAdd className="text-5xl" />}
             >
-              Create learning materials
-            </h2>
-            <Button
-              className={`w-full md:w-80 px-4 py-2 mt-2 font-medium text-white rounded-xl  hover:bg-black/80 ${
-                Boolean(subject.length && grade.length)
-                  ? "bg-black "
-                  : "bg-neutral-500 cursor-not-allowed"
-              }`}
-              onClick={(e) =>
-                Boolean(subject.length && grade.length) &&
-                generateContent("resourceIdeas")
-              }
-              loading={loading}
-              disabled={Boolean(!subject.length || !grade.length)}
-            >
-              {sections.resourceIdeas.content
-                ? "Try one more time ↺"
-                : "Suggest lesson materials →"}
-            </Button>
-
-            {!sections.selectedResource.content && (
-              <Suggestions
-                content={sections.resourceIdeas.content}
-                onSelect={(item: string) =>
-                  setSectionContent("selectedResource", item)
+              <Button
+                className={`w-full md:w-80 px-4 py-2 mt-2 font-medium text-white rounded-xl  hover:bg-black/80 ${
+                  Boolean(subject.length && grade.length)
+                    ? "bg-black "
+                    : "bg-neutral-500 cursor-not-allowed"
+                }`}
+                onClick={(e) =>
+                  Boolean(subject.length && grade.length) &&
+                  generateContent("resourceIdeas")
                 }
-              />
-            )}
-            {sections.selectedResource.content && (
-              <>
-                <Textarea
-                  label="Selected Resource"
-                  description="Feel free to tweak this your needs."
-                  value={sections.selectedResource.content}
-                  onChange={(e) =>
-                    setSectionContent("selectedResource", e.target.value)
+                loading={loading}
+                disabled={Boolean(!subject.length || !grade.length)}
+              >
+                {sections.resourceIdeas.content
+                  ? "Try one more time ↺"
+                  : "Suggest printable resources →"}
+              </Button>
+
+              {!sections.selectedResource.content && (
+                <Suggestions
+                  content={sections.resourceIdeas.content}
+                  onSelect={(item: string) =>
+                    setSectionContent("selectedResource", item)
                   }
-                  rows={3}
-                  className="w-full mt-2 border-gray-300 rounded-md shadow-sm focus:border-black focus:ring-black"
                 />
-                <Button
-                  onClick={() => generateContent("resource")}
-                  loading={loading}
-                >
-                  Create!
-                </Button>
-                <Editor
-                  content={sections.resource.content}
-                  onChange={(value) => setSectionContent("resource", value)}
-                />
-              </>
-            )}
+              )}
+              {sections.selectedResource.content && (
+                <>
+                  <Textarea
+                    label="Printable Resource Description"
+                    description="Feel free to change this if you get bad results."
+                    value={sections.selectedResource.content}
+                    onChange={(e) =>
+                      setSectionContent("selectedResource", e.target.value)
+                    }
+                    rows={3}
+                    className="mt-2"
+                  />
+                  <Button
+                    onClick={() => generateContent("resource")}
+                    loading={loading}
+                  >
+                    <MdPostAdd className="text-lg" />
+                    Create printable
+                  </Button>
+                  <div className="p-6 border border-slate-100">
+                    <Editor
+                      content={sections.resource.content}
+                      onChange={(value) => setSectionContent("resource", value)}
+                    />
+                  </div>
+                </>
+              )}
+            </RoboCard>
           </motion.div>
         )}
 
-        {sections.plan.content && (
+        {topic && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="p-4 mt-8 ring-2 ring-black/10 rounded-xl"
           >
-            <h3 className="mx-auto mb-8 text-3xl font-bold sm:text-4xl text-slate-900">
-              Assessment
-            </h3>
-            <p className="mb-4">
-              Generate a multiple choice assessment for a {studentDemographic}{" "}
-              lesson on {topic}.
-            </p>
-            <div className="flex flex-row flex-wrap gap-3">
-              <Pill selected>Multiple choice</Pill>
-              <Pill>Reflection questions</Pill>
-            </div>
-            <Editor
-              content={sections.assessment.content}
-              onChange={(value) => setSectionContent("assessment", value)}
-            />
-
-            <Button
-              onClick={() => generateContent("assessment")}
-              loading={loading}
+            <RoboCard
+              title="Generate Assessment"
+              icon={<MdQuiz className="text-5xl" />}
             >
-              Generate Assessment
-            </Button>
+              <p className="mb-4">
+                Generate a{" "}
+                <Select
+                  value=""
+                  onChange={() => false}
+                  label="activity type"
+                  options={[
+                    { label: "Multiple choice", value: "Multiple choice" },
+                  ]}
+                />{" "}
+                for a {studentDemographic} lesson on {topic}.
+              </p>
+              <Button
+                onClick={() => generateContent("assessment")}
+                loading={loading}
+              >
+                <MdQuiz className="text-lg" />
+                Create Assessment
+              </Button>
+              {sections.assessment.content && (
+                <div className="p-6 border border-slate-100">
+                  <Editor
+                    content={sections.assessment.content}
+                    onChange={(value) => setSectionContent("assessment", value)}
+                  />
+                </div>
+              )}
+            </RoboCard>
           </motion.div>
         )}
       </AnimatePresence>
-      {sections.plan.content && (
+
+      {Boolean(sections.plan.content || sections.activity.content) && (
         <>
           <Button onClick={saveContent} loading={loading}>
-            Create lesson plan!
+            <MdAssignmentTurnedIn className="text-lg" /> Finish lesson plan
           </Button>
         </>
       )}
