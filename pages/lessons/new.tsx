@@ -287,13 +287,16 @@ function New() {
 
       <Textarea
         label="Topic"
-        description="What will students learn about?"
+        description={
+          <>
+            <span className="font-bold">Hint:</span> Be specific about what your
+            students need to learn and their particular interests.
+          </>
+        }
         value={topic}
         onChange={(e) => setTopic(e.target.value)}
         rows={2}
-        placeholder={
-          "e.g. Students will be able to identify the parts of a flower."
-        }
+        placeholder={"e.g. Fun with fractions in nature"}
       />
 
       <AnimatePresence mode="wait">

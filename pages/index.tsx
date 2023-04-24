@@ -17,13 +17,13 @@ const Home: NextPage = () => {
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
 
-  function handleStartCheckout(tier: "free" | "pro" | "super") {
+  function handleStartCheckout(tier: "free" | "pro" | "unlimited") {
     if (tier === "free") {
       router.push(`/login?returnUrl=/lessons/new`);
     } else if (tier === "pro") {
       router.push(`/login?returnUrl=/account?upgrade=pro`);
     } else {
-      router.push(`/login?returnUrl=/account?upgrade=super`);
+      router.push(`/login?returnUrl=/account?upgrade=unlimited`);
     }
   }
 
@@ -213,8 +213,12 @@ const Home: NextPage = () => {
                   Everything you need to plan your lessons for the year.
                 </p>
                 <div>
+                  <p className="mb-2 text-lg text-red-700 line-through">
+                    $120 regular price
+                  </p>
                   <span className="text-4xl font-bold">$59</span>
                   <span className="font-medium text-gray-600">/ year</span>
+                  <p>for early adopters</p>
                 </div>
                 <Button
                   onClick={() => handleStartCheckout("pro")}
@@ -247,11 +251,15 @@ const Home: NextPage = () => {
                   For educators who want to be unstoppable planning machines.
                 </p>
                 <div>
+                  <p className="mb-2 text-lg text-red-700 line-through">
+                    $385 regular price
+                  </p>
                   <span className="text-4xl font-bold">$189</span>
                   <span className="font-medium text-gray-600">/ year</span>
+                  <p>for early adopters</p>
                 </div>
                 <Button
-                  onClick={() => handleStartCheckout("super")}
+                  onClick={() => handleStartCheckout("unlimited")}
                   variant="outline"
                   fullWidth
                 >

@@ -11,6 +11,12 @@ export default function Footer() {
         .
       </div>
       <div className="flex pb-4 space-x-4 sm:pb-0">
+        <Link href="/privacy-policy" className="group">
+          Privacy Policy
+        </Link>
+        <Link href="/terms-of-service" className="group">
+          Terms of Service
+        </Link>
         <Link
           href="https://twitter.com/mystorybookkids"
           className="group"

@@ -26,17 +26,12 @@ function Account({
     (l) => new Date(l.created_at ?? "").getMonth() === new Date().getMonth()
   ).length;
 
-  // if (!user) {
-  //   router.push(`/login?returnUrl=${window?.location?.href}`);
-  //   return;
-  // }
-
   const successfulSubscribe = router.query.subscribed as string;
 
   const upgradeRedirect = router.query.upgrade as string;
   if (upgradeRedirect === "pro") {
     handleCheckout(process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID_PRO ?? "");
-  } else if (upgradeRedirect === "super") {
+  } else if (upgradeRedirect === "unlimited") {
     handleCheckout(process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID_UNLIMITED ?? "");
   }
 
@@ -185,7 +180,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!session)
     return {
       redirect: {
-        destination: "/register?redirectTo=/accouont",
+        destination: "/register?redirectTo=/account",
         permanent: false,
       },
     };
