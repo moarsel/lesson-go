@@ -25,6 +25,21 @@ function Navbar() {
           ></div>
         </Link>
       )}
+      {user && (
+        <Link
+          href="/feedback"
+          className="relative h-8 font-bold sm:font-medium sm:text-xl"
+        >
+          Feedback
+          <div
+            className={`${
+              router.pathname == "/feedback"
+                ? "bg-green-600 h-2 w-full rounded-full bottom-[-21px] absolute"
+                : ""
+            }`}
+          ></div>
+        </Link>
+      )}
       <LinkButton
         variant="outline"
         href="/lessons/new"

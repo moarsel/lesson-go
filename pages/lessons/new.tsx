@@ -290,7 +290,7 @@ function New() {
         description={
           <>
             <span className="font-bold">Hint:</span> Be specific about what your
-            students need to learn and their particular interests.
+            students will learn and their particular interests.
           </>
         }
         value={topic}
@@ -585,10 +585,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     .eq("user_id", session?.user.id)
     .single();
 
-  const isActive = subscriptionData.status === "active";
+  const isActive = subscriptionData?.status === "active";
   const isPro =
     isActive &&
-    subscriptionData.price_id === process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID_PRO;
+    subscriptionData?.price_id ===
+      process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID_PRO;
   const totalLessonCount = lessons?.length || 0;
   const monthLessonCount =
     lessons?.filter(

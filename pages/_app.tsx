@@ -59,7 +59,9 @@ function MyApp({
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session && gAPILoaded) {
-        googleOneTapPrompt();
+        setTimeout(() => {
+          googleOneTapPrompt();
+        }, 5000);
       }
     });
   }, [gAPILoaded]);

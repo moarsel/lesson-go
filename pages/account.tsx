@@ -22,7 +22,7 @@ function Account({
   const user = useUser();
   const router = useRouter();
 
-  const monthLessonCount = lessons.filter(
+  const monthLessonCount = lessons?.filter(
     (l) => new Date(l.created_at ?? "").getMonth() === new Date().getMonth()
   ).length;
 
@@ -73,7 +73,10 @@ function Account({
 
   return (
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
-      <h1 className="mb-3 text-3xl font-bold">Account</h1>
+      <h1 className="mb-2 text-3xl font-bold">Account</h1>
+      <p className="mb-8 text-lg">
+        Logged in as <strong className="font-medium">{user?.email}</strong>
+      </p>
       {successfulSubscribe && (
         <div className="p-4 mb-3 text-white bg-green-700 rounded-xl">
           Welcome aboard! You're successfully subscribed!
@@ -81,8 +84,8 @@ function Account({
       )}
 
       <div className="flex flex-col gap-3 p-4 ring-2 ring-slate-200 rounded-xl">
-        {subscription.status === "active" &&
-          subscription.price_id ===
+        {subscription?.status === "active" &&
+          subscription?.price_id ===
             process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID_PRO && (
             <>
               <h2 className="text-xl font-semibold">
@@ -108,16 +111,13 @@ function Account({
             </>
           )}
 
-        {(!subscription || subscription.status !== "active") && (
-          <div>
-            <h2>
-              You have {Math.max(5 - lessons.length, 0)} lessons credits left
-              this month.
-            </h2>
+        {lessons && (!subscription || subscription?.status !== "active") && (
+          <div className="flex flex-col gap-3 p-4">
+            <h2>You've used {lessons?.length}/5 free lessons credits.</h2>
             <div className="w-full h-3 bg-gray-200 rounded-full dark:bg-gray-700">
               <div
                 className="h-3 bg-blue-600 rounded-full"
-                style={{ width: `${(lessons.length / 5) * 100}%` }}
+                style={{ width: `${(lessons?.length / 5) * 100}%` }}
               ></div>
             </div>
             <Button
@@ -132,14 +132,14 @@ function Account({
           </div>
         )}
 
-        {subscription && subscription.status === "active" && (
+        {subscription && subscription?.status === "active" && (
           <>
             <Button onClick={redirectToCustomerPortal}>
               Manage your subscription
             </Button>
             <p>
               Your subscription will renew on{" "}
-              {new Date(subscription.current_period_end).toLocaleDateString()}.
+              {new Date(subscription?.current_period_end).toLocaleDateString()}.
             </p>
           </>
         )}
@@ -151,15 +151,16 @@ function Account({
           window.Tally.openPopup("3Eqjzo");
         }}
       ></Script>
-      <button
-        className="w-24 px-4 py-2 mt-8 font-medium text-white bg-black rounded-xl sm:mt-10 hover:bg-black/80"
+      <Button
+        className="mt-4"
+        variant="outline"
         onClick={async () => {
           await supabase.auth.signOut();
           router.push("/");
         }}
       >
         Logout
-      </button>
+      </Button>
     </div>
   );
 }

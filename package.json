@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/webhooks",
+    "local": "concurrently --names \"NEXT,SUPABASE,STRIPE\" -c \"bgBlue.bold,bgMagenta.bold,bgRed.bold\" \"npm run dev\" \"supabase start\" \"npm run stripe:listen\""
   },
   "dependencies": {
     "@headlessui/react": "^1.7.7",
@@ -52,6 +54,7 @@
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "autoprefixer": "^10.4.12",
+    "concurrently": "^8.0.1",
     "postcss": "^8.4.18",
     "tailwindcss": "^3.2.4",
     "typescript": "4.9.4"

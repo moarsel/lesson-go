@@ -14,7 +14,7 @@ function MainLayout({ children }: { children: ReactNode }) {
           Skip to main content
         </a>
       </div>
-      <div className="flex flex-col items-center justify-center min-h-screen py-2 mx-auto">
+      <div className="flex flex-col items-center justify-start min-h-screen py-2 mx-auto">
         <Header>
           <Navbar />
         </Header>
@@ -25,8 +25,8 @@ function MainLayout({ children }: { children: ReactNode }) {
         >
           {children}
         </main>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }

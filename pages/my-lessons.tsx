@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next/types";
 import { ReactElement } from "react";
 import MainLayout from "../components/MainLayout";
 import { Database } from "../supabase/database.types";
+import LinkButton from "../components/LinkButton";
 
 function MyLessonsPage({
   lessons,
@@ -14,6 +15,12 @@ function MyLessonsPage({
   return (
     <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
       <h1 className="mb-8 text-4xl font-bold mt-11">My Lesson Plans</h1>
+      {!lessons.length && (
+        <p className="flex flex-col items-start gap-6 my-5">
+          You have no lessons yet.{" "}
+          <LinkButton href="/lessons/new">Create your first lesson</LinkButton>
+        </p>
+      )}
       {lessons?.map((lesson) => (
         <Link
           href={`/lessons/${lesson.id}`}
