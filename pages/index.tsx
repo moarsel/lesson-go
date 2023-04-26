@@ -8,24 +8,14 @@ import TypeWriterEffect from "typewriter-effect";
 import { MdBolt } from "react-icons/md";
 import { Tab } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
-import Button from "../components/Button";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import LinkButton from "../components/LinkButton";
 
 const Home: NextPage = () => {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
-
-  function handleStartCheckout(tier: "free" | "pro" | "unlimited") {
-    if (tier === "free") {
-      router.push(`/login?returnUrl=/lessons/new`);
-    } else if (tier === "pro") {
-      router.push(`/login?returnUrl=/account?upgrade=pro`);
-    } else {
-      router.push(`/login?returnUrl=/account?upgrade=unlimited`);
-    }
-  }
 
   useEffect(() => {
     setLoaded(true);
@@ -41,7 +31,7 @@ const Home: NextPage = () => {
       <main className="w-full">
         <div className="flex flex-col items-center flex-1 w-full px-4 mt-8 text-center sm:mt-12">
           <Image
-            style={{ width: "20rem" }}
+            style={{ width: "18rem" }}
             src="/robot.png"
             alt="smiling nerdy 3d robot"
             className="mx-auto"
@@ -84,12 +74,6 @@ const Home: NextPage = () => {
               className="flex items-center justify-center w-64 gap-2 px-4 py-2 font-medium text-white bg-black border-2 border-black rounded-xl hover:bg-black/80"
             >
               Plan my lesson <MdBolt className="text-2xl " />
-            </Link>
-            <Link
-              href="/lessons/"
-              className="w-64 px-4 py-2 font-medium border-2 border-black rounded-xl hover:bg-gray-100/80"
-            >
-              Browse Lesson Plans
             </Link>
           </div>
         </div>
@@ -183,13 +167,9 @@ const Home: NextPage = () => {
                   <span className="text-4xl font-bold">$0</span>
                   <span className="font-medium text-gray-600"></span>
                 </div>
-                <Button
-                  onClick={() => handleStartCheckout("free")}
-                  variant="outline"
-                  fullWidth
-                >
+                <LinkButton href="/lessons/new" variant="outline" fullWidth>
                   Get started
-                </Button>
+                </LinkButton>
                 <div>
                   <ul className="space-y-4">
                     <li className="flex flex-row text-gray-600 text-start">
@@ -220,13 +200,13 @@ const Home: NextPage = () => {
                   <span className="font-medium text-gray-600">/ year</span>
                   <p>for early adopters</p>
                 </div>
-                <Button
-                  onClick={() => handleStartCheckout("pro")}
+                <LinkButton
+                  href="/login?returnUrl=/account?upgrade=pro"
                   variant="primary"
                   fullWidth
                 >
                   Get started
-                </Button>
+                </LinkButton>
 
                 <div>
                   <ul className="space-y-4">
@@ -258,13 +238,13 @@ const Home: NextPage = () => {
                   <span className="font-medium text-gray-600">/ year</span>
                   <p>for early adopters</p>
                 </div>
-                <Button
-                  onClick={() => handleStartCheckout("unlimited")}
+                <LinkButton
+                  href="/login?returnUrl=/account?upgrade=unlimited"
                   variant="outline"
                   fullWidth
                 >
                   Get started
-                </Button>
+                </LinkButton>
                 <div>
                   <ul className="space-y-4">
                     <li className="flex flex-row text-gray-600 text-start">

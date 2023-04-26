@@ -10,7 +10,7 @@ class MyDocument extends Document {
             name="description"
             content="Create an engaging lesson plan in seconds."
           />
-          <meta property="og:site_name" content="lessongo.io" />
+          <meta property="og:site_name" content="lessonrobot.com" />
           <meta
             property="og:description"
             content="Create an engaging lesson plan in seconds."

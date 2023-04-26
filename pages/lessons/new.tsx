@@ -574,6 +574,38 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
 
+  const { data: lessons, error } = await supabase
+    .from("lessons")
+    .select("*")
+    .eq("user_id", session?.user.id);
+
+  const { data: subscriptionData, error: subscriptionError } = await supabase
+    .from("subscriptions")
+    .select("*")
+    .eq("user_id", session?.user.id)
+    .single();
+
+  const isActive = subscriptionData.status === "active";
+  const isPro =
+    isActive &&
+    subscriptionData.price_id === process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID_PRO;
+  const totalLessonCount = lessons?.length || 0;
+  const monthLessonCount =
+    lessons?.filter(
+      (l) => new Date(l.created_at ?? "").getMonth() === new Date().getMonth()
+    ).length || 0;
+
+  const needsUpgrade =
+    (!isActive && totalLessonCount > 5) || (isPro && monthLessonCount > 30);
+
+  if (needsUpgrade)
+    return {
+      redirect: {
+        destination: "/upgrade",
+        permanent: false,
+      },
+    };
+
   return {
     props: {
       initialSession: session,

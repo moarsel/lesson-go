@@ -21,11 +21,11 @@ const LoginPage = () => {
           Login
         </h2>
         <h2 className="mb-12 text-xl text-center text-gray-700">
-          Finish lesson planning in a flash 🤖
+          Finish your lesson plans in a flash 🤖
         </h2>
         <Auth
           view="sign_in"
-          redirectTo={`${getURL()}${redirect}}`}
+          redirectTo={`${getURL()}${redirect}`}
           appearance={{ theme: ThemeSupa }}
           supabaseClient={supabaseClient}
           providers={["google"]}
