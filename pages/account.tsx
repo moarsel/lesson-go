@@ -51,7 +51,8 @@ function Account({
 
       const stripe = await getStripe();
       console.log(stripe, sessionId);
-      stripe?.redirectToCheckout({ sessionId });
+      const res = await stripe?.redirectToCheckout({ sessionId });
+      console.log(res);
     } catch (error) {
       // TODO: error handling
       if ((error as Error).message === "exists") {
