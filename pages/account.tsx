@@ -29,7 +29,7 @@ function Account({
     (l) => new Date(l.created_at ?? "").getMonth() === new Date().getMonth()
   ).length;
 
-  const successfulSubscribe = router.query.subscribed as string;
+  const successfulSubscribe = Boolean(router.query.subscribed);
 
   const upgradeRedirect = router.query.upgrade as string;
   if (upgradeRedirect === "pro") {
