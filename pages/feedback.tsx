@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useEffect } from "react";
 import MainLayout from "../components/MainLayout";
+import Head from "next/head";
 
 const BoardToken = "e259c290-ef77-d4b1-f38a-d6eab50d34b3";
 
