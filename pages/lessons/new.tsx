@@ -336,12 +336,11 @@ function New() {
                   loading={loading}
                   disabled={Boolean(!subject.length || !grade.length)}
                 >
+                  <MdLightbulb className="text-lg" />
                   {sections.activityIdeas.content && !loading ? (
                     "Try again ↺"
                   ) : (
-                    <>
-                      Suggest activities <MdLightbulb className="text-lg" />
-                    </>
+                    <>Suggest activities</>
                   )}
                 </Button>
               </div>

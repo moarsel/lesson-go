@@ -10,6 +10,7 @@ import MainLayout from "../components/MainLayout";
 import { Database } from "../supabase/database.types";
 import { postData, getURL } from "../utils/helpers";
 import { getStripe } from "../utils/stripe-client";
+import Head from "next/head";
 
 function Account({
   lessons,
@@ -117,7 +118,7 @@ function Account({
             <div className="w-full h-3 bg-gray-200 rounded-full dark:bg-gray-700">
               <div
                 className="h-3 bg-blue-600 rounded-full"
-                style={{ width: `${(lessons?.length / 5) * 100}%` }}
+                style={{ width: `${Math.min(lessons?.length / 5, 1) * 100}%` }}
               ></div>
             </div>
             <Button
@@ -167,7 +168,14 @@ function Account({
 export default Account;
 
 Account.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return (
+    <MainLayout>
+      <Head>
+        <title>Account | Lesson Robot</title>
+      </Head>
+      {page}
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
