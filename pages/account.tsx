@@ -145,13 +145,13 @@ function Account({
           </>
         )}
       </div>
-      <Script
+      {/* <Script
         src="https://tally.so/widgets/embed.js"
         onLoad={() => {
           // @ts-ignore
           window.Tally.openPopup("3Eqjzo");
         }}
-      ></Script>
+      ></Script> */}
       <Button
         className="mt-4"
         variant="outline"
