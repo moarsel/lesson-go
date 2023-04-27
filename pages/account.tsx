@@ -50,6 +50,7 @@ function Account({
       // event('checkout-session', { label: price.id });
 
       const stripe = await getStripe();
+      console.log(stripe, sessionId);
       stripe?.redirectToCheckout({ sessionId });
     } catch (error) {
       // TODO: error handling

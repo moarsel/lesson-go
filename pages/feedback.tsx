@@ -56,5 +56,12 @@ const Feedback = () => {
 export default Feedback;
 
 Feedback.getLayout = function getLayout(page: ReactElement) {
-  return <MainLayout>{page}</MainLayout>;
+  return (
+    <MainLayout>
+      <Head>
+        <title>Feedback | Lesson Robot</title>
+      </Head>
+      {page}
+    </MainLayout>
+  );
 };
