@@ -12,6 +12,8 @@ import { postData, getURL } from "../utils/helpers";
 import { getStripe } from "../utils/stripe-client";
 import Head from "next/head";
 
+const stripe = getStripe();
+
 function Account({
   lessons,
   subscription,
@@ -49,16 +51,14 @@ function Account({
       // TODO: analytics
       // event('checkout-session', { label: price.id });
 
-      const stripe = await getStripe();
-      console.log(stripe, sessionId);
-      const res = await stripe
-        ?.redirectToCheckout({ sessionId })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // await stripe
+      //   ?.redirectToCheckout({ sessionId })
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     } catch (error) {
       // TODO: error handling
       if ((error as Error).message === "exists") {

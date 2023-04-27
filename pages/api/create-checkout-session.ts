@@ -74,8 +74,9 @@ const createCheckoutSession = async (
         success_url: `${getURL()}/account?subscribed=true`,
         cancel_url: `${getURL()}/account?subscribed=false`,
       });
-
-      return res.status(200).json({ sessionId: stripeSession.id });
+      if (!stripeSession || !stripeSession.url)
+        throw Error("Could not create stripe session");
+      return res.redirect(303, stripeSession.url);
     } catch (err: any) {
       console.log(err);
       res
