@@ -42,7 +42,7 @@ const LoginPage = () => {
         <button
           type="button"
           onClick={googleLogin}
-          className={`${roboto.className} text-sm w-full text-center flex gap-2 px-4 py-2 items-center transition duration-150 border rounded border-slate-200 text-slate-700 hover:bg-[#f8fafe] hover:border-[#d2e3fc] active:bg-[#ecf3fe]`}
+          className={`${roboto.className} text-[#3C4043] text-sm w-full text-center flex gap-2 px-4 py-2 items-center transition duration-150 border rounded border-slate-200  hover:bg-[#f8fafe] hover:border-[#d2e3fc] active:bg-[#ecf3fe]`}
         >
           <img
             className="absolute w-5 h-5"
