@@ -46,14 +46,14 @@ const LoginPage = () => {
         >
           <img
             className="absolute w-5 h-5"
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            src="/google-logo.svg"
             loading="lazy"
             alt="google logo"
           />
           <div className="mx-auto">Continue with Google</div>
         </button>
 
-        <div className="w-full mt-4 border-slate-150 border-[1px]" />
+        <div className="w-full mt-7 mb-3 border-slate-150 border-[1px]" />
         <Auth
           view="sign_in"
           redirectTo={`${getURL()}${redirect}`}
