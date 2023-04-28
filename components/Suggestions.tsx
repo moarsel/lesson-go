@@ -22,10 +22,10 @@ function Suggestions({ content, onSelect }: Props) {
                     onClick={() => {
                       onSelect(`${item}`);
                     }}
-                    key={item}
+                    key={`${item}`}
                   >
                     <p className="flex items-center gap-5 text-left">
-                      <span className="flex items-center justify-center w-8 h-8 text-lg text-white bg-green-900 rounded-full shrink-0">
+                      <span className="flex items-center justify-center w-8 h-8 text-lg text-white bg-green-700 rounded-full shrink-0">
                         {i + 1}
                       </span>
                       {item}

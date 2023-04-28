@@ -92,8 +92,7 @@ function Account({
             process.env.NEXT_PUBLIC_STRIPE_PRODUCT_ID_PRO && (
             <>
               <h2 className="text-xl font-semibold">
-                {30 - monthLessonCount} / 30 lesson credits remaining for this
-                month.
+                {monthLessonCount} / 30 lesson credits used up this month.
               </h2>
               <div className="w-full h-3 bg-gray-200 rounded-full dark:bg-gray-700">
                 <div

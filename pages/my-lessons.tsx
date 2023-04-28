@@ -24,6 +24,7 @@ function MyLessonsPage({
       {lessons?.map((lesson) => (
         <Link
           href={`/lessons/${lesson.id}`}
+          key={lesson.id}
           className="block h-20 max-w-xl p-4 my-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
         >
           <h3 className="text-xl font-bold capitalize">{lesson.title}</h3>

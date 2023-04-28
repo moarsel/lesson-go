@@ -132,6 +132,11 @@ function New() {
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState("");
   const [grade, setGrade] = useState("");
+  const [activityType, setActivityType] = useState("fun 10 minute warmup");
+  const [lessonPlanType, setLessonPlanType] = useState(
+    "Create a lesson plan summary table with a section for materials, objectives, summary, and wrap up. It should include time estimates for each section."
+  );
+  const [assessmentType, setAssessmentType] = useState("multiple choice");
   const [subject, setSubject] = useState("");
   const supabase = useSupabaseClient<Database>();
   const user = useUser();
@@ -196,15 +201,23 @@ function New() {
     setSectionContent(type, "");
     setLoading(true);
 
+    const lessonPlanTypes = {
+      "quick lesson plan summary":
+        "Create a lesson plan summary table with a section for materials, objectives, structure, and wrap up. It should include time estimates for each section.",
+      "5 part lesson plan":
+        "Write an thoughtful lesson plan including objectives, direct instruction (with a list of key concepts), guided practice (20-40 words), closure, and independent practice",
+      "detailed 7 part lesson plan":
+        "Write an expert lesson plan including objectives, materials, anticipatory set, direct instruction [input, modeling, and check for understanding], guided practice, closure, and independent practice",
+    } as any;
     const getPrompts = (type: keyof SectionTypes) => {
       return {
-        activityIdeas: `Generate 3 lesson plan activity ideas for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 20 words (don't include a word count).`,
+        activityIdeas: `Generate 3 lesson plan ${activityType} for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 20 words (don't include a word count).`,
         activity: "",
         selectedResource: "",
         resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content}. Make sure each example is max 35 words in the form of a prompt where the output would just be text. Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything.  It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
         resource: `Generate a well formatted markdown student printable with lots of whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but don't add images.`,
-        plan: `Create ${studentDemographic} lesson plan that meets these goals: ${sections.activity.content}. The plan should be formatted in markdown with sections for warmup and materials (side by side), direct instruction (full row), guided practice (full row), and differentiation (full row). Make it specific, realistic, concise, and practical, there should be no h1 title.`,
-        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with a few different question formats, with whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
+        plan: `${lessonPlanTypes[lessonPlanType]}. It is for a ${studentDemographic} class on the topic of ${topic}. Make it specific, realistic, concise, and practical, there should be no h1 title.`,
+        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
       }[type];
     };
 
@@ -289,7 +302,7 @@ function New() {
         label="Topic"
         description={
           <>
-            <span className="font-bold">Hint:</span> Be specific about what your
+            <span className="font-bold">Hint:</span> be specific about what your
             students will learn and their particular interests.
           </>
         }
@@ -307,17 +320,31 @@ function New() {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <RoboCard
+              defaultOpen={true}
               title="Brainstorm activity ideas"
               icon={<MdLightbulb className="text-5xl " />}
             >
               <p className="text-lg ">
                 Suggest{" "}
                 <Select
-                  value=""
-                  onChange={() => false}
+                  value={activityType}
+                  onChange={(e) => setActivityType(e.target.value)}
                   label="activity type"
                   options={[
-                    { label: "10 minute warmup", value: "10 minute warmup" },
+                    {
+                      label: "fun 10 minute warmup",
+                      value: "fun 10 minute warmup",
+                    },
+                    {
+                      label: "45 minute classroom",
+                      value: "45 minute classroom",
+                    },
+                    { label: "culminating", value: "culminating" },
+                    {
+                      label: "collaborative group",
+                      value: "collaborative group",
+                    },
+                    { label: "inquiry based", value: "inquiry based" },
                   ]}
                 />
                 activity ideas for a lesson on{" "}
@@ -326,11 +353,12 @@ function New() {
               <div className="flex flex-col">
                 <Button
                   variant="primary"
-                  className="w-24 mt-4"
+                  className="w-24 mt-4 ml-auto"
                   onClick={(e) => {
                     if (Boolean(subject.length && grade.length)) {
                       generateContent("activityIdeas");
                       setSectionContent("activity", "");
+                      setSectionContent("activityIdeas", "");
                     }
                   }}
                   loading={loading}
@@ -384,31 +412,38 @@ function New() {
             ref={detailsRef}
           >
             <RoboCard
-              title="Generate a Lesson Plan"
+              title="Draft a Lesson Plan"
               icon={<MdListAlt className="text-5xl" />}
             >
               <p className="mb-4">
                 Write a{" "}
                 <Select
-                  value=""
-                  onChange={() => false}
-                  label="activity type"
+                  value={lessonPlanType}
+                  onChange={(e) => setLessonPlanType(e.target.value)}
+                  label="lesson plan type"
                   options={[
                     {
-                      label: "lesson plan summary table",
-                      value: "lesson plan summary table",
+                      label: "quick lesson plan summary",
+                      value: "quick lesson plan summary",
                     },
                     {
                       label: "5 part lesson plan",
                       value: "5 part lesson plan",
                     },
+                    {
+                      label: "detailed 7 part lesson plan",
+                      value: "detailed 7 part lesson plan",
+                    },
                   ]}
                 />
-                lesson plan summary for a {studentDemographic} lesson for the
-                selected activity.
+                for a {studentDemographic} lesson for the selected activity.
               </p>
 
-              <Button onClick={() => generateContent("plan")} loading={loading}>
+              <Button
+                className="ml-auto"
+                onClick={() => generateContent("plan")}
+                loading={loading}
+              >
                 <MdListAlt className="text-lg" />
                 {!sections.plan.content ? "Generate Plan" : "Try again ↺"}
               </Button>
@@ -435,15 +470,18 @@ function New() {
               icon={<MdPostAdd className="text-5xl" />}
             >
               <Button
-                className={`w-full md:w-80 px-4 py-2 mt-2 font-medium text-white rounded-xl  hover:bg-black/80 ${
+                className={`w-full ml-auto md:w-80 px-4 py-2 mt-2 font-medium text-white rounded-xl  hover:bg-black/80 ${
                   Boolean(subject.length && grade.length)
                     ? "bg-black "
                     : "bg-neutral-500 cursor-not-allowed"
                 }`}
-                onClick={(e) =>
-                  Boolean(subject.length && grade.length) &&
-                  generateContent("resourceIdeas")
-                }
+                onClick={(e) => {
+                  if (subject.length && grade.length) {
+                    setSectionContent("resourceIdeas", "item");
+                    setSectionContent("selectedResource", "item");
+                    generateContent("resourceIdeas");
+                  }
+                }}
                 loading={loading}
                 disabled={Boolean(!subject.length || !grade.length)}
               >
@@ -451,15 +489,16 @@ function New() {
                   ? "Try one more time ↺"
                   : "Suggest printable resources →"}
               </Button>
-
-              {!sections.selectedResource.content && (
-                <Suggestions
-                  content={sections.resourceIdeas.content}
-                  onSelect={(item: string) =>
-                    setSectionContent("selectedResource", item)
-                  }
-                />
-              )}
+              <div className="w-full">
+                {!sections.selectedResource.content && (
+                  <Suggestions
+                    content={sections.resourceIdeas.content}
+                    onSelect={(item: string) =>
+                      setSectionContent("selectedResource", item)
+                    }
+                  />
+                )}
+              </div>
               {sections.selectedResource.content && (
                 <>
                   <Textarea
@@ -504,16 +543,32 @@ function New() {
               <p className="mb-4">
                 Generate a{" "}
                 <Select
-                  value=""
-                  onChange={() => false}
+                  value={assessmentType}
+                  onChange={(e) => setAssessmentType(e.target.value)}
                   label="activity type"
                   options={[
-                    { label: "Multiple choice", value: "Multiple choice" },
+                    { label: "multiple choice", value: "multiple choice" },
+                    { label: "short answer", value: "short answer" },
+                    {
+                      label: "open ended critical thinking",
+                      value: "open ended critical thinking",
+                    },
+                    {
+                      label: "fill in the blanks",
+                      value: "fill in the blanks",
+                    },
+                    { label: "true or false", value: "true or false" },
+                    {
+                      label: "all of the above",
+                      value:
+                        "any of multiple choice, true or false, short answer, fill in the blanks, and/or open ended essay",
+                    },
                   ]}
                 />{" "}
                 for a {studentDemographic} lesson on {topic}.
               </p>
               <Button
+                className="ml-auto"
                 onClick={() => generateContent("assessment")}
                 loading={loading}
               >

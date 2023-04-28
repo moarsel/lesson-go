@@ -1,6 +1,4 @@
-import {
-  MdClear
-} from "react-icons/md";
+import { MdClear } from "react-icons/md";
 import Button from "./Button";
 import { useState } from "react";
 
@@ -8,10 +6,11 @@ type Props = {
   title: string;
   children: React.ReactNode;
   icon: React.ReactNode;
+  defaultOpen?: boolean;
 };
 
-function RoboCard({ title, icon, children }: Props) {
-  const [isExpanded, setIsExpanded] = useState(false);
+function RoboCard({ title, icon, defaultOpen = false, children }: Props) {
+  const [isExpanded, setIsExpanded] = useState(defaultOpen);
   const Component = isExpanded ? "div" : "button";
 
   function handleClick() {
@@ -43,7 +42,7 @@ function RoboCard({ title, icon, children }: Props) {
           {!isExpanded && icon}
         </div>
       </div>
-      {isExpanded && <div className="">{children}</div>}
+      {isExpanded && <div className="w-full">{children}</div>}
     </Component>
   );
 }

@@ -53,21 +53,22 @@ const Home: NextPage = () => {
               ></TypeWriterEffect>
             )}
           </h1>
+          <Image
+            style={{ width: "18rem" }}
+            src="/robot.png"
+            alt="smiling nerdy 3d robot"
+            className="mx-auto mt-3"
+            width={288}
+            height={288}
+            priority
+          />
           <p className="max-w-xl mt-6 text-lg sm:text-xl text-slate-700">
             The future of lesson planning is here. Our AI assistant helps you go
             from <strong>blank slate</strong> to{" "}
             <strong>finished lesson plan</strong> in a flash.
           </p>
-          <Image
-            style={{ width: "18rem" }}
-            src="/robot.png"
-            alt="smiling nerdy 3d robot"
-            className="mx-auto mt-5"
-            width={288}
-            height={288}
-            priority
-          />
-          <div className="relative flex flex-col gap-5 mt-10 sm:flex-row">
+
+          <div className="relative flex flex-col gap-5 mt-6 sm:flex-row">
             <Link
               href="/lessons/new"
               className="flex items-center justify-center w-64 gap-2 px-4 py-2 font-medium text-white bg-black border-2 border-black rounded-xl hover:bg-black/80"
