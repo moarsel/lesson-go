@@ -11,6 +11,7 @@ const roboto = Roboto({
   subsets: ["latin"],
   weight: ["500"],
   variable: "--font-roboto",
+  display: "swap",
 });
 
 const LoginPage = () => {

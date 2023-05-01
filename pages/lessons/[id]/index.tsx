@@ -29,7 +29,13 @@ function ViewLessonPage({
 }) {
   if (!lesson) throw Error("Not authorized");
   const supabase = useSupabaseClient();
-  const content = lesson?.content as SectionTypes;
+  const { activity, plan, resource, assessment } = lesson.content as {
+    activity: { content: string };
+    plan: { content: string };
+    resource: { content: string };
+    assessment: { content: string };
+  };
+
   const isCurrentUser = lesson.user_id === currentUserId;
   const [shareOpen, setShareOpen] = useState(false);
   const [isPublic, setIsPublic] = useState(lesson.public);
@@ -81,7 +87,10 @@ function ViewLessonPage({
       <div className="flex flex-col gap-4">
         <div>
           <h1 className="mb-2 text-4xl capitalize">{lesson?.title}</h1>
-          <div className="text-xl text-gray-600">
+          <div className="mt-1 mb-2 text-xl text-gray-700">
+            {activity.content}
+          </div>
+          <div className="text-xl text-gray-500">
             {lesson?.grade
               ?.map((g) => gradeValues.find((v) => v === g))
               .join(", ")}{" "}
@@ -109,6 +118,11 @@ function ViewLessonPage({
           onClose={() => setShareOpen(false)}
         >
           <div className="flex flex-col mt-8 gap-y-4">
+            {isCurrentUser && !isPublic && (
+              <div className="flex flex-row gap-2 text-lg">
+                Publish your lesson to share it with others!
+              </div>
+            )}
             {isCurrentUser && (
               <Button onClick={handleTogglePublish}>
                 {!isPublic ? (
@@ -152,13 +166,19 @@ function ViewLessonPage({
         </Modal>
       </div>
 
-      <div className="p-12 my-8 prose border shadow-xl rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-        {Object.entries(content)?.map(([key, section], i) => (
-          <div className="print:break-after-all ">
-            <h2 className="capitalize">{key}</h2>
-            <Editor content={section.content} readOnly key={i} />
-          </div>
-        ))}
+      <div className="p-12 my-8 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+        <h2 className="capitalize">Lesson Plan</h2>
+        <Editor content={plan.content} readOnly />
+      </div>
+
+      <div className="p-12 my-8 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+        <h2 className="capitalize">Printable resource</h2>
+        <Editor content={resource.content} readOnly />
+      </div>
+
+      <div className="p-12 my-8 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+        <h2 className="capitalize">Assessment</h2>
+        <Editor content={assessment.content} readOnly />
       </div>
     </div>
   );
