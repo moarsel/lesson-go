@@ -203,7 +203,7 @@ function New() {
 
     const lessonPlanTypes = {
       "quick lesson plan summary":
-        "Create a lesson plan summary table with a section for materials, objectives, structure, and wrap up. It should include time estimates for each section.",
+        "Create a lesson plan summary with a section for materials, objectives, structure, and wrap up. It should include time estimates for each section.",
       "5 part lesson plan":
         "Write an thoughtful lesson plan including objectives, direct instruction (with a list of key concepts), guided practice (20-40 words), closure, and independent practice",
       "detailed 7 part lesson plan":
@@ -216,7 +216,7 @@ function New() {
         selectedResource: "",
         resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content}. Make sure each example is max 35 words in the form of a prompt where the output would just be text. Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything.  It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
         resource: `Generate a well formatted markdown student printable with lots of whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but don't add images.`,
-        plan: `${lessonPlanTypes[lessonPlanType]}. It is for a ${studentDemographic} class on the topic of ${topic}. Make it specific, realistic, concise, and practical, there should be no h1 title.`,
+        plan: `${lessonPlanTypes[lessonPlanType]}. It is for a ${studentDemographic} class on the topic of ${topic}. Make it specific, realistic, concise, and practical.`,
         assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
       }[type];
     };

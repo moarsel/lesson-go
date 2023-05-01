@@ -165,19 +165,22 @@ function ViewLessonPage({
           </div>
         </Modal>
       </div>
-
-      <div className="p-12 my-8 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-        <h2 className="capitalize">Lesson Plan</h2>
+      <h2 className="mt-16 text-lg font-medium capitalize text-slate-700">
+        Lesson Plan
+      </h2>
+      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
         <Editor content={plan.content} readOnly />
       </div>
-
-      <div className="p-12 my-8 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-        <h2 className="capitalize">Printable resource</h2>
+      <h2 className="mt-16 text-lg font-medium capitalize text-slate-700">
+        Printable resource
+      </h2>
+      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
         <Editor content={resource.content} readOnly />
       </div>
-
-      <div className="p-12 my-8 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-        <h2 className="capitalize">Assessment</h2>
+      <h2 className="mt-16 text-lg font-medium capitalize text-slate-700">
+        Assessment
+      </h2>
+      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
         <Editor content={assessment.content} readOnly />
       </div>
     </div>
