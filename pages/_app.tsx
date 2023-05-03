@@ -18,6 +18,8 @@ type NextPageWithLayout = NextPage & {
 const publicSans = Rubik({
   subsets: ["latin"],
   variable: "--font-public-sans",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 function MyApp({
