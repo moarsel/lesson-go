@@ -153,7 +153,7 @@ const Home: NextPage = () => {
               Save hours of time and get back to teaching.
             </h3>
             <p className="max-w-2xl mx-auto mt-6 text-lg font-[400] leading-relaxed text-gray-600 ">
-              We made it free for you to try Lesson Bot, so that you see just
+              We made it free for you to try Lesson Robot, so that you see just
               how much it helps. Give it a try, then get your whole year of
               lesson planning done for just $59.
             </p>
