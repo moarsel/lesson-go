@@ -18,9 +18,9 @@ export default function Footer() {
           Terms of Service
         </Link>
         <Link
-          href="https://twitter.com/mystorybookkids"
+          href="https://twitter.com/lesson_robot"
           className="group"
-          aria-label="MyStorybook on Twitter"
+          aria-label="Lesson Robot on Twitter"
         >
           <svg
             aria-hidden="true"
