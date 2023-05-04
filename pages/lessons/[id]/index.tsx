@@ -1,10 +1,8 @@
 import {
   GlobeAltIcon,
-  InboxIcon,
   LockClosedIcon,
   PrinterIcon,
   ShareIcon,
-  StarIcon,
 } from "@heroicons/react/20/solid";
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -86,27 +84,25 @@ function ViewLessonPage({
       </Head>
       <div className="flex flex-col gap-4">
         <div>
-          <h1 className="mb-2 text-4xl capitalize">{lesson?.title}</h1>
-          <div className="mt-1 mb-2 text-xl text-gray-700">
+          <h1 className="mb-2 text-4xl capitalize print:hidden">
+            {lesson?.title}
+          </h1>
+          <div className="mt-1 mb-2 text-xl text-gray-700 print:hidden">
             {activity.content}
           </div>
-          <div className="text-xl text-gray-500">
+          <div className="text-xl text-gray-500 print:hidden">
             {lesson?.grade
               ?.map((g) => gradeValues.find((v) => v === g))
               .join(", ")}{" "}
             {lesson?.subject?.join(", ")}
           </div>
         </div>
-        <div className="flex flex-row gap-3">
-          <Button onClick={() => setShareOpen(true)} className="print:hidden">
+        <div className="flex flex-row gap-3 print:hidden">
+          <Button onClick={() => setShareOpen(true)}>
             <ShareIcon width={24} />
             Share lesson
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => window.print()}
-            className="print:hidden"
-          >
+          <Button variant="outline" onClick={() => window.print()}>
             <PrinterIcon width={24} />
             Print
           </Button>
@@ -165,22 +161,22 @@ function ViewLessonPage({
           </div>
         </Modal>
       </div>
-      <h2 className="mt-16 text-lg font-medium capitalize text-slate-700">
+      <h2 className="mt-16 text-lg font-medium capitalize print:mt-0 text-slate-700 print:hidden">
         Lesson Plan
       </h2>
-      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
         <Editor content={plan.content} readOnly />
       </div>
-      <h2 className="mt-16 text-lg font-medium capitalize text-slate-700">
+      <h2 className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden">
         Printable resource
       </h2>
-      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
         <Editor content={resource.content} readOnly />
       </div>
-      <h2 className="mt-16 text-lg font-medium capitalize text-slate-700">
+      <h2 className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden">
         Assessment
       </h2>
-      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:break-after-all rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:mt-0 rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
         <Editor content={assessment.content} readOnly />
       </div>
     </div>
