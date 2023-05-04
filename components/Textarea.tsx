@@ -31,7 +31,6 @@ export default function Textarea({
         ref={ref}
         value={value}
         onChange={onChange}
-        rows={4}
         className={`border-gray-400 rounded-md w-full  focus:border-black focus:ring-black ${
           className || ""
         }`}

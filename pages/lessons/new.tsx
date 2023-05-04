@@ -11,6 +11,7 @@ import {
   MdLightbulb,
   MdListAlt,
   MdPostAdd,
+  MdPrint,
   MdQuiz,
 } from "react-icons/md";
 import Autocomplete from "../../components/Autocomplete";
@@ -91,6 +92,16 @@ export const subjectTypes: Array<string> = [
   "Other",
 ];
 
+export const curriculumTypes: Array<string> = [
+  "Common Core State Standards (CCSS)",
+  "Next Generation Learning Standards (NGLS)",
+  "Ontario Curriculum",
+  "International Baccalaureate (IB)",
+  "Advanced Placement (AP)",
+  "Montessori",
+  "Texas Essential Knowledge and Skills (TEKS)",
+];
+
 export type SectionData = {
   content: string;
   description: string;
@@ -134,10 +145,11 @@ function New() {
   const [grade, setGrade] = useState("");
   const [activityType, setActivityType] = useState("fun 10 minute warmup");
   const [lessonPlanType, setLessonPlanType] = useState(
-    "Create a lesson plan summary table with a section for materials, objectives, summary, and wrap up. It should include time estimates for each section."
+    "quick lesson plan summary"
   );
   const [assessmentType, setAssessmentType] = useState("multiple choice");
   const [subject, setSubject] = useState("");
+  const [curriculum, setCurriculum] = useState("");
   const supabase = useSupabaseClient<Database>();
   const user = useUser();
   const [localData, setLocalData] = useLocalStorage({});
@@ -203,21 +215,28 @@ function New() {
 
     const lessonPlanTypes = {
       "quick lesson plan summary":
-        "Create a lesson plan summary with a section for materials, objectives, structure, and wrap up. It should include time estimates for each section.",
+        "Create a concise lesson plan with a section for materials, objectives, structure, and wrap up. It should include time estimates for each section.",
       "5 part lesson plan":
         "Write an thoughtful lesson plan including objectives, direct instruction (with a list of key concepts), guided practice (20-40 words), closure, and independent practice",
       "detailed 7 part lesson plan":
         "Write an expert lesson plan including objectives, materials, anticipatory set, direct instruction [input, modeling, and check for understanding], guided practice, closure, and independent practice",
     } as any;
     const getPrompts = (type: keyof SectionTypes) => {
+      const curriculumType = curriculum
+        ? ` for the ${curriculum} curriculum.`
+        : "";
+      const includeCurriculum = curriculum
+        ? `include a very brief but accurate section listing any curriculum standards met in the ${curriculum} curriculum (up to 15 words each). `
+        : "";
+      console.log(lessonPlanTypes[lessonPlanType]);
       return {
-        activityIdeas: `Generate 3 lesson plan ${activityType} for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical for a single lesson. Each generated activity should be maximum 20 words (don't include a word count).`,
+        activityIdeas: `Generate 3 lesson plan ${activityType} for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical${curriculumType} for a single lesson. Each generated activity should be maximum 20 words (don't include a word count).`,
         activity: "",
         selectedResource: "",
-        resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content}. Make sure each example is max 35 words in the form of a prompt where the output would just be text. Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything.  It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
-        resource: `Generate a well formatted markdown student printable with lots of whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but don't add images.`,
-        plan: `${lessonPlanTypes[lessonPlanType]}. It is for a ${studentDemographic} class on the topic of ${topic}. Make it specific, realistic, concise, and practical.`,
-        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format and there should be no h1 title.`,
+        resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content} on the topic of ${topic}. One example should be wacky and fun. Make sure each example is max 35 words in the form of a prompt where the output would just be text. Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything.  It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
+        resource: `Generate a well formatted markdown student printable with adequate whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but don't add images.`,
+        plan: `${lessonPlanTypes[lessonPlanType]}. It is for a ${studentDemographic} class on the topic of ${topic}. ${includeCurriculum} Make it specific, realistic, concise, and practical.`,
+        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content} ${includeCurriculum}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format with ample whitespace.`,
       }[type];
     };
 
@@ -280,11 +299,11 @@ function New() {
       <h1 className="mb-5 text-3xl font-bold sm:text-4xl text-slate-900">
         First, who is this lesson for?
       </h1>
-      <div className="flex flex-col gap-4 sm:flex-row">
+      <div className="flex flex-col gap-4 lg:flex-row">
         <Autocomplete
           label="Grade"
           className="w-full"
-          value={""}
+          value={grade}
           onChange={(e) => setGrade(e)}
           items={gradeValues}
         />
@@ -292,9 +311,16 @@ function New() {
         <Autocomplete
           className="w-full"
           label="Subject"
-          value={""}
+          value={subject}
           onChange={(e) => setSubject(e)}
           items={subjectTypes}
+        />
+        <Autocomplete
+          className="w-full"
+          label="Curriculum (optional)"
+          value={curriculum}
+          onChange={(e) => setCurriculum(e)}
+          items={curriculumTypes}
         />
       </div>
 
@@ -339,7 +365,6 @@ function New() {
                       label: "45 minute classroom",
                       value: "45 minute classroom",
                     },
-                    { label: "culminating", value: "culminating" },
                     {
                       label: "collaborative group",
                       value: "collaborative group",
@@ -469,6 +494,10 @@ function New() {
               title="Add Printable Resource"
               icon={<MdPostAdd className="text-5xl" />}
             >
+              <p className="mb-4">
+                Suggest ideas for lesson resources that can be printed and
+                handed out for the lesson.{" "}
+              </p>
               <Button
                 className={`w-full ml-auto md:w-80 px-4 py-2 mt-2 font-medium text-white rounded-xl  hover:bg-black/80 ${
                   Boolean(subject.length && grade.length)
@@ -485,9 +514,10 @@ function New() {
                 loading={loading}
                 disabled={Boolean(!subject.length || !grade.length)}
               >
+                <MdPrint />
                 {sections.resourceIdeas.content
-                  ? "Try one more time ↺"
-                  : "Suggest printable resources →"}
+                  ? "Try again ↺"
+                  : "Suggest resources"}
               </Button>
               <div className="w-full">
                 {!sections.selectedResource.content && (
