@@ -38,6 +38,9 @@ const Autocomplete = ({
           return item.toLowerCase().includes(query.toLowerCase());
         });
 
+  // add query as first item of array
+  if (query && items[0] !== query) filteredList.unshift(query);
+
   function handleSelect() {
     setTimeout(() => setShowOptions(false), 1);
   }
