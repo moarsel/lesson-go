@@ -24,7 +24,7 @@ const LoginPage = () => {
     await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: getURL(),
+        redirectTo: `${getURL()}${redirect}`,
       },
     });
   }

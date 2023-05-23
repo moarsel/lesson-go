@@ -203,10 +203,10 @@ function New() {
   }, [Boolean(sections.plan.content)]);
 
   function setSectionContent(type: keyof SectionTypes, contentValue: string) {
-    setSections({
-      ...sections,
-      [type]: { ...sections[type], content: contentValue },
-    });
+    setSections((state) => ({
+      ...state,
+      [type]: { ...state[type], content: contentValue },
+    }));
   }
 
   async function generateContent(type: keyof SectionTypes) {
@@ -228,15 +228,15 @@ function New() {
       const includeCurriculum = curriculum
         ? `include a very brief but accurate section listing any curriculum standards met in the ${curriculum} curriculum (up to 15 words each). `
         : "";
-      console.log(lessonPlanTypes[lessonPlanType]);
+
       return {
         activityIdeas: `Generate 3 lesson plan ${activityType} for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical${curriculumType} for a single lesson. Each generated activity should be maximum 20 words (don't include a word count).`,
         activity: "",
         selectedResource: "",
-        resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate for a ${studentDemographic} for this activity: ${sections.activity.content} on the topic of ${topic}. One example should be wacky and fun. Make sure each example is max 35 words in the form of a prompt where the output would just be text. Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything.  It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
-        resource: `Generate a well formatted markdown student printable with adequate whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but don't add images.`,
+        resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate in plain text for a ${studentDemographic} for this activity: ${sections.activity.content} on the topic of ${topic}. One example should be wacky and fun. Make sure each example is max 35 words in the form of a prompt where the output would just be text (don't include the word count). Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything. It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
+        resource: `Generate a well formatted markdown student printable with adequate whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but do not add images or links.`,
         plan: `${lessonPlanTypes[lessonPlanType]}. It is for a ${studentDemographic} class on the topic of ${topic}. ${includeCurriculum} Make it specific, realistic, concise, and practical.`,
-        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content} ${includeCurriculum}. After we've done this, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format with ample whitespace.`,
+        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content} on the topic of ${topic}. After the lesson, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats about the activity, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format.`,
       }[type];
     };
 
@@ -338,12 +338,13 @@ function New() {
         placeholder={"e.g. Fun with fractions in nature"}
       />
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {topic && grade && subject && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
+            key="activityIdeas"
           >
             <RoboCard
               defaultOpen={true}
@@ -375,15 +376,14 @@ function New() {
                 activity ideas for a lesson on{" "}
                 <span className="font-medium">{topic}</span>.
               </p>
-              <div className="flex flex-col">
+              <div className="flex flex-column">
                 <Button
                   variant="primary"
-                  className="w-24 mt-4 ml-auto"
-                  onClick={(e) => {
+                  className="w-24 mt-4 mb-6 ml-auto"
+                  onClick={() => {
                     if (Boolean(subject.length && grade.length)) {
-                      generateContent("activityIdeas");
                       setSectionContent("activity", "");
-                      setSectionContent("activityIdeas", "");
+                      generateContent("activityIdeas");
                     }
                   }}
                   loading={loading}
@@ -397,6 +397,11 @@ function New() {
                   )}
                 </Button>
               </div>
+              {sections.activityIdeas.content && !sections.activity.content && (
+                <h2 className="text-lg font-medium ">
+                  Hmm, how about selecting one of these?
+                </h2>
+              )}
 
               <div ref={activitiesRef} className="">
                 {!sections.activity.content && (
@@ -422,15 +427,15 @@ function New() {
                     setSectionContent("activity", e.target.value)
                   }
                   rows={3}
-                  className="mt-2"
                 />
               )}
             </RoboCard>
           </motion.div>
         )}
 
-        {topic && (
+        {sections.activity.content && (
           <motion.div
+            key="plan"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
@@ -484,8 +489,9 @@ function New() {
           </motion.div>
         )}
 
-        {topic && (
+        {sections.plan.content && (
           <motion.div
+            key="printables"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
@@ -560,8 +566,9 @@ function New() {
           </motion.div>
         )}
 
-        {topic && (
+        {sections.plan.content && (
           <motion.div
+            key="assessment"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
