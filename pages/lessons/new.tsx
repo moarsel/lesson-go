@@ -236,7 +236,7 @@ function New() {
         resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate in plain text for a ${studentDemographic} for this activity: ${sections.activity.content} on the topic of ${topic}. One example should be wacky and fun. Make sure each example is max 35 words in the form of a prompt where the output would just be text (don't include the word count). Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything. It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
         resource: `Generate a well formatted markdown student printable with adequate whitespace for this prompt: "${sections.selectedResource.content}" Make it specific and appropriate to ${studentDemographic}. Output only the worksheet content without any intro or conclusion. You can add tables and text but do not add images or links.`,
         plan: `${lessonPlanTypes[lessonPlanType]}. It is for a ${studentDemographic} class on the topic of ${topic}. ${includeCurriculum} Make it specific, realistic, concise, and practical.`,
-        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content} on the topic of ${topic}. After the lesson, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats about the activity, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in markdown format.`,
+        assessment: `My ${studentDemographic} students are doing this activity: ${sections.activity.content} on the topic of ${topic}. After the lesson, I will use a quiz as a formative assessment of their learning. Output a quiz with ${assessmentType} question formats about the activity, with appropriate whitespace for the students to write. The answers should only be in an answer key at the end. Output should be in plain text markdown with space between all questions and answers.`,
       }[type];
     };
 
@@ -520,7 +520,7 @@ function New() {
                 loading={loading}
                 disabled={Boolean(!subject.length || !grade.length)}
               >
-                <MdPrint />
+                <MdPostAdd />
                 {sections.resourceIdeas.content
                   ? "Try again ↺"
                   : "Suggest resources"}
