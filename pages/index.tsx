@@ -104,43 +104,75 @@ const Home: NextPage = () => {
                 <Tab.Panel>
                   Generate ideas for activities tailored specifically to your
                   class.
-                  <img
-                    className="my-8 shadow-lg ring-4 ring-white/20"
-                    src="screenshot-1.png"
-                    width={"100%"}
-                    alt="screenshot of activity suggestsions for a chosen topic: grade 4 charlotte's web."
-                  />
+                  <Link
+                    href="/lessons/new"
+                    className="relative flex items-center justify-center transition-all group "
+                  >
+                    <img
+                      className="my-8 shadow-lg ring-4 ring-white/20 group-hover:brightness-50"
+                      src="screenshot-1.png"
+                      width={"100%"}
+                      alt="screenshot of activity suggestsions for a chosen topic: grade 4 charlotte's web."
+                    />
+                    <span className="absolute px-8 py-4 text-2xl font-medium text-transparent bg-transparent rounded group-hover:bg-white group-hover:text-black ">
+                      Try it now
+                    </span>
+                  </Link>
                 </Tab.Panel>
                 <Tab.Panel>
                   Auto-generate a custom lesson plan with everything you need,
                   then edit it to your liking.
-                  <img
-                    className="my-8 shadow-lg ring-4 ring-white/20"
-                    src="screenshot-2.png"
-                    width={"100%"}
-                    alt="screenshot of a lesson plan Charlotte's web including warmup, materials, direct instruction"
-                  />
+                  <Link
+                    href="/lessons/new"
+                    className="relative flex items-center justify-center transition-all group "
+                  >
+                    <img
+                      className="my-8 shadow-lg ring-4 ring-white/20 group-hover:brightness-50"
+                      src="screenshot-2.png"
+                      width={"100%"}
+                      alt="screenshot of a lesson plan Charlotte's web including warmup, materials, direct instruction"
+                    />
+                    <span className="absolute px-8 py-4 text-2xl font-medium text-transparent bg-transparent rounded group-hover:bg-white group-hover:text-black ">
+                      Try it now
+                    </span>
+                  </Link>
                 </Tab.Panel>
                 <Tab.Panel>
                   Save the hassle of finding or creating assessments materials
                   from scratch. We'll draft custom assessment questions based on
                   your lesson.
-                  <img
-                    className="my-8 shadow-lg ring-4 ring-white/20"
-                    src="screenshot-3.png"
-                    width={"100%"}
-                    alt="screenshot of a fill in the blank questions about Charlotte's web."
-                  />
+                  <Link
+                    href="/lessons/new"
+                    className="relative flex items-center justify-center transition-all group "
+                  >
+                    <img
+                      className="my-8 shadow-lg ring-4 ring-white/20 group-hover:brightness-50"
+                      src="screenshot-3.png"
+                      width={"100%"}
+                      alt="screenshot of a fill in the blank questions about Charlotte's web."
+                    />
+                    <span className="absolute px-8 py-4 text-2xl font-medium text-transparent bg-transparent rounded group-hover:bg-white group-hover:text-black ">
+                      Try it now
+                    </span>
+                  </Link>
                 </Tab.Panel>
                 <Tab.Panel>
                   Keep your lesson plans organized and share your nicely
                   formatted documents.{" "}
-                  <img
-                    className="my-8 shadow-lg ring-4 ring-white/20"
-                    src="screenshot-4.png"
-                    width={"100%"}
-                    alt="screenshot of a list of lesson plan previews"
-                  />
+                  <Link
+                    href="/lessons/new"
+                    className="relative flex items-center justify-center transition-all group "
+                  >
+                    <img
+                      className="my-8 shadow-lg ring-4 ring-white/20 group-hover:brightness-50"
+                      src="screenshot-4.png"
+                      width={"100%"}
+                      alt="screenshot of a list of lesson plan previews"
+                    />
+                    <span className="absolute px-8 py-4 text-2xl font-medium text-transparent bg-transparent rounded group-hover:bg-white group-hover:text-black ">
+                      Try it now
+                    </span>
+                  </Link>
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
