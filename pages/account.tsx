@@ -3,7 +3,6 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Script from "next/script";
-
 import { ReactElement } from "react";
 import Button from "../components/Button";
 import MainLayout from "../components/MainLayout";

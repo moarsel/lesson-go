@@ -10,6 +10,19 @@ function Navbar() {
 
   return (
     <div className="flex items-center w-full h-12 col-span-12 gap-5 py-8 text-center sm:gap-10 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
+      <Link
+        href="/lessons"
+        className="relative h-8 font-bold sm:font-medium sm:text-xl"
+      >
+        Browse Lessons
+        <div
+          className={`${
+            router.pathname == "/lessons"
+              ? "bg-green-600 h-2 w-full rounded-full bottom-[-21px] absolute"
+              : ""
+          }`}
+        ></div>
+      </Link>
       {user && (
         <Link
           href="/my-lessons"
@@ -25,21 +38,7 @@ function Navbar() {
           ></div>
         </Link>
       )}
-      {user && (
-        <Link
-          href="/feedback"
-          className="relative h-8 font-bold sm:font-medium sm:text-xl"
-        >
-          Feedback
-          <div
-            className={`${
-              router.pathname == "/feedback"
-                ? "bg-green-600 h-2 w-full rounded-full bottom-[-21px] absolute"
-                : ""
-            }`}
-          ></div>
-        </Link>
-      )}
+
       {user && (
         <LinkButton
           variant="outline"

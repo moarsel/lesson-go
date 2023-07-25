@@ -78,16 +78,33 @@ function ViewLessonPage({
   };
 
   return (
-    <div className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3">
+    <div
+      itemScope
+      itemType="http://schema.org/CreativeWork"
+      className="col-span-12 sm:col-span-10 sm:col-start-2 lg:col-span-8 lg:col-start-3"
+    >
       <Head>
         <title>{lesson?.title} Lesson Plan | Lesson Robot</title>
+        <meta
+          name="description"
+          content={
+            activity.content + " | Lesson plan idea, handout, and assessment."
+          }
+        />
+        <meta itemProp="learningResourceType" content="Lesson Plan" />
+        <meta itemProp="timeRequired" content="PT1H" />
+        <meta itemProp="educationalLevel" content={lesson.grade[0]} />
+        <meta itemProp="inLanguage" content="en" />
       </Head>
       <div className="flex flex-col gap-4">
         <div>
-          <h1 className="mb-2 text-4xl capitalize print:hidden">
+          <h1 itemProp="name" className="mb-2 text-4xl capitalize print:hidden">
             {lesson?.title}
           </h1>
-          <div className="mt-1 mb-2 text-xl text-gray-700 print:hidden">
+          <div
+            itemProp="description"
+            className="mt-1 mb-2 text-xl text-gray-700 print:hidden"
+          >
             {activity.content}
           </div>
           <div className="text-xl text-gray-500 print:hidden">
@@ -161,23 +178,51 @@ function ViewLessonPage({
           </div>
         </Modal>
       </div>
-      <h2 className="mt-16 text-lg font-medium capitalize print:mt-0 text-slate-700 print:hidden">
-        Lesson Plan
-      </h2>
-      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-        <Editor content={plan.content} readOnly />
+      <div
+        itemProp="hasPart"
+        itemScope
+        itemType="http://schema.org/CreativeWork"
+      >
+        <h2
+          itemProp="learningResourceType"
+          className="mt-16 text-lg font-medium capitalize print:mt-0 text-slate-700 print:hidden"
+        >
+          Lesson Plan
+        </h2>
+
+        <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+          <Editor content={plan.content} readOnly />
+        </div>
       </div>
-      <h2 className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden">
-        Printable resource
-      </h2>
-      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-        <Editor content={resource.content} readOnly />
+      <div
+        itemProp="hasPart"
+        itemScope
+        itemType="http://schema.org/CreativeWork"
+      >
+        <h2
+          itemProp="learningResourceType"
+          className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden"
+        >
+          Printable resource
+        </h2>
+        <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+          <Editor content={resource.content} readOnly />
+        </div>
       </div>
-      <h2 className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden">
-        Assessment
-      </h2>
-      <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:mt-0 rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-        <Editor content={assessment.content} readOnly />
+      <div
+        itemProp="hasPart"
+        itemScope
+        itemType="http://schema.org/CreativeWork"
+      >
+        <h2
+          itemProp="learningResourceType"
+          className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden"
+        >
+          Assessment
+        </h2>
+        <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:mt-0 rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+          <Editor content={assessment.content} readOnly />
+        </div>
       </div>
     </div>
   );

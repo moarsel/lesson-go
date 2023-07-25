@@ -75,6 +75,12 @@ const Home: NextPage = () => {
             >
               Plan my lesson <MdBolt className="text-2xl " />
             </Link>
+            <Link
+              href="/lessons/"
+              className="w-64 px-4 py-2 font-medium border-2 border-black rounded-xl hover:bg-gray-100/80"
+            >
+              Browse Lesson Plans
+            </Link>
           </div>
         </div>
         <section className="relative flex flex-col items-center w-full px-4 pb-12 mt-20 bg-gradient-to-tl from-green-400 to-green-800">
