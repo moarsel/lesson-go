@@ -194,36 +194,40 @@ function ViewLessonPage({
           <Editor content={plan.content} readOnly />
         </div>
       </div>
-      <div
-        itemProp="hasPart"
-        itemScope
-        itemType="http://schema.org/CreativeWork"
-      >
-        <h2
-          itemProp="learningResourceType"
-          className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden"
+      {resource.content && (
+        <div
+          itemProp="hasPart"
+          itemScope
+          itemType="http://schema.org/CreativeWork"
         >
-          Printable resource
-        </h2>
-        <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-          <Editor content={resource.content} readOnly />
+          <h2
+            itemProp="learningResourceType"
+            className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden"
+          >
+            Printable resource
+          </h2>
+          <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:my-0 break-after-page rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+            <Editor content={resource.content} readOnly />
+          </div>
         </div>
-      </div>
-      <div
-        itemProp="hasPart"
-        itemScope
-        itemType="http://schema.org/CreativeWork"
-      >
-        <h2
-          itemProp="learningResourceType"
-          className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden"
+      )}
+      {assessment.content && (
+        <div
+          itemProp="hasPart"
+          itemScope
+          itemType="http://schema.org/CreativeWork"
         >
-          Assessment
-        </h2>
-        <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:mt-0 rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
-          <Editor content={assessment.content} readOnly />
+          <h2
+            itemProp="learningResourceType"
+            className="mt-16 text-lg font-medium capitalize print:my-0 text-slate-700 print:hidden"
+          >
+            Assessment
+          </h2>
+          <div className="p-12 mt-4 mb-16 prose border shadow-xl print:p-0 print:mt-0 rounded-xl print:shadow-none print:border-none prose-slate print:prose-sm border-slate-100">
+            <Editor content={assessment.content} readOnly />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
