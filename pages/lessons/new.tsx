@@ -230,7 +230,7 @@ function New() {
         : "";
 
       return {
-        activityIdeas: `Generate 3 lesson plan ${activityType} for ${studentDemographic} lesson with on the topic of ${topic}, labelled "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical${curriculumType} for a single lesson. Each generated activity should be maximum 20 words (don't include a word count).`,
+        activityIdeas: `Generate 3 lesson plan ${activityType} for ${studentDemographic} lesson with on the topic of ${topic}, starting with "1.", "2.", or "3.". Make sure they are age appropriate, specific, engaging and practical${curriculumType} for a single lesson. Each generated activity should be maximum 20 words (don't include a word count). Plain text only no markdown.`,
         activity: "",
         selectedResource: "",
         resourceIdeas: `What are 3 creative examples of learning materials chatgpt could generate in plain text for a ${studentDemographic} for this activity: ${sections.activity.content} on the topic of ${topic}. One example should be wacky and fun. Make sure each example is max 35 words in the form of a prompt where the output would just be text (don't include the word count). Only suggest age appropriate examples with no quizzes, no videos, no cards or flashcards, no graphics or pictures or images, no websites, no interactive anything. It should not be a prompt for students but a printable learning material they could use. Output only a numbered list in markdown with no text before or after.`,
@@ -512,8 +512,8 @@ function New() {
                 }`}
                 onClick={(e) => {
                   if (subject.length && grade.length) {
-                    setSectionContent("resourceIdeas", "item");
-                    setSectionContent("selectedResource", "item");
+                    setSectionContent("resourceIdeas", "");
+                    setSectionContent("selectedResource", "");
                     generateContent("resourceIdeas");
                   }
                 }}

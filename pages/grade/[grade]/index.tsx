@@ -55,14 +55,14 @@ const GradeSubjects = ({
           {filteredLessons?.map((lesson) => (
             <Link
               href={`/lessons/${lesson.id}`}
-              className="self-start block max-w-xl p-4 mb-5 transition bg-white border shadow-md  rounded-xl hover:bg-gray-100"
+              className="self-start block max-w-xl p-4 mb-5 transition bg-white border shadow-md rounded-xl hover:bg-gray-100"
             >
               <h3 className="text-2xl font-bold capitalize">{lesson.title}</h3>
               <p className="mb-2 text-lg text-gray-800">{lesson.overview}</p>
               <p className="flex flex-row gap-3 text-gray-800">
                 {" "}
                 <span className="px-3 text-center bg-green-200 rounded-full">
-                  {lesson.grade.filter((l) => l === grade).join(", ")}{" "}
+                  {lesson.grade.map((l) => l === grade).join(", ")}{" "}
                 </span>
                 <span className="px-3 text-center bg-orange-100 rounded-full">
                   {lesson.subject.join(", ")}
